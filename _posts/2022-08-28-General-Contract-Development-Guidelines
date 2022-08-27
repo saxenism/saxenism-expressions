@@ -1,4 +1,12 @@
-# General Philosophy
+---
+toc: true
+layout: post
+description: Best practices of smart contract development for the EVM chains, focussed on Solidity.
+categories: [markdown]
+title: Smart Contract Development - Best Practices
+---
+
+# General Contract Development Guidelines (Best Practices)
 
 Smart contract programming requires a different engineering mindset than what you may be used to.
 
