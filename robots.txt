@@ -1,1 +1,1 @@
-Sitemap: https://saxenism.github.io/saxenism-expressions/sitemap.xml
+Sitemap: http://saxenism.com/expressions/sitemap.xml
