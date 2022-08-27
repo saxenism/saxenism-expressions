@@ -2,7 +2,7 @@
 toc: true
 layout: post
 description: Best practices of smart contract development for the EVM chains, focussed on Solidity.
-categories: [markdown]
+categories: [markdown, smart-contract, solidity, security, development, best-practices]
 title: Smart Contract Development - Best Practices
 ---
 
