@@ -2,7 +2,7 @@
 toc: true
 layout: post
 description: My attempt at understanding the actual workings of the Maple Finance, before I go out and critique the testing suite for this protocol.
-categories: [web3, solidity, defi-tits, lending, protocol-deep-dive]
+categories: [web3, solidity, defi-tits, lending, protocol-deep-dive, maple, maple-finance]
 title: Maple Finance - An overview
 ---
 
