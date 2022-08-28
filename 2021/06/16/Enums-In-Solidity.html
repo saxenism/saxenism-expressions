@@ -1,0 +1,78 @@
+<h1 id="what-are-enums-in-solidity">What are enums in Solidity?</h1>
+
+<p><em>enums</em> or members of enumerated lists, in Solidity work much like enums in any other language. For me, it is basically a tool to reduce the stress on my <em>mental RAM</em> while writing code or smart contracts.</p>
+
+<h2 id="typical-use-case">Typical Use Case:</h2>
+
+<p>Suppose you want to give your user an option to choose his favorite squad among 9 available options. The available options would be:</p>
+<ul>
+  <li>Black Bull</li>
+  <li>Silver Eagle</li>
+  <li>Blue Rose</li>
+  <li>Golden Dawn</li>
+  <li>Green Mantis</li>
+  <li>Crimson Lion</li>
+  <li>Aqua Deer</li>
+  <li>Purple Orca</li>
+  <li>Coral Peacock</li>
+</ul>
+
+<p>Suppose you intend to use the variable <code class="language-plaintext highlighter-rouge">favSquad</code> to denote your user’s favorite <em>Black Clover</em> squad and use that variable in subsequent logic.</p>
+
+<p>One option (particularly messy one) would be to allow users to enter <code class="language-plaintext highlighter-rouge">strings</code> that denote their favorite squads, but that would bring forth a whole new hell of matching proper cases (upper cases and lower cases), also someone could enter
+a <code class="language-plaintext highlighter-rouge">string</code> that is out of scope, like <code class="language-plaintext highlighter-rouge">Spade Kingdom</code> for example.</p>
+
+<p>Another option would be to assign numbers to each squad (0-8) based on their index, most probably like a mapping. That would work, but you’ll have to always remember which number represents
+which squad while coding, which would be pretty uncomfortable.</p>
+
+<p>Hence, we pivot towards using enums. Enums restrict a variable to have one of only a few predefined values. The values in this enumerated list are called enums.
+With the use of enums it is possible to reduce the number of bugs in your code. 
+This helps you to not make a mistake, to enter something out of the domain, while entering data and also <strong>improves the program readability</strong>.</p>
+
+<p>For example, this is how we would use enums:</p>
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">pragma</span> <span class="n">solidity</span> <span class="o">^</span> <span class="mf">0.8</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="k">contract</span> <span class="n">testEnums</span> <span class="p">{</span>
+  <span class="k">enum</span> <span class="n">CloverSquad</span> <span class="p">{</span>
+    <span class="n">BlackBull</span><span class="p">,</span>
+    <span class="n">GoldenDawn</span><span class="p">,</span>
+    <span class="n">SilverEagle</span><span class="p">,</span>
+    <span class="n">BlueRose</span><span class="p">,</span>
+    <span class="n">CrimsonLion</span><span class="p">,</span>
+    <span class="n">GreenMantis</span><span class="p">,</span>
+    <span class="n">CoralPeacock</span><span class="p">,</span>
+    <span class="n">PurpleOrca</span><span class="p">,</span>
+    <span class="n">AquaDeer</span>
+  <span class="p">}</span>
+  
+  <span class="n">CloverSquad</span> <span class="n">favSquad</span><span class="p">;</span>
+  <span class="n">CloverSquad</span> <span class="n">firstRankedSquad</span> <span class="o">=</span> <span class="n">CloverSquad</span><span class="p">.</span><span class="n">GoldenDawn</span><span class="p">;</span>
+  
+  <span class="k">function</span> <span class="n">getFirstRankedSquad</span><span class="p">()</span> <span class="k">public</span> <span class="k">view</span> <span class="k">returns</span> <span class="p">(</span><span class="n">CloverSquad</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">firstRandkedSquad</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="taking-enum-inputs-and-checking-invalid-inputs">Taking enum inputs and checking invalid inputs</h2>
+
+<p>A question that might arise in your minds (it did in mine too 😅) is how do we take enums as input from the user of our smart contract. We do this by typecasting the enums and checking
+if it is out of range or not.</p>
+
+<p>Example:</p>
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="c1">// Yes, you can use your enums in mappings.
+</span><span class="k">mapping</span> <span class="p">(</span><span class="kt">address</span> <span class="o">=&gt;</span> <span class="n">CloverSquad</span><span class="p">)</span> <span class="k">public</span> <span class="n">playerSquad</span><span class="p">;</span>
+
+<span class="k">function</span> <span class="n">selectFavoriteSquad</span><span class="p">(</span><span class="kt">uint</span> <span class="n">userFavSquad</span><span class="p">)</span> <span class="k">external</span> <span class="p">{</span>
+  <span class="nb">require</span><span class="p">(</span><span class="n">userFavSquad</span> <span class="o">&lt;=</span> <span class="kt">uint</span><span class="p">(</span><span class="n">CloverSquads</span><span class="p">.</span><span class="n">AquaDeer</span><span class="p">),</span> <span class="s">"Choose from 0 to 8"</span><span class="p">);</span>
+  <span class="n">playerSquad</span><span class="p">[</span><span class="n">msg</span><span class="p">.</span><span class="n">sender</span><span class="p">]</span> <span class="o">=</span> <span class="n">CloverSquad</span><span class="p">(</span><span class="n">userFavSquad</span><span class="p">);</span>
+  <span class="c1">// Further Logic....
+</span><span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="further-reading">Further Reading</h2>
+
+<p>That is about everything that you will need to know about <em>enums</em> to be well on your way, but if you really want to get deeper into <em>enums</em>, I would suggest reading <a href="https://gist.github.com/cameel/4d739dc452645539c431ace0d326f146">this incredibly detailed article</a> on <em>enums</em>.</p>
+
+<p><strong>Thank you &amp; Godspeed.</strong></p>
