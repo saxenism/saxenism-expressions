@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>CryptoZombies - Lesson 2 | EVM Expressions</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="CryptoZombies - Lesson 2" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="My notes from lesson 2 of CryptoZombies Solidity speed run." />
+<meta property="og:description" content="My notes from lesson 2 of CryptoZombies Solidity speed run." />
+<link rel="canonical" href="http://saxenism.com/web3/solidity/cryptozombies/beginner/2021/06/13/CryptoZombies-Lesson-2.html" />
+<meta property="og:url" content="http://saxenism.com/web3/solidity/cryptozombies/beginner/2021/06/13/CryptoZombies-Lesson-2.html" />
+<meta property="og:site_name" content="EVM Expressions" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-06-13T00:00:00-05:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="CryptoZombies - Lesson 2" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2021-06-13T00:00:00-05:00","datePublished":"2021-06-13T00:00:00-05:00","description":"My notes from lesson 2 of CryptoZombies Solidity speed run.","headline":"CryptoZombies - Lesson 2","mainEntityOfPage":{"@type":"WebPage","@id":"http://saxenism.com/web3/solidity/cryptozombies/beginner/2021/06/13/CryptoZombies-Lesson-2.html"},"url":"http://saxenism.com/web3/solidity/cryptozombies/beginner/2021/06/13/CryptoZombies-Lesson-2.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://saxenism.com/feed.xml" title="EVM Expressions" /><link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">EVM Expressions</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About Me</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">CryptoZombies - Lesson 2</h1><p class="page-description">My notes from lesson 2 of CryptoZombies Solidity speed run.</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2021-06-13T00:00:00-05:00" itemprop="datePublished">
+        Jun 13, 2021
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      6 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/categories/#web3">web3</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#solidity">solidity</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#cryptozombies">cryptozombies</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#beginner">beginner</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h1"><a href="#lesson-2">Lesson 2:</a></li>
+<li class="toc-entry toc-h1"><a href="#solidity-code-from-lesson2">Solidity code from Lesson2</a>
+<ul>
+<li class="toc-entry toc-h2"><a href="#zombiefactorysol">zombiefactory.sol</a></li>
+<li class="toc-entry toc-h2"><a href="#zombiefeedingsol">zombiefeeding.sol</a></li>
+</ul>
+</li>
+</ul><h1 id="lesson-2">
+<a class="anchor" href="#lesson-2" aria-hidden="true"><span class="octicon octicon-link"></span></a><a href="https://share.cryptozombies.io/en/lesson/2/share/saxenismgmail.com">Lesson 2</a>:</h1>
+
+<ol>
+  <li>Addresses:
+ The ethereum blockchain is made up of accounts, which you can think of as bank accounts.
+ An account has a balance of Ether, and you can send and recieve Ether payments to other accounts, just like your bank account can wire transfer money to other bank accounts
+ Each bank account has an address which you can think of like a bank account number.Its a unique identifier that points to an account.
+ An address is owned by a specific user or a smart contract.
+Mapping:
+ So we can use it as a unique ID for ownership of our zombies. When a user creates new zombies by interacting with our app, we’ll set ownership of those zombies
+ to the Ethereum address that called the function
+ A mapping is essentially a key-value store for storing and looking up data
+     mapping(uint =&gt; string) userIdToName;</li>
+  <li>msg.sender
+ In solidity, there are certain global variables that are available to all functions. One of them is msg.sender
+ msg.sender refers to the address of the person (or the smart contract) who called the current function
+ In solidity, function execution always needs to start with an external caller. A contract will just sit on the blockchain doing nothing until someone calls one of its functions. So, 
+ there will always be a msg.sender</li>
+  <li>require is a keyword in Solidity used for condition checking. If this condition is met, then only a function is executed otherwise, it terminates with an error.
+ Example:
+    <div class="language-solidity highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code> <span class="k">function</span> <span class="n">sayHiToVitalik</span> <span class="p">(</span><span class="kt">string</span> <span class="k">memory</span> <span class="n">_name</span><span class="p">)</span> <span class="k">public</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">string</span> <span class="k">memory</span><span class="p">)</span> <span class="p">{</span>
+     <span class="nb">require</span><span class="p">(</span><span class="nb">keccak256</span><span class="p">(</span><span class="n">abi</span><span class="p">.</span><span class="n">encodePacked</span><span class="p">(</span><span class="n">_name</span><span class="p">))</span> <span class="o">==</span> <span class="nb">keccak256</span><span class="p">(</span><span class="n">abi</span><span class="p">.</span><span class="n">encodePacked</span><span class="p">(</span><span class="s">"Vitalik"</span><span class="p">)));</span>
+     <span class="k">return</span> <span class="s">"Hi Vitalik, thank you for Ethereum!!"</span><span class="p">;</span>
+ <span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+  <li>Solidity does not support string comparison natively, so we simply compare the keccak256 hashes of the two strings.</li>
+  <li>Solidity supports inheritence. Hence, instead of writing one big long contract, it makes sense to split your code logic across multiple
+ contracts to organize the code.</li>
+  <li>Really cool and succint inheritence syntax:
+    <div class="language-solidity highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="k">contract</span> <span class="n">cat</span> <span class="k">is</span> <span class="n">animal</span> <span class="p">{</span>
+<span class="p">}</span> <span class="c1">// Here the contract cat inherits from the contract animal :D
+</span></code></pre></div>    </div>
+  </li>
+  <li>Syntax to import one file into another:
+    <div class="language-solidity highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code> <span class="k">import</span> <span class="s">'./someOtherContract.sol'</span><span class="p">;</span>
+ <span class="k">contract</span> <span class="n">newContract</span> <span class="k">is</span> <span class="n">someOtherContract</span> <span class="p">{</span>
+ <span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+  <li>In solidity, there are two locations in which you can store variables - in <em>storage</em> and in <em>memory</em>.
+ Storage refers to variables permanently stored on the blockchain.
+ Memory variables are temporary, and are erased between external function calls to your contract.
+ Think of it like a computer’s Hard Disk vs RAM
+Example:
+    <div class="language-solidity highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="k">contract</span> <span class="n">SandwichFactory</span> <span class="p">{</span>
+ <span class="k">struct</span> <span class="n">Sandwich</span> <span class="p">{</span>
+     <span class="kt">string</span> <span class="n">name</span><span class="p">;</span>
+     <span class="kt">string</span> <span class="n">status</span><span class="p">;</span>
+ <span class="p">}</span>
+ <span class="n">Sandwich</span><span class="p">[]</span> <span class="n">sandwiches</span><span class="p">;</span>
+ <span class="k">function</span> <span class="n">eatSandwich</span><span class="p">(</span><span class="kt">uint</span> <span class="n">_index</span><span class="p">)</span> <span class="k">public</span> <span class="p">{</span>
+     <span class="c1">// Sandwich mySandwich = sandwiches[_index];
+</span>     <span class="c1">// ^ Seems pretty straightforward, but solidity will give you a warning
+</span>     <span class="c1">// telling you that you should explicitly declare storage or memory here.
+</span>     <span class="c1">// So instead, you should declare with the storage keyword, like:
+</span>     <span class="n">Sandwich</span> <span class="k">storage</span> <span class="n">mySandwich</span> <span class="o">=</span> <span class="n">sandwiches</span><span class="p">[</span><span class="n">_index</span><span class="p">];</span>
+     <span class="c1">// ...in which case mySandwich is a pointer to sandwiches[_index]
+</span>     <span class="c1">// in storage, and...
+</span>     <span class="n">mySandwich</span><span class="p">.</span><span class="n">status</span> <span class="o">=</span> <span class="s">"Eaten!"</span><span class="p">;</span>
+     <span class="c1">// ...this will permanently change `sandwiches[_index]` on the blockchain.
+</span>     <span class="c1">// If you just want a copy, you can use memory:
+</span>     <span class="n">Sandwich</span> <span class="k">memory</span> <span class="n">anotherSandwich</span> <span class="o">=</span> <span class="n">sandwiches</span><span class="p">[</span><span class="n">_index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+     <span class="c1">// ...in which case anotherSandwich will simply be a copy of the 
+</span>     <span class="c1">// data in memory, and...
+</span>     <span class="n">anotherSandwich</span><span class="p">.</span><span class="n">status</span> <span class="o">=</span> <span class="s">"Eaten!"</span><span class="p">;</span>
+     <span class="c1">// ...will just modify the temporary variable and have no effect 
+</span>     <span class="c1">// on sandwiches[_index + 1]. But you can do this:
+</span>     <span class="n">sandwiches</span><span class="p">[</span><span class="n">_index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">anotherSandwich</span><span class="p">;</span>
+     <span class="c1">// ...if you want to copy the changes back into blockchain storage.
+</span> <span class="p">}</span>
+  <span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+  <li>For a struct People such as:
+    <div class="language-solidity highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code> <span class="k">struct</span> <span class="n">People</span> <span class="p">{</span>
+     <span class="kt">string</span> <span class="n">name</span><span class="p">;</span>
+     <span class="kt">uint</span> <span class="n">age</span><span class="p">;</span>
+ <span class="p">}</span>
+ <span class="n">People</span> <span class="n">randomMan</span> <span class="o">=</span> <span class="n">People</span><span class="p">(</span><span class="s">"Sam"</span><span class="p">,</span> <span class="s">"22"</span><span class="p">);</span>
+</code></pre></div>    </div>
+    <p>You can access the properties of this struct as follows:
+ randomMan.age or randomMan.name</p>
+  </li>
+  <li>Types of functions in solidity:
+a. Private
+b. Internal
+c. Public
+d. External
+internal is the same as private, except that it’s also accessible to contracts that inherit from this contract.
+external is the same public, except that these functions can ONLY be called outside the contract.</li>
+  <li>Interacting with other smart contracts on the Ethereum blockchain:
+a. Define an interface (almost the same syntax as that of a contract, but only function signatures are mentioned here.)
+b. Only those function signatures need to be written in the interface, that we actually need to call
+c. Grab the address of the smart contract, you want to call the function from
+d. Initialise the interface you built with this address (much like creating an object)
+e. Example:
+    <div class="language-solidity highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>    <span class="k">contract</span> <span class="n">NumberInterface</span> <span class="p">{</span>
+        <span class="k">function</span> <span class="n">getNum</span><span class="p">(</span><span class="kt">address</span> <span class="n">_myAddress</span><span class="p">)</span> <span class="k">public</span> <span class="k">view</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">contract</span> <span class="n">MyContract</span> <span class="p">{</span>
+        <span class="kt">address</span> <span class="n">NumberInterfaceAddress</span> <span class="o">=</span> <span class="mh">0xabcde122</span><span class="p">......</span>
+        <span class="n">NumberInterface</span> <span class="n">numberContract</span> <span class="o">=</span> <span class="n">NumberInterface</span><span class="p">(</span><span class="n">NumberInterfaceAddress</span><span class="p">);</span>
+        <span class="k">function</span> <span class="n">someFunction</span><span class="p">()</span> <span class="k">public</span> <span class="p">{</span>
+            <span class="kt">uint</span> <span class="n">num</span> <span class="o">=</span> <span class="n">numberContract</span><span class="p">.</span><span class="n">getNum</span><span class="p">(</span><span class="n">msg</span><span class="p">.</span><span class="n">sender</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+  <li>In Solidity you can return more than one value from a function :D</li>
+  <li>This example illustrates, how we manage multiple return values from Solidity function:
+    <div class="language-solidity highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>    <span class="k">function</span> <span class="n">multipleReturns</span><span class="p">()</span> <span class="k">internal</span> <span class="k">returns</span><span class="p">(</span><span class="kt">uint</span> <span class="n">a</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">b</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">c</span><span class="p">)</span> <span class="p">{</span>
+   <span class="k">return</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
+    <span class="p">}</span>
+   <span class="k">function</span> <span class="n">processMultipleReturns</span><span class="p">()</span> <span class="k">external</span> <span class="p">{</span>
+   <span class="kt">uint</span> <span class="n">a</span><span class="p">;</span>
+   <span class="kt">uint</span> <span class="n">b</span><span class="p">;</span>
+   <span class="kt">uint</span> <span class="n">c</span><span class="p">;</span>
+   <span class="c1">// This is how you do multiple assignment:
+</span>   <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span> <span class="o">=</span> <span class="n">multipleReturns</span><span class="p">();</span>
+   <span class="p">}</span>
+   <span class="c1">// Or if we only cared about one of the values:
+</span>   <span class="k">function</span> <span class="n">getLastReturnValue</span><span class="p">()</span> <span class="k">external</span> <span class="p">{</span>
+   <span class="kt">uint</span> <span class="n">c</span><span class="p">;</span>
+   <span class="c1">// We can just leave the other fields blank:
+</span>   <span class="p">(,,</span><span class="n">c</span><span class="p">)</span> <span class="o">=</span> <span class="n">multipleReturns</span><span class="p">();</span>
+    <span class="p">}</span>
+</code></pre></div>    </div>
+    <p><br>
+<br></p>
+  </li>
+</ol>
+
+<h1 id="solidity-code-from-lesson2">
+<a class="anchor" href="#solidity-code-from-lesson2" aria-hidden="true"><span class="octicon octicon-link"></span></a>Solidity code from Lesson2</h1>
+
+<h2 id="zombiefactorysol">
+<a class="anchor" href="#zombiefactorysol" aria-hidden="true"><span class="octicon octicon-link"></span></a>zombiefactory.sol</h2>
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">pragma</span> <span class="n">solidity</span> <span class="o">&gt;=</span> <span class="mf">0.8</span><span class="p">.</span><span class="mi">4</span><span class="p">;</span>
+
+<span class="k">contract</span> <span class="n">ZombieFactory</span> <span class="p">{</span>
+
+    <span class="k">event</span> <span class="n">NewZombie</span><span class="p">(</span><span class="kt">uint</span> <span class="n">zombieId</span><span class="p">,</span> <span class="kt">string</span> <span class="n">name</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">dna</span><span class="p">);</span>
+
+    <span class="kt">uint</span> <span class="n">dnaDigits</span> <span class="o">=</span> <span class="mi">16</span><span class="p">;</span>
+    <span class="kt">uint</span> <span class="n">dnaModulus</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="n">dnaDigits</span><span class="p">;</span> <span class="c1">//(10^16)
+</span>
+    <span class="k">struct</span> <span class="n">Zombie</span> <span class="p">{</span>
+        <span class="kt">string</span> <span class="n">name</span><span class="p">;</span>
+        <span class="kt">uint</span> <span class="n">dna</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">Zombie</span><span class="p">[]</span> <span class="k">public</span> <span class="n">zombies</span><span class="p">;</span>
+
+    <span class="k">mapping</span> <span class="p">(</span><span class="kt">uint</span> <span class="o">=&gt;</span> <span class="kt">address</span><span class="p">)</span> <span class="k">public</span> <span class="n">zombieToOwner</span><span class="p">;</span>
+    <span class="k">mapping</span> <span class="p">(</span><span class="kt">address</span> <span class="o">=&gt;</span> <span class="kt">uint</span><span class="p">)</span> <span class="n">ownerZombieCount</span><span class="p">;</span>
+
+    <span class="k">function</span> <span class="n">_createZombie</span><span class="p">(</span><span class="kt">string</span> <span class="k">memory</span> <span class="n">_name</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">_dna</span><span class="p">)</span> <span class="k">internal</span> <span class="p">{</span>
+        <span class="n">zombies</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">Zombie</span><span class="p">(</span><span class="n">_name</span><span class="p">,</span> <span class="n">_dna</span><span class="p">));</span>
+        <span class="kt">uint</span> <span class="n">id</span> <span class="o">=</span> <span class="n">zombies</span><span class="p">.</span><span class="n">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">zombieToOwner</span><span class="p">[</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">msg</span><span class="p">.</span><span class="n">sender</span><span class="p">;</span>
+        <span class="n">ownerZombieCount</span><span class="p">[</span><span class="n">msg</span><span class="p">.</span><span class="n">sender</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
+        <span class="k">emit</span> <span class="n">NewZombie</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">_name</span><span class="p">,</span> <span class="n">_dna</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">function</span> <span class="n">_generateRandomDna</span><span class="p">(</span><span class="kt">string</span> <span class="k">memory</span> <span class="n">_str</span><span class="p">)</span> <span class="k">private</span> <span class="k">view</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">uint</span> <span class="n">rand</span> <span class="o">=</span> <span class="kt">uint</span><span class="p">(</span><span class="nb">keccak256</span><span class="p">(</span><span class="n">abi</span><span class="p">.</span><span class="n">encodePacked</span><span class="p">(</span><span class="n">_str</span><span class="p">)));</span>
+        <span class="k">return</span> <span class="n">rand</span> <span class="o">%</span> <span class="n">dnaModulus</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">function</span> <span class="n">createRandomZombie</span><span class="p">(</span><span class="kt">string</span> <span class="k">memory</span> <span class="n">_name</span><span class="p">)</span> <span class="k">public</span> <span class="p">{</span>
+        <span class="nb">require</span><span class="p">(</span><span class="n">ownerZombieCount</span><span class="p">[</span><span class="n">msg</span><span class="p">.</span><span class="n">sender</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="kt">uint</span> <span class="n">randDna</span> <span class="o">=</span> <span class="n">_generateRandomDna</span><span class="p">(</span><span class="n">_name</span><span class="p">);</span>
+        <span class="n">randDna</span> <span class="o">=</span> <span class="n">randDna</span> <span class="o">-</span> <span class="n">randDna</span> <span class="o">%</span> <span class="mi">100</span><span class="p">;</span>
+        <span class="n">_createZombie</span><span class="p">(</span><span class="n">_name</span><span class="p">,</span> <span class="n">randDna</span><span class="p">);</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="zombiefeedingsol">
+<a class="anchor" href="#zombiefeedingsol" aria-hidden="true"><span class="octicon octicon-link"></span></a>zombiefeeding.sol</h2>
+
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">pragma</span> <span class="n">solidity</span> <span class="o">^</span> <span class="mf">0.8</span><span class="p">.</span><span class="mi">4</span><span class="p">;</span>
+
+<span class="k">import</span> <span class="s">"lesson2_zombiefactory.sol"</span><span class="p">;</span>
+
+<span class="k">contract</span> <span class="n">KittyInterface</span> <span class="p">{</span>
+  <span class="k">function</span> <span class="n">getKitty</span><span class="p">(</span><span class="kt">uint256</span> <span class="n">_id</span><span class="p">)</span> <span class="k">external</span> <span class="k">view</span> <span class="k">returns</span> <span class="p">(</span>
+    <span class="kt">bool</span> <span class="n">isGestating</span><span class="p">,</span>
+    <span class="kt">bool</span> <span class="n">isReady</span><span class="p">,</span>
+    <span class="kt">uint256</span> <span class="n">cooldownIndex</span><span class="p">,</span>
+    <span class="kt">uint256</span> <span class="n">nextActionAt</span><span class="p">,</span>
+    <span class="kt">uint256</span> <span class="n">siringWithId</span><span class="p">,</span>
+    <span class="kt">uint256</span> <span class="n">birthTime</span><span class="p">,</span>
+    <span class="kt">uint256</span> <span class="n">matronId</span><span class="p">,</span>
+    <span class="kt">uint256</span> <span class="n">sireId</span><span class="p">,</span>
+    <span class="kt">uint256</span> <span class="n">generation</span><span class="p">,</span>
+    <span class="kt">uint256</span> <span class="n">genes</span>
+  <span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">contract</span> <span class="n">ZombieFeeding</span> <span class="k">is</span> <span class="n">ZombieFactory</span> <span class="p">{</span>
+
+  <span class="kt">address</span> <span class="n">ckAddress</span> <span class="o">=</span> <span class="mh">0x06012c8cf97BEaD5deAe237070F9587f8E7A266d</span><span class="p">;</span>
+  
+  <span class="n">KittyInterface</span> <span class="n">kittyContract</span> <span class="o">=</span> <span class="n">KittyInterface</span><span class="p">(</span><span class="n">ckAddress</span><span class="p">);</span>
+
+  <span class="k">function</span> <span class="n">feedAndMultiply</span><span class="p">(</span><span class="kt">uint</span> <span class="n">_zombieId</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">_targetDna</span><span class="p">,</span> <span class="kt">string</span> <span class="k">memory</span> <span class="n">_species</span><span class="p">)</span> <span class="k">public</span> <span class="p">{</span>
+    <span class="nb">require</span><span class="p">(</span><span class="n">msg</span><span class="p">.</span><span class="n">sender</span> <span class="o">==</span> <span class="n">zombieToOwner</span><span class="p">[</span><span class="n">_zombieId</span><span class="p">]);</span>
+    <span class="n">Zombie</span> <span class="k">storage</span> <span class="n">myZombie</span> <span class="o">=</span> <span class="n">zombies</span><span class="p">[</span><span class="n">_zombieId</span><span class="p">];</span>
+    <span class="n">_targetDna</span> <span class="o">=</span> <span class="n">_targetDna</span> <span class="o">%</span> <span class="n">dnaModulus</span><span class="p">;</span>
+    <span class="kt">uint</span> <span class="n">newDna</span> <span class="o">=</span> <span class="p">(</span><span class="n">myZombie</span><span class="p">.</span><span class="n">dna</span> <span class="o">+</span> <span class="n">_targetDna</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">keccak256</span><span class="p">(</span><span class="n">abi</span><span class="p">.</span><span class="n">encodePacked</span><span class="p">(</span><span class="n">_species</span><span class="p">))</span> <span class="o">==</span> <span class="nb">keccak256</span><span class="p">(</span><span class="n">abi</span><span class="p">.</span><span class="n">encodePacked</span><span class="p">(</span><span class="s">"kitty"</span><span class="p">)))</span> <span class="p">{</span>
+      <span class="n">newDna</span> <span class="o">=</span> <span class="n">newDna</span> <span class="o">-</span> <span class="n">newDna</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">+</span> <span class="mi">99</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">_createZombie</span><span class="p">(</span><span class="s">"NoName"</span><span class="p">,</span> <span class="n">newDna</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="k">function</span> <span class="n">feedOnKitty</span><span class="p">(</span><span class="kt">uint</span> <span class="n">_zombieId</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">_kittyId</span><span class="p">)</span> <span class="k">public</span> <span class="p">{</span>
+    <span class="kt">uint</span> <span class="n">kittyDna</span><span class="p">;</span>
+    <span class="p">(,,,,,,,,,</span><span class="n">kittyDna</span><span class="p">)</span> <span class="o">=</span> <span class="n">kittyContract</span><span class="p">.</span><span class="n">getKitty</span><span class="p">(</span><span class="n">_kittyId</span><span class="p">);</span>
+    <span class="n">feedAndMultiply</span><span class="p">(</span><span class="n">_zombieId</span><span class="p">,</span> <span class="n">kittyDna</span><span class="p">,</span> <span class="s">"kitty"</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+  </div><a class="u-url" href="/web3/solidity/cryptozombies/beginner/2021/06/13/CryptoZombies-Lesson-2.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Personal website of Rahul Saxena, aka saxenism, containing his thoughts about web3, EVM and a decentralised world.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/saxenism" target="_blank" title="saxenism"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/saxenism" target="_blank" title="saxenism"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
