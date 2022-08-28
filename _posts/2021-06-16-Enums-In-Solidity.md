@@ -1,3 +1,11 @@
+---
+toc: true
+layout: post
+description: All about Enums in Solidity. Very widely (mis)used, sometimes misunderstood.
+categories: [web3, solidity, enums, beginner]
+title: Enums
+---
+
 # What are enums in Solidity?
 
 *enums* or members of enumerated lists, in Solidity work much like enums in any other language. For me, it is basically a tool to reduce the stress on my *mental RAM* while writing code or smart contracts.
