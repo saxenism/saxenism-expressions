@@ -8,6 +8,8 @@ title: DeFi TITS - A Primer on Testing
 
 # The International Testing Standard (TITS) for DeFi
 
+{% twitter https://twitter.com/saxenism/status/1552166849504509952?s=20&t=G9WJ1kv3BQZ1-_qkpUz8sQ %}
+
 ## Mission Statement
 
 I believe that protocols need to be held to a higher standard of testing. Web3 protocols are decentralised, therefore there are no centralised authorities, and subsequently there is no regulatory pressure on the protocols to do quality checks on their protocols.
