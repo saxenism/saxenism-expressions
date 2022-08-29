@@ -4,7 +4,7 @@ title: About Me
 permalink: /about/
 ---
 
-<h1> Blockchain: Web3 Engineer & Consultant </h1>
+<h1> Blockchain Engineer & Consultant </h1>
 
 A curious tinkerer, madly in love with the decentralised universe
 
