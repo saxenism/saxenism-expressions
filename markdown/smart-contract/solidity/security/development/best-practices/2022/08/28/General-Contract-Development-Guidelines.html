@@ -79,7 +79,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      2 min read
+      4 min read
     
 </span></p>
 
@@ -119,7 +119,13 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h2"><a href="#blockchain-properties">Blockchain Properties</a></li>
 </ul>
 </li>
-<li class="toc-entry toc-h1"><a href="#development-best-practices">Development best practices:</a></li>
+<li class="toc-entry toc-h1"><a href="#development-best-practices">Development best practices:</a>
+<ul>
+<li class="toc-entry toc-h2"><a href="#external-calls">External Calls</a></li>
+<li class="toc-entry toc-h2"><a href="#force-feeding-ether">Force Feeding Ether</a></li>
+<li class="toc-entry toc-h2"><a href="#public-on-chain-data">Public on-chain Data</a></li>
+</ul>
+</li>
 </ul><h1 id="general-contract-development-guidelines-best-practices">
 <a class="anchor" href="#general-contract-development-guidelines-best-practices" aria-hidden="true"><span class="octicon octicon-link"></span></a>General Contract Development Guidelines (Best Practices)</h1>
 
@@ -182,6 +188,9 @@ window.onload = wrap_img;
 <h1 id="development-best-practices">
 <a class="anchor" href="#development-best-practices" aria-hidden="true"><span class="octicon octicon-link"></span></a>Development best practices:</h1>
 
+<h2 id="external-calls">
+<a class="anchor" href="#external-calls" aria-hidden="true"><span class="octicon octicon-link"></span></a>External Calls</h2>
+
 <ul>
   <li>External calls are very risky.
     <ul>
@@ -191,9 +200,90 @@ window.onload = wrap_img;
       <li>Avoid making state changes after the external call. The usual <em>re-entrancy attack</em> and following the <em>check-effects-interactions</em> pattern circus.</li>
     </ul>
   </li>
-  <li>
+  <li>Prefer <code class="language-plaintext highlighter-rouge">call</code> over <code class="language-plaintext highlighter-rouge">transfer</code> and <code class="language-plaintext highlighter-rouge">send</code>.
+    <ul>
+      <li>
+<code class="language-plaintext highlighter-rouge">transfer</code> and <code class="language-plaintext highlighter-rouge">send</code> forward exactly 2300 gas to the recipient. This was done to limit the <code class="language-plaintext highlighter-rouge">reentrancy vulnerability</code>.
+        <ul>
+          <li>However, post the Instanbul hard fork, the cost of <code class="language-plaintext highlighter-rouge">SLOAD</code> operation was increased and it made it quite possible that 2300 gas might not be enough for the contract to carry out the logic in its fallback function</li>
+          <li>But with the same fact, we also have a benefit here that, these methods can act as a filter to ensure that only EOA’s can call the withdraw function instead of contracts.</li>
+          <li>Therefore, it is a matter of design choice rather than a <em>best practice</em> in this case.</li>
+        </ul>
+      </li>
+      <li>A disadvantage of using <code class="language-plaintext highlighter-rouge">call</code> is that it does nothing to mitigate the <code class="language-plaintext highlighter-rouge">reentrancy attack</code> and that attack has to be handled separately.</li>
+    </ul>
+  </li>
+  <li>For low-level call methods(call, callcode, delegatecall), always handle the case of your call failing by checking the return value.</li>
 </ul>
 
+<p>Example:</p>
+
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">someAddress</span><span class="p">.</span><span class="nb">call</span><span class="p">.</span><span class="n">value</span><span class="p">(</span><span class="mi">100</span><span class="p">)(</span><span class="kt">bytes</span><span class="p">(</span><span class="nb">sha3</span><span class="p">(</span><span class="s">"deposit()"</span><span class="p">)));</span>
+<span class="c1">// If deposit throws an exception, the raw call() will only return false and transaction will NOT be reverted
+</span></code></pre></div></div>
+
+<ul>
+  <li>
+    <p>Avoid combining multiple ether transfers in a single transaction.
+Favor pull over push for external calls.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">delegatecall</code> is made by the caller contract to a callee as if the callee was the same contract. Therefore, we must remain vigilant with <code class="language-plaintext highlighter-rouge">delegatecall</code> as it can modify the state of the caller contract.</p>
+  </li>
+</ul>
+
+<p>Example:</p>
+
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">contract</span> <span class="n">OneBeingCalled</span> <span class="p">{</span>
+    <span class="k">function</span> <span class="n">doSomeGoodWork</span><span class="p">()</span> <span class="k">external</span> <span class="p">{</span>
+        <span class="nb">selfdestruct</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">contract</span> <span class="n">OneWhoCalled</span> <span class="p">{</span>
+    <span class="k">function</span> <span class="n">outsourceSomeGoodWork</span><span class="p">(</span><span class="kt">address</span> <span class="n">_callee</span><span class="p">)</span> <span class="k">public</span> <span class="p">{</span>
+        <span class="n">_callee</span><span class="p">.</span><span class="nb">delegatecall</span><span class="p">(</span><span class="kt">bytes4</span><span class="p">(</span><span class="nb">keccak256</span><span class="p">(</span><span class="s">"doSomeGoodWork()"</span><span class="p">)));</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<h2 id="force-feeding-ether">
+<a class="anchor" href="#force-feeding-ether" aria-hidden="true"><span class="octicon octicon-link"></span></a>Force Feeding Ether</h2>
+
+<ul>
+  <li>
+    <p>Do not rely on <code class="language-plaintext highlighter-rouge">address(this).balance</code> for your contract logic because it is possible to force send Ether to any contract.</p>
+  </li>
+  <li>
+    <p>The contract can implement a fallback function that does a revert, but it will not be able to stop these three method of force sending Ether:</p>
+    <ul>
+      <li>Attacker creates a contract, funds it and calls <code class="language-plaintext highlighter-rouge">selfdestruct(victimAddress)</code>
+</li>
+      <li>Attacker is a miner, wins some block reward and redirects the award to your address</li>
+      <li>Attacker pre-computes your contract address and sends some Ether to it even before the victim contract is deployed.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="public-on-chain-data">
+<a class="anchor" href="#public-on-chain-data" aria-hidden="true"><span class="octicon octicon-link"></span></a>Public on-chain Data</h2>
+
+<ul>
+  <li>
+    <p>Applications like <strong>On Chain Rock-Paper-Scissors</strong> require submitted data (player’s move) to be private until some point in time in order to work.</p>
+  </li>
+  <li>
+    <p>The best strategy to use here is to use <em>commitment scheme</em> with separate phases: commit phase and then the reveal phase.</p>
+  </li>
+  <li>
+    <p>Also, don’t implement your own random number generator. Ethereum is a deterministic protocol, so no variable within this protocol can be used as an unpredictable random number.</p>
+    <blockquote>
+      <p>Miners can influence the <code class="language-plaintext highlighter-rouge">block.blockhash() value</code></p>
+    </blockquote>
+  </li>
+</ul>
 
   </div><a class="u-url" href="/markdown/smart-contract/solidity/security/development/best-practices/2022/08/28/General-Contract-Development-Guidelines.html" hidden></a>
 </article>
