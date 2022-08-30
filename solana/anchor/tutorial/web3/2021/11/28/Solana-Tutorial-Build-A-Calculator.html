@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Solana Anchor Tutorial: Build a Calculator | EVM Expressions</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Solana Anchor Tutorial: Build a Calculator" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Learn Anchor, a development framework on Solana by building a calculator" />
+<meta property="og:description" content="Learn Anchor, a development framework on Solana by building a calculator" />
+<link rel="canonical" href="https://saxenism.com/solana/anchor/tutorial/web3/2021/11/28/Solana-Tutorial-Build-A-Calculator.html" />
+<meta property="og:url" content="https://saxenism.com/solana/anchor/tutorial/web3/2021/11/28/Solana-Tutorial-Build-A-Calculator.html" />
+<meta property="og:site_name" content="EVM Expressions" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-11-28T00:00:00-06:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Solana Anchor Tutorial: Build a Calculator" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2021-11-28T00:00:00-06:00","datePublished":"2021-11-28T00:00:00-06:00","description":"Learn Anchor, a development framework on Solana by building a calculator","headline":"Solana Anchor Tutorial: Build a Calculator","mainEntityOfPage":{"@type":"WebPage","@id":"https://saxenism.com/solana/anchor/tutorial/web3/2021/11/28/Solana-Tutorial-Build-A-Calculator.html"},"url":"https://saxenism.com/solana/anchor/tutorial/web3/2021/11/28/Solana-Tutorial-Build-A-Calculator.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://saxenism.com/feed.xml" title="EVM Expressions" /><link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">EVM Expressions</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About Me</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Solana Anchor Tutorial: Build a Calculator </h1><p class="page-description">Learn Anchor, a development framework on Solana by building a calculator</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2021-11-28T00:00:00-06:00" itemprop="datePublished">
+        Nov 28, 2021
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      23 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/categories/#solana">solana</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#anchor">anchor</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#tutorial">tutorial</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#web3">web3</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h1"><a href="#solana-development-101-building-a-calculator-using-solana-programs">Solana development 101: Building a calculator using Solana programs</a></li>
+<li class="toc-entry toc-h1"><a href="#setting-up-the-environment">Setting up the Environment:</a></li>
+<li class="toc-entry toc-h1"><a href="#running-configurations-on-solana-cli">Running configurations on Solana CLI</a></li>
+<li class="toc-entry toc-h1"><a href="#setting-up-our-anchor-project">Setting up our Anchor project</a></li>
+<li class="toc-entry toc-h1"><a href="#defining-our-programs">Defining our programs</a></li>
+<li class="toc-entry toc-h1"><a href="#writing-the-logic-for-our-first-solana-program">Writing the logic for our first Solana program</a>
+<ul>
+<li class="toc-entry toc-h2"><a href="#a-small-note-about-accounts-on-solana">A small note about accounts on Solana</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h1"><a href="#defining-the-structure-of-calculator-account">Defining the structure of calculator account</a></li>
+<li class="toc-entry toc-h1"><a href="#first-calculation-function-logic">First calculation function logic</a></li>
+<li class="toc-entry toc-h1"><a href="#challenge-sub-quest">Challenge sub-quest</a></li>
+<li class="toc-entry toc-h1"><a href="#solution-to-the-challenge-sub-quest">Solution to the challenge sub-quest</a></li>
+<li class="toc-entry toc-h1"><a href="#final-piece-of-the-puzzle">Final piece of the puzzle</a>
+<ul>
+<li class="toc-entry toc-h2"><a href="#further-reading">Further reading:</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h1"><a href="#testing-our-calculator-program">Testing our calculator program</a></li>
+<li class="toc-entry toc-h1"><a href="#writing-our-first-test">Writing our first test</a></li>
+<li class="toc-entry toc-h1"><a href="#writing-our-second-test">Writing our second test</a></li>
+<li class="toc-entry toc-h1"><a href="#challenge-sub-quest-1">Challenge sub-quest</a></li>
+<li class="toc-entry toc-h1"><a href="#solution-to-the-challenge-sub-quest-1">Solution to the challenge sub-quest</a></li>
+<li class="toc-entry toc-h1"><a href="#running-the-tests">Running the tests</a></li>
+<li class="toc-entry toc-h1"><a href="#congratulations">Congratulations</a>
+<ul>
+<li class="toc-entry toc-h2"><a href="#next-steps">Next steps</a></li>
+</ul>
+</li>
+</ul><h1 id="solana-development-101-building-a-calculator-using-solana-programs">
+<a class="anchor" href="#solana-development-101-building-a-calculator-using-solana-programs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Solana development 101: Building a calculator using Solana programs</h1>
+
+<p>Welcome to the Solana crypto-currency quest. With this quest you’ll get upto speed with the most rapidly rising blockchain in the market: <em>Solana</em>. It would be awesome if you know a bit 
+of Rust (or even C++ concepts) already and are familiar with how blockchains work, but even if you do not have any specific background of Rust or Solana development, we will have all bases covered. If 
+you have a high level of interest and motivation, we should be good to go ahead.</p>
+
+<p>In this quest, we will be developing a simple calculator on the Solana blockchain. This essentially means that once you are done with this quest, you will be well versed with the basics of development on 
+the Solana blockchain using the Anchor framework and would be much better equipped to take on the other Solana quests.</p>
+
+<h1 id="setting-up-the-environment">
+<a class="anchor" href="#setting-up-the-environment" aria-hidden="true"><span class="octicon octicon-link"></span></a>Setting up the Environment:</h1>
+
+<p>There are a few things that we need to get up and running before we move forward in this quest. Before we move forward make sure you’ve a working NodeJS environment set up. We need rust, Solana, Mocha(a JS testing framework), Anchor and Phantom wallet for this quest.
+To install rust, run</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+source $HOME/.cargo/env
+rustup component add rustfmt
+</code></pre></div></div>
+
+<p>To install Solana, run</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sh -c "$(curl -sSfL https://release.solana.com/v1.8.0/install)"
+</code></pre></div></div>
+
+<p>To install mocha globally, run</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install -g mocha
+</code></pre></div></div>
+
+<p>Now we’ll be installing Anchor.
+If you’re on a linux system, run</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Only on linux systems
+npm i -g @project-serum/anchor-cli
+</code></pre></div></div>
+
+<p><strong>Fair Warning</strong> : If you are using a Windows system, we highly suggest using <a href="https://en.wikipedia.org/wiki/Windows_Subsystem_for_Linux">WSL2</a> (Windows sub-system for Linux) or switching to a Linux environment. Setting up WSL is also quick and easy. A 
+good walk-through can be found <a href="https://www.youtube.com/watch?v=X3bPWl9Z2D0&amp;ab_channel=BeachcastsProgrammingVideos">here</a>
+For any other OS, you need to build from source. Run the following command</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cargo install --git https://github.com/project-serum/anchor --tag v0.17.0 anchor-cli --locked
+</code></pre></div></div>
+
+<p>To verify that Anchor is installed, run</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>anchor --version
+</code></pre></div></div>
+
+<p><img src="https://user-images.githubusercontent.com/32522659/142705750-c5f09499-1108-4e8b-bc57-ab3755826a51.png" alt="1"></p>
+
+<p>Since Solana is still a pretty new blockchain compared to the establised ones out there, it’s developer tooling too is pretty limited and cumbersome as of now. However, it is rapidly improving 
+and it does so on a daily basis. At the forefront of this development is Anchor, by <a href="https://twitter.com/armaniferrante">Armani Ferrante</a>. You can think of it like the Ruby on Rails framework for
+Ruby, that means yes, you can develop things on vanilla Ruby, but Ruby on Rails makes your life much much easier, right? That’s the same with Anchor and Solana development. Anchor is the Hardhat of 
+Solana development plus much more. It offers a Rust DSL (basically, an easier Rust) to work with along with IDL, CLI and workspace management. Anchor abstracts away a lot of potential security holes
+from a conventional Solana program, takes care of the serialization and deserialization, reduces large boilder-platey code to macros and lot of other good good stuff.</p>
+
+<h1 id="running-configurations-on-solana-cli">
+<a class="anchor" href="#running-configurations-on-solana-cli" aria-hidden="true"><span class="octicon octicon-link"></span></a>Running configurations on Solana CLI</h1>
+
+<p>The first command you should run on your terminal (assuming Solana CLI was properly installed in the last quest) is:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>solana config get
+</code></pre></div></div>
+
+<p>This should throw up a result similar to something like:</p>
+
+<p><img src="https://user-images.githubusercontent.com/32522659/142705905-e5197e57-144d-4b17-b91c-a5d725b7e128.png" alt="image"></p>
+
+<p>If you didnot set up your keypair earlier, then you won’t be having the <code class="language-plaintext highlighter-rouge">Keypair Path</code> in your results. To set that up, follow the instructions over <a href="https://docs.solana.com/wallet-guide/paper-wallet#seed-phrase-generation">here</a></p>
+
+<p>We would want to remain on the local network for building our program and later shift to the devent or mainnet-beta if required. If the <code class="language-plaintext highlighter-rouge">RPC URL</code> field of your last result did not show <code class="language-plaintext highlighter-rouge">localhost</code>, you can set it to localhost using the following command:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>solana config set --url localhost
+</code></pre></div></div>
+
+<p>Next, we would want to know our account/wallet address and airdrop some SOL tokens into it, to handle all the deployment, transactions etc costs that come with interacting with and using a Solana program. To do that first let’s find our address. The command to do that is:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>solana address
+</code></pre></div></div>
+
+<p>This would result into something like this:</p>
+
+<p><img src="https://user-images.githubusercontent.com/32522659/142705948-017553ae-593e-4c2f-ae75-b12d0ab7e9a2.png" alt="image"></p>
+
+<p>Then, for more comprehensive details of your account, use the following command with the address that you got from the last command</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>solana account &lt;your address from the last command&gt;
+</code></pre></div></div>
+
+<p>This would result into something like this:</p>
+
+<p><img src="https://user-images.githubusercontent.com/32522659/142706018-f78f61c9-e22e-43a4-8ff6-da8d9e344606.png" alt="image"></p>
+
+<p>Next, we want to spin up our local network. Think of this local network as a mock Solana blockchain running on your own single system. This network would be required for development and testing of our program. To spin it up, in a separate tab, use the following command:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>solana-test-validator
+</code></pre></div></div>
+
+<p>Once you get an image, like the one below, you know that your local validator (local network) is now up and running</p>
+
+<p><img src="https://user-images.githubusercontent.com/32522659/142706030-6c3ad079-f69c-4be7-9221-a476c11cc1d0.png" alt="image"></p>
+
+<p>Now, our last task is to top up our account with some SOL, which you can do by using:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>solana airdrop 100
+</code></pre></div></div>
+
+<p>This should result in something like:</p>
+
+<p><img src="https://user-images.githubusercontent.com/32522659/142706066-032212f7-5ed2-4f03-b22a-e28a581ad0a3.png" alt="image"></p>
+
+<h1 id="setting-up-our-anchor-project">
+<a class="anchor" href="#setting-up-our-anchor-project" aria-hidden="true"><span class="octicon octicon-link"></span></a>Setting up our Anchor project</h1>
+
+<p>In this sub-quest all we would do is initialize an Anchor project and see whether everything’s there and working fine or not and after move on ahead to make our own changes.
+Head over to your preferred destination for the project using your terminal and then type the following command:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>anchor init mymoneydapp
+
+cd mycalculatordapp
+</code></pre></div></div>
+
+<p>This would result in a screen somewhat similar to this:</p>
+
+<p><img src="https://user-images.githubusercontent.com/32522659/142706138-4b093910-3bba-4277-99b4-cedaae0b0dc1.png" alt="image"></p>
+
+<p>First we check whether we can see the <em>programs</em>, <em>app</em>, <em>programs</em>, <em>migrations</em> directory among others or not. If we can, we would head over to <em>programs/messengerapp/src/lib.rs</em> to see the default program that Anchor provides us. This is the most basic example possible on Anchor and what’s happening here is simply that a user-defined function <code class="language-plaintext highlighter-rouge">Initialize</code> whenever called would successfully exit the program. That’s all, nothing fancy. Now, let’s try to compile this program using the following command:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>anchor build
+</code></pre></div></div>
+
+<p>This would trigger a build function and would something like this upon completion:</p>
+
+<p><img src="https://user-images.githubusercontent.com/32522659/142706255-54bf2239-5f20-48bb-8faf-29a10700a70d.png" alt="image"></p>
+
+<p>This build creates a new folder in your project directory called, <code class="language-plaintext highlighter-rouge">target</code>. This <code class="language-plaintext highlighter-rouge">target</code> folder contains the <code class="language-plaintext highlighter-rouge">idl</code> directory, which would also contain the <code class="language-plaintext highlighter-rouge">idl</code> for our program. The <code class="language-plaintext highlighter-rouge">IDL</code> or Interface Description Language describes the instructions exposed by the contract and is very similar to ABI in Solidity and user for similar purposes, ie, for tests and front-end integrations. Next, we can move onto testing this program, so that we can get familiar with how testing is done in Anchor. Head to <code class="language-plaintext highlighter-rouge">tests/messengerapp.js</code>. Here, you’ll see a test written in javascript to interact and test the default program. There are a lot of things in the test, that may not make sense to you right now, but stick around and we’ll get to those shortly. The test would look something like this:</p>
+
+<p><img src="https://user-images.githubusercontent.com/32522659/142706288-ca3047bf-fe58-402c-80b6-955b07afd29f.png" alt="image"></p>
+
+<p>Next, to actually run these tests, first head over to the tab where you ran the solana-test-validator command and kill that process (using Ctrl-C). Now, use the following command:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>anchor test
+</code></pre></div></div>
+
+<p>The passing tests should result in the following screen:</p>
+
+<p><img src="https://user-images.githubusercontent.com/32522659/142706337-6133d6b2-4aee-46b7-a467-4e22567ea78a.png" alt="image"></p>
+
+<p>Now, let’s head over to the <code class="language-plaintext highlighter-rouge">programs</code> directory and start importing some cool Rust crates provided by Anchor which will help us build our calculator app.</p>
+
+<h1 id="defining-our-programs">
+<a class="anchor" href="#defining-our-programs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Defining our programs</h1>
+
+<p>Head over to <code class="language-plaintext highlighter-rouge">programs/mycalculatordapp/src/lib.rs</code> and clear the code written there apart from the boilerplate code written over there. After clearing, your coding screen should look something like this:</p>
+
+<p><img src="https://user-images.githubusercontent.com/32522659/142734480-8e60e4e7-d2a9-405d-87e9-ebde863875cd.png" alt="image"></p>
+
+<p>You can also copy paste the below code to get started (assuming that you’ve also named your project as <code class="language-plaintext highlighter-rouge">mycalculatordapp</code>)</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>use anchor_lang::prelude::*;
+
+declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS");
+
+#[program]
+pub mod mycalculatordapp {
+    use super::*;
+    
+}
+</code></pre></div></div>
+
+<p>Now let us simply define the function signatures that we will require to code up our calculator dapp without writing the logic yet. The bulk of the program goes in a module under the <code class="language-plaintext highlighter-rouge">#[program]</code> macro. We’ll just define them under the <code class="language-plaintext highlighter-rouge">pub mod mycalculatordapp</code> and write the logic later. These function definitions would look like this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    pub fn create(ctx:Context&lt;Create&gt;, init_message: String) -&gt; ProgramResult {
+
+    }
+
+    pub fn add(ctx: Context&lt;Addition&gt;, num1: i64, num2: i64) -&gt; ProgramResult {
+
+    }
+
+    pub fn multiply(ctx: Context&lt;Multiplication&gt;, num1: i64, num2: i64) -&gt; ProgramResult {
+
+    }
+
+    pub fn subtract(ctx: Context&lt;Subtraction&gt;, num1: i64, num2: i64) -&gt; ProgramResult {
+
+    }
+
+    pub fn divide(ctx: Context&lt;Division&gt;, num1: i64, num2: i64) -&gt; ProgramResult {
+
+    }
+</code></pre></div></div>
+
+<p>Here <code class="language-plaintext highlighter-rouge">pub</code> means public and <code class="language-plaintext highlighter-rouge">fn</code> means function, implying that they are public functions that can be invoked from our program, ie it becomes a client-callable program function. The first argument of these functions is always <code class="language-plaintext highlighter-rouge">Context&lt;T&gt;</code> which consist of the solana accounts array and the program ID, which in essence is the required data to call just about any progarm on Solana. The next parameter of both the first function is a <code class="language-plaintext highlighter-rouge">String</code> named init_message, which we will be using as our message that is stored on our calculator (think how you see some text every time you boot up your phone, pc, calculator etc). In the other functions, the <code class="language-plaintext highlighter-rouge">num1</code> and <code class="language-plaintext highlighter-rouge">num2</code> parameters are of type integers and are the numbers on which we will be performing our mathematical operations. The <code class="language-plaintext highlighter-rouge">ProgramResult</code> is the return type of both these functions, which actually is just an easier method to serve function results and/or errors.</p>
+
+<p>After defining the above functions, your code should look something like this:</p>
+
+<p><img src="https://user-images.githubusercontent.com/32522659/142736063-8d8b3f80-c4df-475c-9734-e1426affdc10.png" alt="image"></p>
+
+<h1 id="writing-the-logic-for-our-first-solana-program">
+<a class="anchor" href="#writing-the-logic-for-our-first-solana-program" aria-hidden="true"><span class="octicon octicon-link"></span></a>Writing the logic for our first Solana program</h1>
+
+<p>Now let’s write the logic for the <code class="language-plaintext highlighter-rouge">create</code> function first, ok? Let’s first make our intentions clear for this function and the program in general. We want to keep track of three things here. First is the greeting message that we would be storing in our calculator, the second would be the result of all the mathematical operations and third is the remainder, which will be used in case of division, since Anchor currently does not support floating values. So we would want our calculator account (the main account that will handle all the calculation stuff of the program) to have three fields, namely: <code class="language-plaintext highlighter-rouge">greeting</code>, <code class="language-plaintext highlighter-rouge">result</code>, <code class="language-plaintext highlighter-rouge">remainder</code>. Also, since the same account will be used for the calculations and with different parameteres, we would want the calculator account to be mutable, ie, to be able to persist changes. Write the following code logic inside the <code class="language-plaintext highlighter-rouge">create</code> function now.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        let calculator = &amp;mut ctx.accounts.calculator;
+        calculator.greeting = init_message;
+        Ok(())
+
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">Ok(())</code> syntax is used for error handling of the ProgramResult type. You can think of <code class="language-plaintext highlighter-rouge">Ok(())</code> like a gate, that lets the program continue if there are no errors but sends the program into another state if an error is encountered.</p>
+
+<p>Now, your coding screen should look something like this:</p>
+
+<p><img src="https://user-images.githubusercontent.com/32522659/142736026-a0313568-7e60-4601-9d6e-a08bbecb8779.png" alt="image"></p>
+
+<h2 id="a-small-note-about-accounts-on-solana">
+<a class="anchor" href="#a-small-note-about-accounts-on-solana" aria-hidden="true"><span class="octicon octicon-link"></span></a>A small note about accounts on Solana</h2>
+<p>An account is not actually a wallet. Instead, it’s a way for the contract to persist data between calls. This includes information such as the count in our base_account, and also information about permissions on the account. Accounts pay rent in the form of lamports, and if it runs out, then the account is purged from the blockchain. Accounts with two years worth of rent attached are “rent-exempt” and can stay on the chain forever.</p>
+
+<h1 id="defining-the-structure-of-calculator-account">
+<a class="anchor" href="#defining-the-structure-of-calculator-account" aria-hidden="true"><span class="octicon octicon-link"></span></a>Defining the structure of calculator account</h1>
+
+<p>In the last sub-quest, we talked about what is our expectation with the calculator account, right? Also, we used the calculator account already in the <code class="language-plaintext highlighter-rouge">create</code> function. So, now let’s go ahead and define what actually our calculator account is. As mentioned earlier, everything on Solana is an account, so we will be using the awesome macros of Anchor to convert a struct into our calculator account.</p>
+
+<p>Write the code provided below outside of <code class="language-plaintext highlighter-rouge">pub mod mycalculatordapp</code>.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#[account]
+pub struct Calculator {
+    pub greeting: String,
+    pub result: i64,
+    pub remainder: i64,
+}
+</code></pre></div></div>
+
+<p>With this, your code screen would look something like this:</p>
+
+<p><img src="https://user-images.githubusercontent.com/32522659/142736006-ddbc11b0-1d98-43a3-928f-2171eb28f347.png" alt="image"></p>
+
+<p>Good, now you are on track to implement actual functionalities of a calculator. Let’s see how do we do that.</p>
+
+<h1 id="first-calculation-function-logic">
+<a class="anchor" href="#first-calculation-function-logic" aria-hidden="true"><span class="octicon octicon-link"></span></a>First calculation function logic</h1>
+
+<p>With the last sub-quest, we are all set to write the logic for our first calculation function. Let’s write the logic for addition first. As you might be thinking, here we simply have to save the result of the addition of the two parameters in the <code class="language-plaintext highlighter-rouge">result</code> field of the calculator account. If you were thinking along that lines, then congratulations, you’re right on the money. Write the following code inside of the <code class="language-plaintext highlighter-rouge">add</code> function</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        let calculator = &amp;mut ctx.accounts.calculator;
+        calculator.result = num1 + num2;
+        Ok(())
+
+</code></pre></div></div>
+
+<p>With this, your coding screen would look something like this:
+<img src="https://user-images.githubusercontent.com/32522659/142735765-d2513af9-5e5f-4d85-8ed0-c66862f4fbe9.png" alt="image"></p>
+
+<p>Notice the <code class="language-plaintext highlighter-rouge">Context&lt;Addition</code>? As discussed earlier, it is the list of accounts that must be passed to this particular function for it to run. What accounts do you think would we require to send to this function to make it work? Yes, correct, we only need to send the calculator account, nothing else xD. So, now with this knowledge, let’s define <code class="language-plaintext highlighter-rouge">Addition</code>, write the following code below with your declaration of the calculator account:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#[derive(Accounts)]
+pub struct Addition&lt;'info&gt; {
+    #[account(mut)]
+    pub calculator: Account&lt;'info, Calculator&gt;,
+}
+</code></pre></div></div>
+
+<p>With this, your coding screen would look something like this:</p>
+
+<p><img src="https://user-images.githubusercontent.com/32522659/142735894-c6eafac8-c69b-4e56-bf18-c01168bbc964.png" alt="image"></p>
+
+<p>Congratulations…. now you have a Solana blockchain program that is capable of adding two number…. How cool is that, right? Now I want you to take a pause and re-collect whatever you’ve learnt in the quest uptil now, because the next sub-quest is going to be a challenge sub-quest :D</p>
+
+<h1 id="challenge-sub-quest">
+<a class="anchor" href="#challenge-sub-quest" aria-hidden="true"><span class="octicon octicon-link"></span></a>Challenge sub-quest</h1>
+
+<p>This sub-quest is a challenge for you. Trust me, at this moment, you are perfectly capable to write more Solana code by yourself. Keep in mind how we defined the <code class="language-plaintext highlighter-rouge">add</code> function and the <code class="language-plaintext highlighter-rouge">Addition</code> struct in the last quest and with that knowledge, I want you all to write the code for all the remaining functions, that is, <code class="language-plaintext highlighter-rouge">multiply</code>, <code class="language-plaintext highlighter-rouge">subtract</code> and <code class="language-plaintext highlighter-rouge">divide</code> and then declare the corresponding structs, that is <code class="language-plaintext highlighter-rouge">Multiplication</code>, <code class="language-plaintext highlighter-rouge">Subtraction</code> and <code class="language-plaintext highlighter-rouge">Division</code>.</p>
+
+<p>The only function that will be slightly different would be the <code class="language-plaintext highlighter-rouge">divide</code> function, so trust in yourself and give this sub-quest your best shot.</p>
+
+<h1 id="solution-to-the-challenge-sub-quest">
+<a class="anchor" href="#solution-to-the-challenge-sub-quest" aria-hidden="true"><span class="octicon octicon-link"></span></a>Solution to the challenge sub-quest</h1>
+
+<p>I hope that you did your best to try and complete the remaining functions, now you can tally them with the below code.</p>
+
+<p>The code for the <code class="language-plaintext highlighter-rouge">multiply</code> function is as follows:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        let calculator = &amp;mut ctx.accounts.calculator;
+        calculator.result = num1 * num2;
+        Ok(())
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">Multiplication</code> struct would look something like this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#[derive(Accounts)]
+pub struct Multiplication&lt;'info&gt; {
+    #[account(mut)]
+    pub calculator: Account&lt;'info, Calculator&gt;,
+}
+</code></pre></div></div>
+
+<p>The code for the <code class="language-plaintext highlighter-rouge">subtract</code> function is as follows:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        let calculator = &amp; mut ctx.accounts.calculator;
+        calculator.result = num1 - num2;
+        Ok(())
+</code></pre></div></div>
+
+<p>The code for <code class="language-plaintext highlighter-rouge">Subtraction</code> struct is as follows:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#[derive(Accounts)]
+pub struct Subtraction&lt;'info&gt; {
+    #[account(mut)]
+    pub calculator: Account&lt;'info, Calculator&gt;,
+}
+</code></pre></div></div>
+
+<p>And finally, the code for the <code class="language-plaintext highlighter-rouge">divide</code> function is as follows:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        let calculator = &amp;mut ctx.accounts.calculator;
+        calculator.result = num1 / num2;
+        calculator.remainder = num1 % num2;
+        Ok(())
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">Division</code> struct also looks like this</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#[derive(Accounts)]
+pub struct Division&lt;'info&gt; {
+    #[account(mut)]
+    pub calculator: Account&lt;'info, Calculator&gt;,
+}
+</code></pre></div></div>
+
+<p>With all this, your coding screen should look something like this:</p>
+
+<p><img src="https://user-images.githubusercontent.com/32522659/142736456-bbc7f833-a2be-41b1-bc90-234c24d0d5bb.png" alt="image"></p>
+
+<p><img src="https://user-images.githubusercontent.com/32522659/142736470-3acd524d-d3db-483d-badf-e46963a07107.png" alt="image"></p>
+
+<p>Did you get them right, or most of them right or even one right? Wasn’t this exciting? You’re able to write Solana code yourself right off the bat.</p>
+
+<p>Now, is our program complete? Sadly no, there is one more, last remaining piece of the puzzle that we must address before we can say that we done with the program coding part. Before jumping onto the next sub-quest, try and guess what could we be missing from our program, and yes, you can guess that. It is within your grasp.</p>
+
+<h1 id="final-piece-of-the-puzzle">
+<a class="anchor" href="#final-piece-of-the-puzzle" aria-hidden="true"><span class="octicon octicon-link"></span></a>Final piece of the puzzle</h1>
+
+<p>If you could guess that we had used the <code class="language-plaintext highlighter-rouge">Create</code> struct in the first <code class="language-plaintext highlighter-rouge">create</code> function itself but never defined it anywhere like we defined the <code class="language-plaintext highlighter-rouge">Addition</code>, <code class="language-plaintext highlighter-rouge">Multiplication</code> etc structs, then, congratulations you were absolutely right.</p>
+
+<p>With this struct, we want to pass three accounts, the first is obviously the calculator account, since it is being used in the function itself. The second account is the user account and the third account is the system_program. What makes this struct a bit more special is that, in this struct we have to give the command to actually create the calculator account (which we have used in the subsequent functions). The creation of this calculator account will cost us some money (SOL) which will be paid by the <code class="language-plaintext highlighter-rouge">user</code> account that we just mentioned, along with that we have the space parameter where we specify how much space do we require in our account (here, calculator account) and finally the <code class="language-plaintext highlighter-rouge">system_program</code> is just system specifications for the Solana blockchain, again in the form of an account.</p>
+
+<p>Write the following code to define the <code class="language-plaintext highlighter-rouge">Create</code> struct:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#[derive(Accounts)]
+pub struct Create&lt;'info&gt; {
+    #[account(init, payer = user, space = 8 + 64 + 64 + 64 + 64)]
+    pub calculator: Account&lt;'info, Calculator&gt;,
+    #[account(mut)]
+    pub user: Signer&lt;'info&gt;,
+    pub system_program: Program&lt;'info, System&gt;,
+}
+</code></pre></div></div>
+
+<p>As discussed earlier, we used the derive Accounts macro since we had to incorporate 3 accounts here and for all these three accounts individually, we used the account macro. Now onto the arguments used with these macros. The <code class="language-plaintext highlighter-rouge">init</code> macro is used to create a new account owned by the current program which is our <code class="language-plaintext highlighter-rouge">mycalculatordapp</code> program. Whenever <code class="language-plaintext highlighter-rouge">init</code> parameter is used, we must always specify the <code class="language-plaintext highlighter-rouge">payer</code> or the account that will be paying for creation of the account on the Solana blockchain, along with the <code class="language-plaintext highlighter-rouge">space</code> param which is the space with which the new account is created.</p>
+
+<p>The <code class="language-plaintext highlighter-rouge">mut</code> parameter marks an account as mutable, which essentially means our account will be altered and Solana will need to update the data in your account. So, always use the <code class="language-plaintext highlighter-rouge">mut</code> parameter for persisting changes.</p>
+
+<p>Another new concept used here is the <code class="language-plaintext highlighter-rouge">Signer</code> type. This is used to enforce the constraint that the <code class="language-plaintext highlighter-rouge">authority</code> account (messengerapp in this case) <em>signed</em> the transaction.</p>
+
+<p>With this, your coding screen should look something like this:</p>
+
+<p><img src="https://user-images.githubusercontent.com/32522659/142736771-62624164-35ab-4aa0-b31d-4c5f8dabbaf0.png" alt="image"></p>
+
+<h2 id="further-reading">
+<a class="anchor" href="#further-reading" aria-hidden="true"><span class="octicon octicon-link"></span></a>Further reading:</h2>
+<p>You can read up on different types of account constraints <a href="https://docs.rs/anchor-lang/0.18.0/anchor_lang/derive.Accounts.html">here</a>.</p>
+
+<h1 id="testing-our-calculator-program">
+<a class="anchor" href="#testing-our-calculator-program" aria-hidden="true"><span class="octicon octicon-link"></span></a>Testing our calculator program</h1>
+
+<p>Head over to <code class="language-plaintext highlighter-rouge">tests/mycalculatordapp.js</code> and delete everything that’s written there. We are going to be writing our tests from scratch. The first step would be to import the necessary libraries and constants. To do that, use the following code:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const assert = require('assert');
+const anchor = require('@project-serum/anchor');
+const { SystemProgram } = anchor.web3;
+</code></pre></div></div>
+
+<p>Now, since we will be using <code class="language-plaintext highlighter-rouge">Mocha</code> for testing our programs, we will create the skeleton of where we will be putting our tests. So, basically, how Mocha works is that it takes <code class="language-plaintext highlighter-rouge">describe</code> blocks as testing blocks and within those <code class="language-plaintext highlighter-rouge">describe</code> blocks there are numerous tests written using the <code class="language-plaintext highlighter-rouge">it</code> blocks. So, use the following code to create the skeleton:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>describe('mycalculatordapp', () =&gt; {
+  const provider = anchor.Provider.local();
+  anchor.setProvider(provider);
+
+  const calculator = anchor.web3.Keypair.generate();
+  const program = anchor.workspace.Mycalculatordapp;
+
+  it('Creates a calculator', async () =&gt; {
+
+  });
+
+  it("Adds two numbers", async function() {
+
+  });
+
+  it('Multiplies two numbers', async function() {
+
+  })
+
+  it('Subtracts two numbers', async function() {
+
+  });
+
+  it('Divides two numbers', async function() {
+
+  });
+});
+</code></pre></div></div>
+<p>With this, your code screen should look something like this:</p>
+
+<p><img src="https://user-images.githubusercontent.com/32522659/142736973-a4a89e29-9e5f-40c5-82fd-924e2e81d1f7.png" alt="image"></p>
+
+<p>The additional things that we coded there were the introduction of <code class="language-plaintext highlighter-rouge">provider</code>. The <code class="language-plaintext highlighter-rouge">provider</code> is the abstraction of a connection to the Solana network. In the test, the Anchor framework will create the provider for us based on the environment <code class="language-plaintext highlighter-rouge">(anchor.Provider.local())</code>.</p>
+
+<p>Now, the <code class="language-plaintext highlighter-rouge">program</code> is an abstraction that combines the Provider, idl, and the programID (which is generated when the program is built) and allows us to call RPC methods against our program.</p>
+
+<p>The calculator variable you see is the keypair generated using anchor.web3 that we will be using to test our program.</p>
+
+<p>When we have these three things, we can start calling functions in our program, which is what we will be doing in our next sub-quest.</p>
+
+<h1 id="writing-our-first-test">
+<a class="anchor" href="#writing-our-first-test" aria-hidden="true"><span class="octicon octicon-link"></span></a>Writing our first test</h1>
+
+<p>The method to call the functions of our program is pretty straight-forward. We will use the program RPCs (Remote procedure calls) to access the function and then we will use the <code class="language-plaintext highlighter-rouge">web3.js</code> library to create <code class="language-plaintext highlighter-rouge">accounts</code> which have to be passed as the parameters to those functions. Let’s first jump into the code of our first test and see things in action.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  it('Creates a calculator', async () =&gt; {
+    await program.rpc.create("Welcome to Solana", {
+      accounts: {
+        calculator: calculator.publicKey,
+        user: provider.wallet.publicKey,
+        systemProgram: SystemProgram.programId,
+      },
+      signers: [calculator]
+    });
+
+    const account = await program.account.calculator.fetch(calculator.publicKey);
+    assert.ok(account.greeting === "Welcome to Solana");
+    _calculator = calculator;
+  });
+</code></pre></div></div>
+<p>Now, what we have done in the code above is simply create a <code class="language-plaintext highlighter-rouge">calculator</code> account by generating a new account using the <code class="language-plaintext highlighter-rouge">web3</code> library. Then using the program RPC, we have called the <code class="language-plaintext highlighter-rouge">create</code> function and to that function we have supplied the required parameters, which were the <code class="language-plaintext highlighter-rouge">calculator</code>, <code class="language-plaintext highlighter-rouge">user</code>, <code class="language-plaintext highlighter-rouge">systemProgram</code> and the <code class="language-plaintext highlighter-rouge">init_message</code> string.</p>
+
+<p>After this function is run, we simply grabbed hold of the calculator account and checked it’s <code class="language-plaintext highlighter-rouge">greeting</code> field and verify whether it has changed to <code class="language-plaintext highlighter-rouge">Welcome to Solana</code> or not. After that we save the calculator account in a variable called <code class="language-plaintext highlighter-rouge">_calculator</code> so that it can be referenced later.</p>
+
+<p>With this, your code screen would look something like this:</p>
+
+<p><img src="https://user-images.githubusercontent.com/32522659/142737192-b30cfe3e-905c-46f7-9cfd-457d7e4f0f05.png" alt="image"></p>
+
+<h1 id="writing-our-second-test">
+<a class="anchor" href="#writing-our-second-test" aria-hidden="true"><span class="octicon octicon-link"></span></a>Writing our second test</h1>
+
+<p>With this second test, we begin testing the calculations of the Solana program that we wrote. Firstly, we will write the test for the correct functioning of the <code class="language-plaintext highlighter-rouge">add</code> function and then with that as the inspiration, the next sub-quest will be a challenge sub-quest where the learner will write the tests for <code class="language-plaintext highlighter-rouge">multiply</code>, <code class="language-plaintext highlighter-rouge">subtract</code> and <code class="language-plaintext highlighter-rouge">divide</code>. For testing, we cannot directly use numbers and we will therefore have to cast them into Anchor big numbers. Now, write the code below to test the <code class="language-plaintext highlighter-rouge">add</code> function of our <code class="language-plaintext highlighter-rouge">mycalculatordapp</code> program.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  it("Adds two numbers", async function() {
+    const calculator = _calculator;
+    
+    await program.rpc.add(new anchor.BN(2), new anchor.BN(3), {
+      accounts: {
+        calculator: calculator.publicKey,
+      },
+    });
+
+    const account = await program.account.calculator.fetch(calculator.publicKey);
+    assert.ok(account.result.eq(new anchor.BN(5)));
+    assert.ok(account.greeting === "Welcome to Solana");
+  });
+</code></pre></div></div>
+<p>It is very similar to the test we wrote in the last sub-quest with the only changes being that we are supplying <em>2</em> and <em>3</em> as the numbers to be added and passing the list of accounts as per the <code class="language-plaintext highlighter-rouge">Addition</code> struct which requires only the <code class="language-plaintext highlighter-rouge">calculator</code> account. After the <code class="language-plaintext highlighter-rouge">add</code> function is run using the RPC, we fetch the calculator account and check the fields of the calculator account. The <code class="language-plaintext highlighter-rouge">greeting</code> field should remain unaffected and still be “Welcome to Solana”, along with that the result field should now be equal to the sum of 2 and 3, ie, 5.</p>
+
+<p>That is all that was required to test the <code class="language-plaintext highlighter-rouge">add</code> function. With this, your coding screen should look like this:</p>
+
+<p><img src="https://user-images.githubusercontent.com/32522659/142737483-fff0e04d-3abf-414c-a44d-20b487b38d05.png" alt="image"></p>
+
+<h1 id="challenge-sub-quest-1">
+<a class="anchor" href="#challenge-sub-quest-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Challenge sub-quest</h1>
+
+<p>As discussed in the previous sub-quest, in this sub-quest you are required to come up with the tests for the <code class="language-plaintext highlighter-rouge">multiply</code>, <code class="language-plaintext highlighter-rouge">subtract</code> and <code class="language-plaintext highlighter-rouge">divide</code> functions by yourself. You can take inspiration from the earlier two tests we wrote and trust me when I say that you can very easily write the tests for these three functions too. All you need to do is make sure that the entire quest uptil this point was clear to you.</p>
+
+<p>All the best.</p>
+
+<h1 id="solution-to-the-challenge-sub-quest-1">
+<a class="anchor" href="#solution-to-the-challenge-sub-quest-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Solution to the challenge sub-quest</h1>
+
+<p>I hope that you gave your best attempt to the challenge in the last sub-quest and now let’s tally what you’ve written with the tests can be. The values of the parameters (num1 and num2) being passed can change, make sure you are writing your <code class="language-plaintext highlighter-rouge">assert</code> statements accordingly.</p>
+
+<p>Here’s the code for the <code class="language-plaintext highlighter-rouge">multiply</code> function check:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  it('Multiplies two numbers', async function() {
+    const calculator = _calculator;
+
+    await program.rpc.multiply(new anchor.BN(2), new anchor.BN(3), {
+      accounts: {
+        calculator: calculator.publicKey,
+      },
+    });
+
+    const account = await program.account.calculator.fetch(calculator.publicKey);
+    assert.ok(account.result.eq(new anchor.BN(6)));
+    assert.ok(account.greeting === "Welcome to Solana");
+  })
+
+</code></pre></div></div>
+<p>Here’s the code for the <code class="language-plaintext highlighter-rouge">subtract</code> function check:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  it('Subtracts two numbers', async function() {
+    const calculator = _calculator;
+
+    await program.rpc.subtract(new anchor.BN(32), new anchor.BN(33), {
+      accounts: {
+        calculator: calculator.publicKey,
+      },
+    });
+
+    const account = await program.account.calculator.fetch(calculator.publicKey);
+    assert.ok(account.result.eq(new anchor.BN(-1)));
+    assert.ok(account.greeting === "Welcome to Solana");
+  });
+
+</code></pre></div></div>
+
+<p>Here’s the code for the <code class="language-plaintext highlighter-rouge">divide</code> function check:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  it('Divides two numbers', async function() {
+    const calculator = _calculator;
+
+    await program.rpc.divide(new anchor.BN(10), new anchor.BN(3), {
+      accounts: {
+        calculator: calculator.publicKey,
+      },
+    });
+
+    const account = await program.account.calculator.fetch(calculator.publicKey);
+    assert.ok(account.result.eq(new anchor.BN(3)));
+    assert.ok(account.remainder.eq(new anchor.BN(1)));
+    assert.ok(account.greeting === "Welcome to Solana");
+  });
+</code></pre></div></div>
+
+<p>Wasn’t this exhilarating? You’ve only just started with Solana development and now not only can you just write program functions on your own, you can also write tests to verify their functioning. Isn’t this seriously mind-blowing? Anyway, congratulations on this feet and just tally your code with the code snapshot below and after which we move onto actaully running these tests.</p>
+
+<p><img src="https://user-images.githubusercontent.com/32522659/142737709-260d3284-6fe1-4441-8925-f9839d6a8434.png" alt="image"></p>
+
+<p><img src="https://user-images.githubusercontent.com/32522659/142737716-2f534f82-7cfa-4843-ad25-02b32086d7ea.png" alt="image"></p>
+
+<p><img src="https://user-images.githubusercontent.com/32522659/142737719-31b2f671-a448-4a17-8e10-5bfbfcff5d7d.png" alt="image"></p>
+
+<h1 id="running-the-tests">
+<a class="anchor" href="#running-the-tests" aria-hidden="true"><span class="octicon octicon-link"></span></a>Running the tests</h1>
+
+<p>Now, that we are done running all the tests, make sure that your local validator is not running. That means make sure that the <code class="language-plaintext highlighter-rouge">solana-test-validator</code> process is not running and the <code class="language-plaintext highlighter-rouge">network</code> is set as localhost by inspecting the results of <code class="language-plaintext highlighter-rouge">solana config get</code>. Once all this is done, it is time for us to actually test the progarm that we wrote. To do that use the following command:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>anchor test
+</code></pre></div></div>
+
+<p>If all the tests pass, you’ll get a screen similar to this:</p>
+
+<p><img src="https://user-images.githubusercontent.com/32522659/142737779-3de3bb2b-9752-4c70-a2d1-8d50377aa708.png" alt="image"></p>
+
+<p>If you get some errors, try debugging those using the error messages you get. Make sure you have accurately followed the code presented in the quests and you are on the same Anchor version as that followed in the quest (0.17.0). With that you’ll find your way out of most of the errors that you might run into.</p>
+
+<h1 id="congratulations">
+<a class="anchor" href="#congratulations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Congratulations</h1>
+
+<p>Congratulations on succesfully creating your own calculator on the Solana blockchain and testing its functioning :D</p>
+
+<h2 id="next-steps">
+<a class="anchor" href="#next-steps" aria-hidden="true"><span class="octicon octicon-link"></span></a>Next steps</h2>
+<p>Now you’ve dipped your toes in the ocean of Solana development. To learn more about it, you can try and mess around with the data types that we used in the function declarations and see what effect does that have on the program; you can try to use just one struct in place of the <code class="language-plaintext highlighter-rouge">Addition</code>, <code class="language-plaintext highlighter-rouge">Multiplication</code>, <code class="language-plaintext highlighter-rouge">Subtraction</code> and <code class="language-plaintext highlighter-rouge">Division</code> struct since they were all similar. You can try to combine all the four calculator functions into one function where the operation is decided using the parameter passed, and apart from this you can experiment with the contents of this quest to your heart’s content and then you can move onto the other quests on Solana development.</p>
+
+  </div><a class="u-url" href="/solana/anchor/tutorial/web3/2021/11/28/Solana-Tutorial-Build-A-Calculator.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Personal website of Rahul Saxena, aka saxenism, containing his thoughts about web3, EVM and a decentralised world.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/saxenism" target="_blank" title="saxenism"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/saxenism" target="_blank" title="saxenism"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
