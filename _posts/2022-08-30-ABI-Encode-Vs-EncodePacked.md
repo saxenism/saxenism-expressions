@@ -80,7 +80,6 @@ contract StringEncoding {
     abi.encodePacked("Solidity");
     // returns -> 0x536f6c6964697479
     ```
-    + 
 
 + Since `abi.encodePacked` is non-standard hashing and uses the least amount of memory, it is usually gas-efficient
 
