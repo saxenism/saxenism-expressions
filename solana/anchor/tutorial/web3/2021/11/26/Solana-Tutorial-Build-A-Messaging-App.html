@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Solana Anchor Tutorial: Build a Messaging App | EVM Expressions</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Solana Anchor Tutorial: Build a Messaging App" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Learn Anchor, a development framework on Solana by building a messaging app" />
+<meta property="og:description" content="Learn Anchor, a development framework on Solana by building a messaging app" />
+<link rel="canonical" href="https://saxenism.com/solana/anchor/tutorial/web3/2021/11/26/Solana-Tutorial-Build-A-Messaging-App.html" />
+<meta property="og:url" content="https://saxenism.com/solana/anchor/tutorial/web3/2021/11/26/Solana-Tutorial-Build-A-Messaging-App.html" />
+<meta property="og:site_name" content="EVM Expressions" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-11-26T00:00:00-06:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Solana Anchor Tutorial: Build a Messaging App" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2021-11-26T00:00:00-06:00","datePublished":"2021-11-26T00:00:00-06:00","description":"Learn Anchor, a development framework on Solana by building a messaging app","headline":"Solana Anchor Tutorial: Build a Messaging App","mainEntityOfPage":{"@type":"WebPage","@id":"https://saxenism.com/solana/anchor/tutorial/web3/2021/11/26/Solana-Tutorial-Build-A-Messaging-App.html"},"url":"https://saxenism.com/solana/anchor/tutorial/web3/2021/11/26/Solana-Tutorial-Build-A-Messaging-App.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://saxenism.com/feed.xml" title="EVM Expressions" /><link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">EVM Expressions</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About Me</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Solana Anchor Tutorial: Build a Messaging App </h1><p class="page-description">Learn Anchor, a development framework on Solana by building a messaging app</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2021-11-26T00:00:00-06:00" itemprop="datePublished">
+        Nov 26, 2021
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      20 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/categories/#solana">solana</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#anchor">anchor</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#tutorial">tutorial</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#web3">web3</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h1"><a href="#building-a-messaging-app-on-solana-starting-with-a-blockchain-time-capsule">Building a messaging app on Solana: Starting with a blockchain time capsule</a>
+<ul>
+<li class="toc-entry toc-h2"><a href="#setting-up-the-environment">Setting up the Environment:</a></li>
+<li class="toc-entry toc-h2"><a href="#running-configurations-on-solana-cli">Running configurations on Solana CLI</a></li>
+<li class="toc-entry toc-h2"><a href="#setting-up-our-anchor-project">Setting up our Anchor project</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#writing-our-first-program-function">Writing our first program function</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#writing-out-our-second-function">Writing out our second function</a></li>
+<li class="toc-entry toc-h2"><a href="#defining-the-first-account-struct-used-in-our-program">Defining the first Account struct used in our program</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#further-reading">Further Reading:</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#defining-all-remaining-accounts-of-our-program">Defining all remaining Accounts of our program</a></li>
+<li class="toc-entry toc-h2"><a href="#updating-our-program_id">Updating our program_id</a></li>
+<li class="toc-entry toc-h2"><a href="#creating-the-testing-skeleton-of-our-program">Creating the testing skeleton of our program</a></li>
+<li class="toc-entry toc-h2"><a href="#writing-our-first-test">Writing our first test</a></li>
+<li class="toc-entry toc-h2"><a href="#writing-the-second-test">Writing the second test</a></li>
+<li class="toc-entry toc-h2"><a href="#testing-our-program">Testing our program</a></li>
+<li class="toc-entry toc-h2"><a href="#congratulations">Congratulations</a></li>
+</ul>
+</li>
+</ul><h1 id="building-a-messaging-app-on-solana-starting-with-a-blockchain-time-capsule">
+<a class="anchor" href="#building-a-messaging-app-on-solana-starting-with-a-blockchain-time-capsule" aria-hidden="true"><span class="octicon octicon-link"></span></a>Building a messaging app on Solana: Starting with a blockchain time capsule</h1>
+
+<p>Welcome to the Solana messaging app quest. With this quest you’ll get upto speed with the most rapidly rising blockchain in the market: <em>Solana</em>. It would be awesome if you know a bit 
+of Rust or C++ already and are familiar with how blockchains work, but even if you do not have any specific background of Rust or Solana development, we will have all bases covered. If 
+you have a high level of interest and motivation, we should be good to go ahead.</p>
+
+<p>In this quest, we will be developing a blockchain based time-capsule. This essentially means that you’ll be able to leave a message on the Solana blockchain and anyone can view it for as
+long as the Solana blockchain itself exists. Your message will survive the test of time and could not be taken down by anyone.</p>
+
+<p>This time-capsule quest will set us up for extending this project and creating an entire messaging app. How cool is that, right?</p>
+
+<h2 id="setting-up-the-environment">
+<a class="anchor" href="#setting-up-the-environment" aria-hidden="true"><span class="octicon octicon-link"></span></a>Setting up the Environment:</h2>
+
+<p>There are a few things that we need to get up and running before we move forward in this quest. Before we move forward make sure you’ve a working NodeJS environment set up. We need rust, Solana, Mocha(a JS testing framework), Anchor and Phantom wallet for this quest.
+To install rust, run</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+source $HOME/.cargo/env
+rustup component add rustfmt
+</code></pre></div></div>
+
+<p>To install Solana, run</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sh -c "$(curl -sSfL https://release.solana.com/v1.8.0/install)"
+</code></pre></div></div>
+
+<p>To install mocha globally, run</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install -g mocha
+</code></pre></div></div>
+
+<p>Now we’ll be installing Anchor.
+If you’re on a linux system, run</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Only on linux systems
+npm i -g @project-serum/anchor-cli
+</code></pre></div></div>
+
+<p><strong>Fair Warning</strong> : If you are using a Windows system, we highly suggest using <a href="https://en.wikipedia.org/wiki/Windows_Subsystem_for_Linux">WSL2</a> (Windows sub-system for Linux) or switching to a Linux environment. Setting up WSL is also quick and easy. A 
+good walk-through can be found <a href="https://www.youtube.com/watch?v=X3bPWl9Z2D0&amp;ab_channel=BeachcastsProgrammingVideos">here</a>
+For any other OS, you need to build from source. Run the following command</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cargo install --git https://github.com/project-serum/anchor --tag v0.18.0 anchor-cli --locked
+</code></pre></div></div>
+
+<p>To verify that Anchor is installed, run</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>anchor --version
+</code></pre></div></div>
+
+<p>Since Solana is still a pretty new blockchain compared to the establised ones out there, it’s developer tooling too is pretty limited and cumbersome as of now. However, it is rapidly improving 
+and it does so on a daily basis. At the forefront of this development is Anchor, by <a href="https://twitter.com/armaniferrante">Armani Ferrante</a>. You can think of it like the Ruby on Rails framework for
+Ruby, that means yes, you can develop things on vanilla Ruby, but Ruby on Rails makes your life much much easier, right? That’s the same with Anchor and Solana development. Anchor is the Hardhat of 
+Solana development plus much more. It offers a Rust DSL (basically, an easier Rust) to work with along with IDL, CLI and workspace management.</p>
+
+<h2 id="running-configurations-on-solana-cli">
+<a class="anchor" href="#running-configurations-on-solana-cli" aria-hidden="true"><span class="octicon octicon-link"></span></a>Running configurations on Solana CLI</h2>
+
+<p>The first command you should run on your terminal (assuming Solana CLI was properly installed in the last quest) is:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>solana config get
+</code></pre></div></div>
+
+<p>This should throw up a result similar to something like:</p>
+
+<p><img src="img-messaging/1.png" alt=""></p>
+
+<p>If you didnot set up your keypair earlier, then you won’t be having the <code class="language-plaintext highlighter-rouge">Keypair Path</code> in your results. To set that up, follow the instructions over <a href="https://docs.solana.com/wallet-guide/paper-wallet#seed-phrase-generation">here</a></p>
+
+<p>We would want to remain on the local network for building our program and later shift to the devent or mainnet-beta if required. If the <code class="language-plaintext highlighter-rouge">RPC URL</code> field of your last result did not show <code class="language-plaintext highlighter-rouge">localhost</code>, you can set it to localhost using the following command:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>solana config set --url localhost
+</code></pre></div></div>
+
+<p>Next, we would want to know our account/wallet address and airdrop some SOL tokens into it, to handle all the deployment, transactions etc costs that come with interacting with and using a Solana program. To do that first let’s find our address. The command to do that is:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>solana address
+</code></pre></div></div>
+
+<p>This would result into something like this:</p>
+
+<p><img src="img-messaging/2.png" alt=""></p>
+
+<p>Then, for more comprehensive details of your account, use the following command with the address that you got from the last command</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>solana account &lt;your address from the last command&gt;
+</code></pre></div></div>
+
+<p>This would result into something like this:</p>
+
+<p><img src="img-messaging/3.png" alt=""></p>
+
+<p>Next, we want to spin up our local network. Think of this local network as a mock Solana blockchain running on your own single system. This network would be required for development and testing of our program. To spin it up, in a separate tab, use the following command:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>solana-test-validator
+</code></pre></div></div>
+
+<p>Once you get an image, like the one below, you know that your local validator (local network) is now up and running</p>
+
+<p><img src="img-messaging/4.png" alt=""></p>
+
+<p>Now, our last task is to top up our account with some SOL, which you can do by using:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>solana airdrop 100
+</code></pre></div></div>
+
+<p>This should result in something like:</p>
+
+<p><img src="img-messaging/5.png" alt=""></p>
+
+<h2 id="setting-up-our-anchor-project">
+<a class="anchor" href="#setting-up-our-anchor-project" aria-hidden="true"><span class="octicon octicon-link"></span></a>Setting up our Anchor project</h2>
+
+<p>In this sub-quest all we would do is initialize an Anchor project and see whether everything’s there and working fine or not and after move on ahead to make our own changes.
+Head over to your preferred destination for the project using your terminal and then type the following command:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>anchor init messengerapp
+
+cd messengerapp
+</code></pre></div></div>
+
+<p>This would result in a screen somewhat similar to this:</p>
+
+<p><img src="img-messaging/6.png" alt=""></p>
+
+<p>First we check whether we can see the <em>programs</em>, <em>app</em>, <em>programs</em>, <em>migrations</em> directory among others or not. If we can, we would head over to <em>programs/messengerapp/src/lib.rs</em> to see the default program that Anchor provides us. This is the most basic example possible on Anchor and what’s happening here is simply that a user-defined function <code class="language-plaintext highlighter-rouge">Initialize</code> whenever called would successfully exit the program. That’s all, nothing fancy. Now, let’s try to compile this program using the following command:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>anchor build
+</code></pre></div></div>
+
+<p>This would trigger a build function and would something like this upon completion:</p>
+
+<p><img src="img-messaging/7.png" alt=""></p>
+
+<p>This build creates a new folder in your project directory called, <code class="language-plaintext highlighter-rouge">target</code>. This <code class="language-plaintext highlighter-rouge">target</code> folder contains the <code class="language-plaintext highlighter-rouge">idl</code> directory, which would also contain the <code class="language-plaintext highlighter-rouge">idl</code> for our program. The <code class="language-plaintext highlighter-rouge">IDL</code> or Interface Description Language describes the instructions exposed by the contract and is very similar to ABI in Solidity and user for similar purposes, ie, for tests and front-end integrations. Next, we can move onto testing this program, so that we can get familiar with how testing is done in Anchor. Head to <code class="language-plaintext highlighter-rouge">tests/messengerapp.js</code>. Here, you’ll see a test written in javascript to interact and test the default program. There are a lot of things in the test, that may not make sense to you right now, but stick around and we’ll get to those shortly. The test would look something like this:</p>
+
+<p><img src="img-messaging/8.png" alt=""></p>
+
+<p>Next, to actually run these tests, first head over to the tab where you ran the solana-test-validator command and kill that process (using Ctrl-C). Now, use the following command:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>anchor test
+</code></pre></div></div>
+
+<p>The passing tests should result in the following screen:</p>
+
+<p><img src="img-messaging/9.png" alt=""></p>
+
+<p>Now, let’s head over to the <code class="language-plaintext highlighter-rouge">programs</code> directory again and start making changes to create our messaging app.</p>
+
+<h3 id="writing-our-first-program-function">
+<a class="anchor" href="#writing-our-first-program-function" aria-hidden="true"><span class="octicon octicon-link"></span></a>Writing our first program function</h3>
+
+<p>Head over to <code class="language-plaintext highlighter-rouge">programs/messengerapp/src/lib.rs</code> and clear the code written there apart from the macro declarations and crates (libraries) that we will be using. After the clearning, your coding screen should look somehting like this:</p>
+
+<p><img src="img-messaging/10.png" alt=""></p>
+
+<p>Now let us simply define two functions that we will be using in our Solana program. The bulk of the program goes in a module under the <code class="language-plaintext highlighter-rouge">#[program]</code> macro. We’ll just define them under the <code class="language-plaintext highlighter-rouge">pub mod messengerapp</code> and write the logic later. These two function definitions would look like this:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    pub fn initialize(ctx: Context&lt;Initialize&gt;, data: String) -&gt; ProgramResult {
+        
+    }
+
+    pub fn update(ctx: Context&lt;Update&gt;, data: String) -&gt; ProgramResult {
+        
+    }
+</code></pre></div></div>
+<p>Here <code class="language-plaintext highlighter-rouge">pub</code> means public and <code class="language-plaintext highlighter-rouge">fn</code> means function, implying that they are public functions that can be invoked from our program, ie it becomes a client-callable program function. The first argument of these functions is always <code class="language-plaintext highlighter-rouge">Context&lt;T&gt;</code> which consist of the solana accounts array and the program ID, which in essence is the required data to call just about any progarm on Solana. The next parameter of both these functions is a <code class="language-plaintext highlighter-rouge">String</code> named data, which we will be using as our message. The <code class="language-plaintext highlighter-rouge">ProgramResult</code> is the return type of both these functions, which actually is just an easier method to serve function results and/or errors.</p>
+
+<p>After defining the above two functions, your code should look something like this:</p>
+
+<p><img src="img-messaging/11.png" alt=""></p>
+
+<p>Now, let’s write our logic for the <code class="language-plaintext highlighter-rouge">initialize</code> function, ok? Let’s first make our intentions clear for this function and the program in general. We want to keep track of two things here. First, is the data that is being passed while calling the function and the second is the list of all the data(messages) that have been passed to our specific account. So, we would want our main account (the account that will handle all the messaging stuff of the program) to have two fields, one for storing the incoming data and the other for keeping a record of all earlier data. We call this account the <code class="language-plaintext highlighter-rouge">base_account</code>. Also, keep in mind that since we will be adding to the data_list everytime a new data is introduced, we will need the account to be mutable, ie, the account should be able to accept changes. Write the following logic inside the <code class="language-plaintext highlighter-rouge">initialize</code> function now:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>let base_account = &amp;mut ctx.accounts.base_account;
+let copy = data.clone();
+base_account.data = data;
+base_account.data_list.push(copy);
+Ok(())
+</code></pre></div></div>
+<p>The <code class="language-plaintext highlighter-rouge">Ok(())</code> syntax is used for error handling of the ProgramResult type. You can think of <code class="language-plaintext highlighter-rouge">Ok(())</code> like a gate, that lets the program continue if there are no errors but sends the program into another state if an error is encountered.</p>
+
+<p>Now, your coding screen should look something like this: 
+<img src="img-messaging/12.png" alt=""></p>
+
+<p><strong>A small note about Accounts on Solana:</strong>
+An account is not actually a wallet. Instead, it’s a way for the contract to persist data between calls. This includes information such as the count in our base_account, and also information about permissions on the account. Accounts pay rent in the form of lamports, and if it runs out, then the account is purged from the blockchain. Accounts with two years worth of rent attached are “rent-exempt” and can stay on the chain forever.</p>
+
+<h2 id="writing-out-our-second-function">
+<a class="anchor" href="#writing-out-our-second-function" aria-hidden="true"><span class="octicon octicon-link"></span></a>Writing out our second function</h2>
+
+<p>In the last sub-quest we defined the <code class="language-plaintext highlighter-rouge">update</code> function, right? Now let’s go ahead and write the logic for this function.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>let base_account = &amp;mut ctx.accounts.base_account;
+let copy = data.clone();
+base_account.data = data;
+base_account.data_list.push(copy);
+Ok(())
+</code></pre></div></div>
+
+<p>Your code screen should now look like this:
+<img src="img-messaging/13.png" alt=""></p>
+
+<p>Wasn’t this funny? We wrote the same code again, right? Well, yes, the logic of both the functions were same and the only real difference is in the <code class="language-plaintext highlighter-rouge">Account</code> inside of the <code class="language-plaintext highlighter-rouge">Context&lt;&gt;</code> struct. This is a simple container for the currently executing <code class="language-plaintext highlighter-rouge">program_id</code> generic over <code class="language-plaintext highlighter-rouge">Accounts</code>. This essentially is what would differentiate between whether the message coming in our program is the first message or some later messages. Now, the natural question would be where are all these <code class="language-plaintext highlighter-rouge">structs</code> defined? Calm down, champ. We haven’t yet defined them, but that is exactly what we will be doing next.</p>
+
+<h2 id="defining-the-first-account-struct-used-in-our-program">
+<a class="anchor" href="#defining-the-first-account-struct-used-in-our-program" aria-hidden="true"><span class="octicon octicon-link"></span></a>Defining the first Account struct used in our program</h2>
+
+<p>Let’s first define the <code class="language-plaintext highlighter-rouge">Initialize</code> struct used in our <code class="language-plaintext highlighter-rouge">initialize</code> function that we defined two sub-quests back. We already have gone over what <code class="language-plaintext highlighter-rouge">Accounts</code> and <code class="language-plaintext highlighter-rouge">Context</code> are. So, here just keep in mind that whenever we need to include multiple <code class="language-plaintext highlighter-rouge">accounts</code> in a struct, we would use the derive Accounts macro, which is <code class="language-plaintext highlighter-rouge">#[derive(Accounts)]</code>, basically when we want to <em>derive</em> an account to pass to the function using other <code class="language-plaintext highlighter-rouge">accounts</code>, we use the derive accounts macro and while defining a singular <code class="language-plaintext highlighter-rouge">account</code> we would simply use the normal account macro, which is <code class="language-plaintext highlighter-rouge">[account]</code>. Now the normal account marco can also consist of many parameters which denote the permissions related to that particular account and we will look into those as we move ahead. Write the following code into your editor:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#[derive(Accounts)]
+pub struct Initialize&lt;'info&gt; {
+    #[account(init, payer = user, space = 64 + 64)]
+    pub base_account: Account&lt;'info, BaseAccount&gt;,
+    #[account(mut)]
+    pub user: Signer&lt;'info&gt;,
+    pub system_program: Program&lt;'info, System&gt;,
+}
+</code></pre></div></div>
+
+<p>As discussed earlier, we used the derive Accounts macro since we had to incorporate 3 accounts here and for all these three accounts individually, we used the account macro. Now onto the arguments used with these macros. The <code class="language-plaintext highlighter-rouge">init</code> macro is used to create a new account owned by the current program which is our <code class="language-plaintext highlighter-rouge">messengerapp</code> program. Whenever <code class="language-plaintext highlighter-rouge">init</code> parameter is used, we must always specify the <code class="language-plaintext highlighter-rouge">payer</code> or the account that will be paying for creation of the account on the Solana blockchain, along with the <code class="language-plaintext highlighter-rouge">space</code> param which is the space with which the new account is created.</p>
+
+<p>The <code class="language-plaintext highlighter-rouge">mut</code> parameter marks an account as mutable, which essentially means our account will be altered and Solana will need to update the data in your account. So, always use the <code class="language-plaintext highlighter-rouge">mut</code> parameter for persisting changes.</p>
+
+<p>Another new concept used here is the <code class="language-plaintext highlighter-rouge">Signer</code> type. This is used to enforce the constraint that the <code class="language-plaintext highlighter-rouge">authority</code> account (messengerapp in this case) <em>signed</em> the transaction.</p>
+
+<p>The peculiar thing you might notice here is that the <code class="language-plaintext highlighter-rouge">base_account</code> field is of type <code class="language-plaintext highlighter-rouge">BaseAccount</code>, but that <code class="language-plaintext highlighter-rouge">BaseAccount</code> is not to be found anywhere, right? As always, we will be defining that in just the next sub-quest. So hold on and re-read all the info that you just recieved if you feel the need. In the next sub-quest we will be defining the <code class="language-plaintext highlighter-rouge">Update</code> and <code class="language-plaintext highlighter-rouge">BaseAccount</code> structs.</p>
+
+<p>Your coding screen should look like this right now:</p>
+
+<p><img src="img-messaging/14.png" alt=""></p>
+
+<h3 id="further-reading">
+<a class="anchor" href="#further-reading" aria-hidden="true"><span class="octicon octicon-link"></span></a>Further Reading:</h3>
+<p>You can read up on different types of account constraints <a href="https://docs.rs/anchor-lang/0.18.0/anchor_lang/derive.Accounts.html">here</a>.</p>
+
+<h2 id="defining-all-remaining-accounts-of-our-program">
+<a class="anchor" href="#defining-all-remaining-accounts-of-our-program" aria-hidden="true"><span class="octicon octicon-link"></span></a>Defining all remaining Accounts of our program</h2>
+
+<p>With the understanding about all kinds of <code class="language-plaintext highlighter-rouge">Account</code> marcos and the associated parameters with them, let’s get straight into writing the other two account structs.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pub struct Update&lt;'info&gt; {
+    #[account(mut)]
+    pub base_account: Account&lt;'info, BaseAccount&gt;,
+</code></pre></div></div>
+
+<p>and now the final <code class="language-plaintext highlighter-rouge">BaseAccount</code> struct:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#[account]
+pub struct BaseAccount {
+    pub data: String,
+    pub data_list: Vec&lt;String&gt;,
+</code></pre></div></div>
+
+<p>Now, for the <code class="language-plaintext highlighter-rouge">Update</code> account struct, we notice that it is essentially the same as the <code class="language-plaintext highlighter-rouge">Initialize</code> account struct, it’s just that we are using an existing field <code class="language-plaintext highlighter-rouge">base_account</code> of type <code class="language-plaintext highlighter-rouge">BaseAccount</code> and not creating it. After which, we define the <code class="language-plaintext highlighter-rouge">BaseAccount</code> that was being used everywhere. As discussed earlier, it has two fields, one is <code class="language-plaintext highlighter-rouge">data</code> of type <code class="language-plaintext highlighter-rouge">String</code> to store the incoming value of the message while the other is a <code class="language-plaintext highlighter-rouge">vector of strings</code> to store/persist all the messages in that account. A vector is a list of elements with no specified size. But, bear in mind that initially we had createed our base account with the space of <code class="language-plaintext highlighter-rouge">64 + 64</code> so there will be a limit to thow many messages can be stored. You can explore the limits at different sizes as a side quest.</p>
+
+<p>After writing these definitions, your code screen should be looking something like this:</p>
+
+<p><img src="img-messaging/15.png" alt=""></p>
+
+<p>Good, now we are just one step away from being completely done with the smart contract (programs in Solana lingo) side of our project.</p>
+
+<h2 id="updating-our-program_id">
+<a class="anchor" href="#updating-our-program_id" aria-hidden="true"><span class="octicon octicon-link"></span></a>Updating our program_id</h2>
+
+<p>Remember the <code class="language-plaintext highlighter-rouge">declare_id!</code> macro of our program that was declared at the top with a random looking string, that we did not talk about? It is time to fix that. Currently, it looks something like this:</p>
+
+<p><img src="img-messaging/16.png" alt=""></p>
+
+<p>Since, we already discussed that we would be working on our local network, we need to deploy our program on our local network and then put the <code class="language-plaintext highlighter-rouge">program_id</code> recieved from there here at this macro. First make sure that your local validator is running in a different tab. If it is not, run it again in a different tab using the <code class="language-plaintext highlighter-rouge">solana-test-validator</code> command. Now use the following command to deploy your anchor program:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>anchor deploy
+</code></pre></div></div>
+
+<p>The above command should result in a screen similar to this:</p>
+
+<p><img src="img-messaging/17.png" alt=""></p>
+
+<p>Now, copy the <strong>program ID</strong> from the above output to the <code class="language-plaintext highlighter-rouge">declare_id</code> macro in our program. Something like this:</p>
+
+<p><img src="img-messaging/18.png" alt=""></p>
+
+<p>Congratulations, we are now done with writing the programs of our project. You just completed the smart contract (programs in Solana lingo) side of the Time Capsule project :D</p>
+
+<h2 id="creating-the-testing-skeleton-of-our-program">
+<a class="anchor" href="#creating-the-testing-skeleton-of-our-program" aria-hidden="true"><span class="octicon octicon-link"></span></a>Creating the testing skeleton of our program</h2>
+
+<p>Head over to <code class="language-plaintext highlighter-rouge">tests/messengerapp.js</code> and delete everything that’s written there. We are going to be writing our tests from scratch. The first step would be to import the necessary libraries and constants. To do that, use the following code:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const assert = require('assert');
+const anchor = require('@project-serum/anchor');
+const { SystemProgram } = anchor.web3;
+</code></pre></div></div>
+
+<p>Now, since we will be using <code class="language-plaintext highlighter-rouge">Mocha</code> for testing our programs, we will create the skeleton of where we will be putting our tests. So, basically, how Mocha works is that it takes <code class="language-plaintext highlighter-rouge">describe</code> blocks as testing blocks and within those <code class="language-plaintext highlighter-rouge">describe</code> blocks there are numerous tests written using the <code class="language-plaintext highlighter-rouge">it</code> blocks. So, use the following code to create the skeleton:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>describe("Testing our messaging app: ", function() {
+  const provider = anchor.Provider.env();
+  anchor.setProvider(provider);
+  const program = anchor.workspace.Messengerapp;
+
+  it("An account is initialized", async function() {
+
+  });
+
+  it("Update the account previously created: ", async function() {
+
+  });
+});
+</code></pre></div></div>
+
+<p>Now, your code screen should look something like:</p>
+
+<p><img src="img-messaging/19.png" alt=""></p>
+
+<p>The additional things that we coded there were the introduction of <code class="language-plaintext highlighter-rouge">provider</code>. The <code class="language-plaintext highlighter-rouge">provider</code> is the abstraction of a connection to the Solana network. In the test, the Anchor framework will create the provider for us based on the environment <code class="language-plaintext highlighter-rouge">(anchor.Provider.env())</code>.</p>
+
+<p>Now, the <code class="language-plaintext highlighter-rouge">program</code> is an abstraction that combines the Provider, idl, and the programID (which is generated when the program is built) and allows us to call RPC methods against our program.</p>
+
+<p>When we have these two things, we can start calling functions in our program, which is what we will be doing in our next sub-quest.</p>
+
+<h2 id="writing-our-first-test">
+<a class="anchor" href="#writing-our-first-test" aria-hidden="true"><span class="octicon octicon-link"></span></a>Writing our first test</h2>
+
+<p>The method to call the functions of our program is pretty straight-forward. We will use the program RPCs (Remote procedure calls) to access the function and then we will use the <code class="language-plaintext highlighter-rouge">web3.js</code> library to create <code class="language-plaintext highlighter-rouge">accounts</code> which have to be passed as the parameters to those functions. Let’s first jump into the code of our first test and see things in action.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  it("An account is initialized", async function() {
+    const baseAccount  = anchor.web3.Keypair.generate();
+    await program.rpc.initialize("My first message", {
+      accounts: {
+        baseAccount: baseAccount.publicKey,
+        user: provider.wallet.publicKey,
+        systemProgram: SystemProgram.programId,
+      },
+      signers: [baseAccount]
+    });
+  });
+</code></pre></div></div>
+
+<p>Now, what we have done in the code above is simply create a <code class="language-plaintext highlighter-rouge">baseAccount</code> by generating a new account using the <code class="language-plaintext highlighter-rouge">web3</code> library. Then using the program RPC, we have called the <code class="language-plaintext highlighter-rouge">initialize</code> function and to that function we have supplied the required parameters, which were the <code class="language-plaintext highlighter-rouge">baseAccount</code>, <code class="language-plaintext highlighter-rouge">user</code>, <code class="language-plaintext highlighter-rouge">systemProgram</code> and the <code class="language-plaintext highlighter-rouge">signer</code>.</p>
+
+<p>After this function is run, we simply need to grab hold of the baseAccount and check it’s <code class="language-plaintext highlighter-rouge">data</code> field and verify whether it has changed to <code class="language-plaintext highlighter-rouge">My first message</code> or not. To do that, we use the following lines of code:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    const account = await program.account.baseAccount.fetch(baseAccount.publicKey);
+    console.log('Data: ', account.data);
+    assert.ok(account.data === "My first message");
+    _baseAccount = baseAccount;
+</code></pre></div></div>
+
+<p>After this, your coding screen should look like this:</p>
+
+<p><img src="img-messaging/20.png" alt=""></p>
+
+<p>What we did here <code class="language-plaintext highlighter-rouge">fetch</code> the <code class="language-plaintext highlighter-rouge">baseAccount</code> from the program after the <code class="language-plaintext highlighter-rouge">initialize</code> function has been run and store it in a variable called <code class="language-plaintext highlighter-rouge">account</code>. Then we check whether the <code class="language-plaintext highlighter-rouge">data</code> field of <code class="language-plaintext highlighter-rouge">account</code> is the same as our message or not. In the last step, we save the state of this <code class="language-plaintext highlighter-rouge">baseAccount</code> in a variable called <code class="language-plaintext highlighter-rouge">_baseAccount</code>, so that we can check that later in the other tests.</p>
+
+<p>Now let us write the second test, where we update the previously created <code class="language-plaintext highlighter-rouge">baseAccount</code> which we stored in <code class="language-plaintext highlighter-rouge">_baseAccount</code> and check whether new messages get stored in the <code class="language-plaintext highlighter-rouge">data_list</code> field or not.</p>
+
+<h2 id="writing-the-second-test">
+<a class="anchor" href="#writing-the-second-test" aria-hidden="true"><span class="octicon octicon-link"></span></a>Writing the second test</h2>
+
+<p>As mentioned in the last quest, our objective with this test is to update the <code class="language-plaintext highlighter-rouge">data_list</code> field of the <code class="language-plaintext highlighter-rouge">baseAccount</code> and then verify this updation. To do that, we will write the below code:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    const baseAccount = _baseAccount;
+
+    await program.rpc.update("My second message", {
+      accounts: {
+        baseAccount: baseAccount.publicKey,
+      },
+    });
+</code></pre></div></div>
+
+<p>With the above code, we assigned the <code class="language-plaintext highlighter-rouge">_baseAccount</code> to a new <code class="language-plaintext highlighter-rouge">baseAccount</code>. This step can be skipped. After that, just like how we called the <code class="language-plaintext highlighter-rouge">initialize</code> function earlier, we called the <code class="language-plaintext highlighter-rouge">update</code> function and provided it with the required params, which are the new message and the <code class="language-plaintext highlighter-rouge">baseAccount</code>. After that to verify whether the update took place or not, we will use the following code:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    const account = await program.account.baseAccount.fetch(baseAccount.publicKey);
+    console.log("Updated data: ", account.data);
+    assert.ok(account.data === "My second message");
+    console.log("All account data: ", account);
+    console.log("All data: ", account.dataList);
+    assert.ok(account.dataList.length === 2);
+</code></pre></div></div>
+
+<p>With this, your coding screen should look something like this:</p>
+
+<p><img src="img-messaging/21.png" alt=""></p>
+
+<p>The <code class="language-plaintext highlighter-rouge">console.logs</code> can be skipped, but they are there for our own better understanding. So, in this block of code, we again fetch the <code class="language-plaintext highlighter-rouge">baseAccount</code> after the <code class="language-plaintext highlighter-rouge">update</code> function and check whether the <code class="language-plaintext highlighter-rouge">data</code> of the account has been updated or not. Then we print the details of the account itself, then the entire list of all the messages and finally we check whether the length of this <code class="language-plaintext highlighter-rouge">data_list</code> field of the <code class="language-plaintext highlighter-rouge">baseAccount</code> is 2 or not (since it should ideally contain [<em>My first message</em>, <em>My second message</em>]).</p>
+
+<p>With this we are done writing our tests, now all that remains is to actually run these tests.</p>
+
+<h2 id="testing-our-program">
+<a class="anchor" href="#testing-our-program" aria-hidden="true"><span class="octicon octicon-link"></span></a>Testing our program</h2>
+
+<p>Remember, some time back we changed the <code class="language-plaintext highlighter-rouge">program_id</code> in the <code class="language-plaintext highlighter-rouge">declare_id</code> macro of our program? We will follow a similar step in the <code class="language-plaintext highlighter-rouge">Anchor.toml</code> file now. Open the <code class="language-plaintext highlighter-rouge">Anchor.toml</code> file and replace the old <code class="language-plaintext highlighter-rouge">program_id</code> with the new <code class="language-plaintext highlighter-rouge">program_id</code>, like so:</p>
+
+<p><img src="img-messaging/22.png" alt=""></p>
+
+<p>Now, it’s the moment of truth. Head over to the console and type the following command if you have not stopped the <code class="language-plaintext highlighter-rouge">solana-test-validator</code> running in a different tab:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>anchor test --skip-local-validator
+</code></pre></div></div>
+
+<p>This will hopefully give a result similar to this:</p>
+
+<p><img src="img-messaging/24.png" alt=""></p>
+
+<p>And if this didn’t work for you go to your local validator tab and close it using <code class="language-plaintext highlighter-rouge">Ctrl</code> + <code class="language-plaintext highlighter-rouge">C</code> and after come back to the tab where you were testing and type the following command:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>anchor test
+</code></pre></div></div>
+
+<p>This should yield a result similar to:</p>
+
+<p><img src="img-messaging/23.png" alt=""></p>
+
+<h2 id="congratulations">
+<a class="anchor" href="#congratulations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Congratulations</h2>
+
+<p>Congratulations on not only building the building blocks of a chat application on Solana, which you can use as time-capsule on the blockchain, but also successfully testing that. In the next quest, we can go on ahead to see how to connect the front-end of a website with our program and see for ourselves how well our program is working. See you all soon :)</p>
+
+  </div><a class="u-url" href="/solana/anchor/tutorial/web3/2021/11/26/Solana-Tutorial-Build-A-Messaging-App.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Personal website of Rahul Saxena, aka saxenism, containing his thoughts about web3, EVM and a decentralised world.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/saxenism" target="_blank" title="saxenism"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/saxenism" target="_blank" title="saxenism"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

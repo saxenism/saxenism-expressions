@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Solana Anchor Tutorial: Create your own tokens | EVM Expressions</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Solana Anchor Tutorial: Create your own tokens" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Learn Anchor, a development framework on Solana by creating your own tokens" />
+<meta property="og:description" content="Learn Anchor, a development framework on Solana by creating your own tokens" />
+<link rel="canonical" href="https://saxenism.com/solana/anchor/tutorial/web3/2021/11/24/Solana-Tutorial-Create-Tokens.html" />
+<meta property="og:url" content="https://saxenism.com/solana/anchor/tutorial/web3/2021/11/24/Solana-Tutorial-Create-Tokens.html" />
+<meta property="og:site_name" content="EVM Expressions" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-11-24T00:00:00-06:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Solana Anchor Tutorial: Create your own tokens" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2021-11-24T00:00:00-06:00","datePublished":"2021-11-24T00:00:00-06:00","description":"Learn Anchor, a development framework on Solana by creating your own tokens","headline":"Solana Anchor Tutorial: Create your own tokens","mainEntityOfPage":{"@type":"WebPage","@id":"https://saxenism.com/solana/anchor/tutorial/web3/2021/11/24/Solana-Tutorial-Create-Tokens.html"},"url":"https://saxenism.com/solana/anchor/tutorial/web3/2021/11/24/Solana-Tutorial-Create-Tokens.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://saxenism.com/feed.xml" title="EVM Expressions" /><link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">EVM Expressions</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About Me</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Solana Anchor Tutorial: Create your own tokens </h1><p class="page-description">Learn Anchor, a development framework on Solana by creating your own tokens</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2021-11-24T00:00:00-06:00" itemprop="datePublished">
+        Nov 24, 2021
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      32 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/categories/#solana">solana</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#anchor">anchor</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#tutorial">tutorial</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#web3">web3</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h1"><a href="#building-your-own-crypto-currency-using-solana-programs">Building your own crypto-currency using Solana programs</a></li>
+<li class="toc-entry toc-h1"><a href="#setting-up-the-environment">Setting up the Environment:</a></li>
+<li class="toc-entry toc-h1"><a href="#running-configurations-on-solana-cli">Running configurations on Solana CLI</a></li>
+<li class="toc-entry toc-h1"><a href="#setting-up-our-anchor-project">Setting up our Anchor project</a>
+<ul>
+<li class="toc-entry toc-h2"><a href="#importing-the-anchor-spl-crates">Importing the Anchor SPL Crates</a></li>
+<li class="toc-entry toc-h2"><a href="#writing-our-first-program-function">Writing our first program function</a></li>
+<li class="toc-entry toc-h2"><a href="#writing-the-logic-for-our-functions">Writing the logic for our functions</a></li>
+<li class="toc-entry toc-h2"><a href="#lets-learn-to-serialize-and-deserialize">Let’s learn to serialize and deserialize</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#a-small-note-about-accounts-on-solana">A small note about Accounts on Solana:</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#defining-our-first-account-struct">Defining our first account struct</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#small-note-about-the-access-control-macros">Small note about the Access Control macros</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#defining-all-other-accounts">Defining all other accounts</a></li>
+<li class="toc-entry toc-h2"><a href="#say-hi-to-cross-program-invocations-cpis">Say hi to Cross Program Invocations (CPIs)</a></li>
+<li class="toc-entry toc-h2"><a href="#our-first-cpi">Our first CPI</a></li>
+<li class="toc-entry toc-h2"><a href="#implementing-all-other-from-blocks">Implementing all other from blocks</a></li>
+<li class="toc-entry toc-h2"><a href="#the-last-implementation-block">The last implementation block</a></li>
+<li class="toc-entry toc-h2"><a href="#checking-our-code">Checking our code</a></li>
+<li class="toc-entry toc-h2"><a href="#importing-the-necessary-code-required-for-testing-our-contract">Importing the necessary code required for testing our contract</a></li>
+<li class="toc-entry toc-h2"><a href="#the-spl-token-testing-boilerplate">The SPL Token testing boilerplate</a></li>
+<li class="toc-entry toc-h2"><a href="#initializing-the-test-state">Initializing the test state</a></li>
+<li class="toc-entry toc-h2"><a href="#writing-the-test-to-check-minting-of-our-token">Writing the test to check minting of our token</a></li>
+<li class="toc-entry toc-h2"><a href="#test-to-transfer-and-burn-our-tokens">Test to transfer and burn our tokens</a></li>
+<li class="toc-entry toc-h2"><a href="#testing-the-transfer-of-authority">Testing the transfer of authority</a></li>
+<li class="toc-entry toc-h2"><a href="#running-the-tests">Running the tests</a></li>
+</ul>
+</li>
+</ul><h1 id="building-your-own-crypto-currency-using-solana-programs">
+<a class="anchor" href="#building-your-own-crypto-currency-using-solana-programs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Building your own crypto-currency using Solana programs</h1>
+
+<p>Welcome to the Solana crypto-currency quest. With this quest you’ll get upto speed with the most rapidly rising blockchain in the market: <em>Solana</em>. It would be awesome if you know a bit 
+of Rust (or even C++ concepts) already and are familiar with how blockchains work, but even if you do not have any specific background of Rust or Solana development, we will have all bases covered. If 
+you have a high level of interest and motivation, we should be good to go ahead.</p>
+
+<p>In this quest, we will be developing our own crypto-currency on the Solana blockchain or our own <code class="language-plaintext highlighter-rouge">spl-token</code> in the Solana lingo. This essentially means that once you are done with this quest, 
+you will be able to make your crypto-currency using Solana programs and use that to do whatever you can think of, including using it as a fan token, a social token, a governance token, a utility token
+or a coin.</p>
+
+<h1 id="setting-up-the-environment">
+<a class="anchor" href="#setting-up-the-environment" aria-hidden="true"><span class="octicon octicon-link"></span></a>Setting up the Environment:</h1>
+
+<p>There are a few things that we need to get up and running before we move forward in this quest. Before we move forward make sure you’ve a working NodeJS environment set up. We need rust, Solana, Mocha(a JS testing framework), Anchor and Phantom wallet for this quest.
+To install rust, run</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+source $HOME/.cargo/env
+rustup component add rustfmt
+</code></pre></div></div>
+
+<p>To install Solana, run</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sh -c "$(curl -sSfL https://release.solana.com/v1.8.0/install)"
+</code></pre></div></div>
+
+<p>To install mocha globally, run</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install -g mocha
+</code></pre></div></div>
+
+<p>Now we’ll be installing Anchor.
+If you’re on a linux system, run</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Only on linux systems
+npm i -g @project-serum/anchor-cli
+</code></pre></div></div>
+
+<p><strong>Fair Warning</strong> : If you are using a Windows system, we highly suggest using <a href="https://en.wikipedia.org/wiki/Windows_Subsystem_for_Linux">WSL2</a> (Windows sub-system for Linux) or switching to a Linux environment. Setting up WSL is also quick and easy. A 
+good walk-through can be found <a href="https://www.youtube.com/watch?v=X3bPWl9Z2D0&amp;ab_channel=BeachcastsProgrammingVideos">here</a>
+For any other OS, you need to build from source. Run the following command</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cargo install --git https://github.com/project-serum/anchor --tag v0.17.0 anchor-cli --locked
+</code></pre></div></div>
+
+<p>To verify that Anchor is installed, run</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>anchor --version
+</code></pre></div></div>
+
+<p>Since Solana is still a pretty new blockchain compared to the establised ones out there, it’s developer tooling too is pretty limited and cumbersome as of now. However, it is rapidly improving 
+and it does so on a daily basis. At the forefront of this development is Anchor, by <a href="https://twitter.com/armaniferrante">Armani Ferrante</a>. You can think of it like the Ruby on Rails framework for
+Ruby, that means yes, you can develop things on vanilla Ruby, but Ruby on Rails makes your life much much easier, right? That’s the same with Anchor and Solana development. Anchor is the Hardhat of 
+Solana development plus much more. It offers a Rust DSL (basically, an easier Rust) to work with along with IDL, CLI and workspace management. Anchor abstracts away a lot of potential security holes
+from a conventional Solana program, takes care of the serialization and deserialization, reduces large boilder-platey code to macros and lot of other good good stuff.</p>
+
+<h1 id="running-configurations-on-solana-cli">
+<a class="anchor" href="#running-configurations-on-solana-cli" aria-hidden="true"><span class="octicon octicon-link"></span></a>Running configurations on Solana CLI</h1>
+
+<p>The first command you should run on your terminal (assuming Solana CLI was properly installed in the last quest) is:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>solana config get
+</code></pre></div></div>
+
+<p>This should throw up a result similar to something like:</p>
+
+<p><img src="img-my-money/1.png" alt=""></p>
+
+<p>If you didnot set up your keypair earlier, then you won’t be having the <code class="language-plaintext highlighter-rouge">Keypair Path</code> in your results. To set that up, follow the instructions over <a href="https://docs.solana.com/wallet-guide/paper-wallet#seed-phrase-generation">here</a></p>
+
+<p>We would want to remain on the local network for building our program and later shift to the devent or mainnet-beta if required. If the <code class="language-plaintext highlighter-rouge">RPC URL</code> field of your last result did not show <code class="language-plaintext highlighter-rouge">localhost</code>, you can set it to localhost using the following command:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>solana config set --url localhost
+</code></pre></div></div>
+
+<p>Next, we would want to know our account/wallet address and airdrop some SOL tokens into it, to handle all the deployment, transactions etc costs that come with interacting with and using a Solana program. To do that first let’s find our address. The command to do that is:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>solana address
+</code></pre></div></div>
+
+<p>This would result into something like this:</p>
+
+<p><img src="img-my-money/2.png" alt=""></p>
+
+<p>Then, for more comprehensive details of your account, use the following command with the address that you got from the last command</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>solana account &lt;your address from the last command&gt;
+</code></pre></div></div>
+
+<p>This would result into something like this:</p>
+
+<p><img src="img-my-money/3.png" alt=""></p>
+
+<p>Next, we want to spin up our local network. Think of this local network as a mock Solana blockchain running on your own single system. This network would be required for development and testing of our program. To spin it up, in a separate tab, use the following command:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>solana-test-validator
+</code></pre></div></div>
+
+<p>Once you get an image, like the one below, you know that your local validator (local network) is now up and running</p>
+
+<p><img src="img-my-money/4.png" alt=""></p>
+
+<p>Now, our last task is to top up our account with some SOL, which you can do by using:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>solana airdrop 100
+</code></pre></div></div>
+
+<p>This should result in something like:</p>
+
+<p><img src="img-my-money/5.png" alt=""></p>
+
+<h1 id="setting-up-our-anchor-project">
+<a class="anchor" href="#setting-up-our-anchor-project" aria-hidden="true"><span class="octicon octicon-link"></span></a>Setting up our Anchor project</h1>
+
+<p>In this sub-quest all we would do is initialize an Anchor project and see whether everything’s there and working fine or not and after move on ahead to make our own changes.
+Head over to your preferred destination for the project using your terminal and then type the following command:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>anchor init mymoneydapp
+
+cd mymoneydapp
+</code></pre></div></div>
+
+<p>This would result in a screen somewhat similar to this:</p>
+
+<p><img src="img-my-money/6.png" alt=""></p>
+
+<p>First we check whether we can see the <em>programs</em>, <em>app</em>, <em>programs</em>, <em>migrations</em> directory among others or not. If we can, we would head over to <em>programs/messengerapp/src/lib.rs</em> to see the default program that Anchor provides us. This is the most basic example possible on Anchor and what’s happening here is simply that a user-defined function <code class="language-plaintext highlighter-rouge">Initialize</code> whenever called would successfully exit the program. That’s all, nothing fancy. Now, let’s try to compile this program using the following command:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>anchor build
+</code></pre></div></div>
+
+<p>This would trigger a build function and would something like this upon completion:</p>
+
+<p><img src="img-my-money/7.png" alt=""></p>
+
+<p>This build creates a new folder in your project directory called, <code class="language-plaintext highlighter-rouge">target</code>. This <code class="language-plaintext highlighter-rouge">target</code> folder contains the <code class="language-plaintext highlighter-rouge">idl</code> directory, which would also contain the <code class="language-plaintext highlighter-rouge">idl</code> for our program. The <code class="language-plaintext highlighter-rouge">IDL</code> or Interface Description Language describes the instructions exposed by the contract and is very similar to ABI in Solidity and user for similar purposes, ie, for tests and front-end integrations. Next, we can move onto testing this program, so that we can get familiar with how testing is done in Anchor. Head to <code class="language-plaintext highlighter-rouge">tests/messengerapp.js</code>. Here, you’ll see a test written in javascript to interact and test the default program. There are a lot of things in the test, that may not make sense to you right now, but stick around and we’ll get to those shortly. The test would look something like this:</p>
+
+<p><img src="img-my-money/8.png" alt=""></p>
+
+<p>Next, to actually run these tests, first head over to the tab where you ran the solana-test-validator command and kill that process (using Ctrl-C). Now, use the following command:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>anchor test
+</code></pre></div></div>
+
+<p>The passing tests should result in the following screen:</p>
+
+<p><img src="img-my-money/9.png" alt=""></p>
+
+<p>Now, let’s head over to the <code class="language-plaintext highlighter-rouge">programs</code> directory and start importing some cool Rust crates provided by Anchor which will help us build our money app.</p>
+
+<h2 id="importing-the-anchor-spl-crates">
+<a class="anchor" href="#importing-the-anchor-spl-crates" aria-hidden="true"><span class="octicon octicon-link"></span></a>Importing the Anchor SPL Crates</h2>
+
+<p>Head over to <code class="language-plaintext highlighter-rouge">programs/mymoneydapp/Cargo.toml</code> and under dependencies, add the two following lines:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>anchor-spl = "0.17.0"
+spl-token = { version = "3.1.1", features = ["no-entrypoint"] }
+</code></pre></div></div>
+
+<p>Make sure that the version of the <code class="language-plaintext highlighter-rouge">anchor-spl</code> you write here, matches the version of <code class="language-plaintext highlighter-rouge">anchor-lang</code> that you had installed. It would be much more convenient for you if install the same version that we are using in the quest. After these changes, the <code class="language-plaintext highlighter-rouge">Cargo.toml</code> file would look something like this:</p>
+
+<p><img src="img-my-money/11.png" alt=""></p>
+
+<p>Now that we are done adding the dependencies in the Cargo file, let’s call it inside our program too. Write down the following <code class="language-plaintext highlighter-rouge">use</code> statments at the very top of your <code class="language-plaintext highlighter-rouge">programs/mymoneydapp/src/lib.rs</code> file:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>use anchor_spl::token::{self, Burn, MintTo, SetAuthority, Transfer};
+</code></pre></div></div>
+
+<p>After this, clear all the default code that we were provided with, this would make your coding screen look something like:</p>
+
+<p><img src="img-my-money/12.png" alt=""></p>
+
+<h2 id="writing-our-first-program-function">
+<a class="anchor" href="#writing-our-first-program-function" aria-hidden="true"><span class="octicon octicon-link"></span></a>Writing our first program function</h2>
+
+<p>Head over to <code class="language-plaintext highlighter-rouge">programs/mymoneydapp/src/lib.rs</code> and clear the code written there apart from the macro declarations and crates (libraries) that we will be using. After the clearning, your coding screen should look something like the last screen of the last quest.</p>
+
+<p>Now let us simply define four functions that we will be using in our Solana program. The bulk of the program goes in a module under the <code class="language-plaintext highlighter-rouge">#[program]</code> macro. We’ll just define them under the <code class="language-plaintext highlighter-rouge">pub mod mymoneydapp</code> and write the logic later. These four function definitions would look like this:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    pub fn proxy_transfer(ctx: Context&lt;ProxyTransfer&gt;, amount: u64) -&gt; ProgramResult {
+
+    }
+    
+    pub fn proxy_mint_to(ctx: Context&lt;ProxyMintTo&gt;, amount: u64) -&gt; ProgramResult {
+    
+    }
+    
+    pub fn proxy_burn(ctx: Context&lt;ProxyBurn&gt;, amount: u64) -&gt; ProgramResult {
+    
+    }
+    
+    pub fn proxy_set_authority(
+        ctx: Context&lt;ProxySetAuthority&gt;,
+        authority_type: AuthorityType,
+        new_authority: Option&lt;Pubkey&gt;,
+    ) -&gt; ProgramResult {
+    
+    }
+</code></pre></div></div>
+
+<p>Notice the use of the word <code class="language-plaintext highlighter-rouge">proxy</code> in each function name? That is because we would be doing <code class="language-plaintext highlighter-rouge">Cross Program Invocation</code> or CPI for short in this program of ours. This essentially means that we would be calling functions of other Solana programs from our program. As you might have guessed, we would be calling the functions from the <code class="language-plaintext highlighter-rouge">anchor_spl</code> programs, which is the (abstracted) Anchor implementation of the spl-programs that you can find in the Solana Rust SDK. To look at the structure and explore the <code class="language-plaintext highlighter-rouge">anchor_spl</code> programs more, visit https://github.com/project-serum/anchor/tree/v0.17.0/spl. Reading through that would also help us understand the <em>implementations</em> later on.</p>
+
+<p>Here <code class="language-plaintext highlighter-rouge">pub</code> means public and <code class="language-plaintext highlighter-rouge">fn</code> means function, implying that they are public functions that can be invoked from our program, ie it becomes a client-callable program function. The first argument of these functions is always <code class="language-plaintext highlighter-rouge">Context&lt;T&gt;</code> which consist of the solana accounts array and the program ID, which in essence is the required data to call just about any progarm on Solana. The next parameter of these functions is a <code class="language-plaintext highlighter-rouge">u64</code> or an unsigned integer named <em>amount</em>, which we will be using as our the amount of our tokens in different functions. The <code class="language-plaintext highlighter-rouge">ProgramResult</code> is the return type of both these functions, which actually is just an easier method to serve function results and/or errors.</p>
+
+<p>As discussed earlier, the <code class="language-plaintext highlighter-rouge">Context</code> parameter in each function is essentially a list of all the accounts that must be passed for the function to work as expected and the different structs you see in all <code class="language-plaintext highlighter-rouge">Contexts</code> such as <code class="language-plaintext highlighter-rouge">ProxyTransfer</code>, <code class="language-plaintext highlighter-rouge">ProxyMintTo</code>, etc will be defined later.</p>
+
+<p>After defining the above four functions, your code should look something like this:</p>
+
+<p><img src="https://user-images.githubusercontent.com/32522659/141686353-c526a7d5-930f-427d-8ba2-74f2dc6d8f33.png" alt="image"></p>
+
+<h2 id="writing-the-logic-for-our-functions">
+<a class="anchor" href="#writing-the-logic-for-our-functions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Writing the logic for our functions</h2>
+
+<p>The logic of all of our functions would be very straight-forward. We would simply call the functions provided by <code class="language-plaintext highlighter-rouge">anchor_spl</code> with the correct parameters. That’s it. Simple. First update your code as the following:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    pub fn proxy_transfer(ctx: Context&lt;ProxyTransfer&gt;, amount: u64) -&gt; ProgramResult {
+        token::transfer(ctx.accounts.into(), amount)
+    }
+    
+    pub fn proxy_mint_to(ctx: Context&lt;ProxyMintTo&gt;, amount: u64) -&gt; ProgramResult {
+        token::mint_to(ctx.accounts.into(), amount)
+    }
+    
+    pub fn proxy_burn(ctx: Context&lt;ProxyBurn&gt;, amount: u64) -&gt; ProgramResult {
+        token::burn(ctx.accounts.into(), amount)
+    }
+    
+    pub fn proxy_set_authority(
+        ctx: Context&lt;ProxySetAuthority&gt;,
+        authority_type: AuthorityType,
+        new_authority: Option&lt;Pubkey&gt;,
+    ) -&gt; ProgramResult {
+        token::set_authority(ctx.accounts.into(), authority_type.into(), new_authority)
+    }
+</code></pre></div></div>
+
+<p>With this, your coding screen would look something like:</p>
+
+<p><img src="https://user-images.githubusercontent.com/32522659/141692551-f5db700b-931b-4354-8382-17e920779a0d.png" alt="image"></p>
+
+<p>If you want to further investigate the functions that we called here, you can head over to the <a href="https://docs.rs/anchor-spl/0.17.0/anchor_spl/index.html">official docs of the <code class="language-plaintext highlighter-rouge">anchor_spl</code> crate</a>.</p>
+
+<h2 id="lets-learn-to-serialize-and-deserialize">
+<a class="anchor" href="#lets-learn-to-serialize-and-deserialize" aria-hidden="true"><span class="octicon octicon-link"></span></a>Let’s learn to serialize and deserialize</h2>
+
+<p>You might already be familiar with the concept of enumerate or <code class="language-plaintext highlighter-rouge">enum</code> as that is a fairly language agnostic concept. However, if you are not, you can think of enums as a convenient way of naming states or conditions in your code.</p>
+
+<p>Coming to what is serialization and deserialization, the good news is that Anchor does all the heavy lifting in this regards and we just need to know what these terms mean. Simple. So, serialize in general means to put together some data in a standard format and conversely deserealize means to break down a monolith into a standard format of many pieces of data. In terms of Anchor programming, <code class="language-plaintext highlighter-rouge">AccountSerialize</code> macro is used when a data structure can be serialized and stored into account storage, ie in an <code class="language-plaintext highlighter-rouge">AccountInfo</code>’s mutable data slice. Similarly, <code class="language-plaintext highlighter-rouge">AccountDeserialize</code> macro is used when a data structure can be de-serialized from binary format. This macro deserializes the instance from a given slice of bytes and updates the buffer to point at the remaining bytes.</p>
+
+<p>Let’s see the above concepts in action. Write the following code outside of the <code class="language-plaintext highlighter-rouge">#[program]</code> module:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#[derive(AnchorSerialize, AnchorDeserialize)]
+pub enum AuthorityType {
+    MintTokens,
+    FreezeAccount,
+    AccountOwner,
+    CloseAccount
+}
+</code></pre></div></div>
+
+<p>Since literally everything on the Solana blockchain should be in form of an account, the <code class="language-plaintext highlighter-rouge">derive</code> macro is used to convert this <code class="language-plaintext highlighter-rouge">enum</code> in the format of an account. <code class="language-plaintext highlighter-rouge">MintTokens</code> here would represent the authority to mint new tokens, <code class="language-plaintext highlighter-rouge">FreezeAccount</code> to freeze accounts associated with the Mint, <code class="language-plaintext highlighter-rouge">AccountOwner</code> being the owners of a token account and <code class="language-plaintext highlighter-rouge">CloseAccount</code> representing the authority to close a token account.</p>
+
+<p>After this, your screen would look something like:</p>
+
+<p><img src="https://user-images.githubusercontent.com/32522659/141687337-3ed605ca-b7d7-4d60-8af6-134e71532924.png" alt="image"></p>
+
+<h3 id="a-small-note-about-accounts-on-solana">
+<a class="anchor" href="#a-small-note-about-accounts-on-solana" aria-hidden="true"><span class="octicon octicon-link"></span></a>A small note about Accounts on Solana:</h3>
+<p>An account is not actually a wallet. Instead, it’s a way for the contract to persist data between calls. This includes information such as the count in our base_account, and also information about permissions on the account. Accounts pay rent in the form of lamports, and if it runs out, then the account is purged from the blockchain. Accounts with two years worth of rent attached are “rent-exempt” and can stay on the chain forever.</p>
+
+<h2 id="defining-our-first-account-struct">
+<a class="anchor" href="#defining-our-first-account-struct" aria-hidden="true"><span class="octicon octicon-link"></span></a>Defining our first account struct</h2>
+
+<p>In the first function, we used the <code class="language-plaintext highlighter-rouge">ProxyTransfer</code> struct, right? Now, let’s define it so that every relevant information along with the correct constraints on those information (accounts) can be passed to our <code class="language-plaintext highlighter-rouge">proxy_transfer</code> function. Write the following lines of codes below your <code class="language-plaintext highlighter-rouge">Serialize</code> and <code class="language-plaintext highlighter-rouge">Deserialize</code> code:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#[derive(Accounts)]
+pub struct ProxyTransfer&lt;'info&gt; {
+    #[account(signer)]
+    pub authority: AccountInfo&lt;'info&gt;,
+    #[account(mut)]
+    pub from: AccountInfo&lt;'info&gt;,
+    #[account(mut)]
+    pub to: AccountInfo&lt;'info&gt;,
+    pub token_program: AccountInfo&lt;'info&gt;,
+}
+</code></pre></div></div>
+
+<p>As discussed earlier, everything on Solana is an account, so we convert the <code class="language-plaintext highlighter-rouge">ProxyTransfer</code> struct (with all the relevant information for the <code class="language-plaintext highlighter-rouge">proxy_transfer</code> function) into an account using the <code class="language-plaintext highlighter-rouge">derive</code> account macro in the code above. The account <code class="language-plaintext highlighter-rouge">signer</code> macro you see is used to enforce the constraint that the authority is the one who signs the transaction (of calling the function) and the account <code class="language-plaintext highlighter-rouge">mut</code> macro is used to mark an account as mutable, ie, we want to persist changes in those accounts. Now coming onto the accounts themselves, these are a <code class="language-plaintext highlighter-rouge">from</code> account from which the transfer will take place and the <code class="language-plaintext highlighter-rouge">to</code> account, to which the tokens will go to. Then the <code class="language-plaintext highlighter-rouge">authority</code> is the one who should be able to execute these programs and the <code class="language-plaintext highlighter-rouge">token_program</code> is used to identify which function to call from the original crate.</p>
+
+<p>After this, your code screen should look something like:
+<img src="https://user-images.githubusercontent.com/32522659/141687937-0c1ac5d9-06ad-4ad1-a1ff-286a42dcd244.png" alt="image"></p>
+
+<h3 id="small-note-about-the-access-control-macros">
+<a class="anchor" href="#small-note-about-the-access-control-macros" aria-hidden="true"><span class="octicon octicon-link"></span></a>Small note about the Access Control macros</h3>
+<p>The <em>Accounts</em> macro implements the Accounts trait. Transforms a struct from the untrusted &amp;[AccountInfo] slice given to a Solana progam into a validated struct of deserialized account types</p>
+
+<p>#[account]: It is an attribute macro implementing AccountSerialize and AccountDeserialize</p>
+
+<p><em>Account</em> Wrapper type for a deserialized account implementing AccountDeserialize. Using this type within an <em>Accounts</em> struct ensures the account is owned by the address defined by <em>declare_id!</em> where the inner account was defined.</p>
+
+<p>With the above (and more Account Constraints and Access Controllers) we can define preconditions for our any instruction handler expecting a certain set of accounts,
+allowing us to more easily reason about the security of our programs.</p>
+
+<h2 id="defining-all-other-accounts">
+<a class="anchor" href="#defining-all-other-accounts" aria-hidden="true"><span class="octicon octicon-link"></span></a>Defining all other accounts</h2>
+
+<p>In a similar fashion to the <code class="language-plaintext highlighter-rouge">ProxyTransfer</code> account struct, we can define <code class="language-plaintext highlighter-rouge">ProxyMintTo</code>, <code class="language-plaintext highlighter-rouge">ProxyBurn</code> and <code class="language-plaintext highlighter-rouge">ProxySetAuthority</code> structs with the desired information (accounts) in each of them as required by their respective functions. It’ll be a fun exercise for you to open up the <code class="language-plaintext highlighter-rouge">anchor-spl</code> crate in Anchor’s github and try to figure out what would be structure of all the remaining account structs.</p>
+
+<p>Once you have given it your best shot, comapre your structs with what we have here. Up first is the <code class="language-plaintext highlighter-rouge">ProxyMintTo</code> struct that will be used to call the <code class="language-plaintext highlighter-rouge">proxy_mint_to</code> function.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#[derive(Accounts)]
+pub struct ProxyMintTo&lt;'info&gt; {
+    #[account(signer)]
+    pub authority: AccountInfo&lt;'info&gt;,
+    #[account(mut)]
+    pub mint: AccountInfo&lt;'info&gt;,
+    #[account(mut)]
+    pub to: AccountInfo&lt;'info&gt;,
+    pub token_program: AccountInfo&lt;'info&gt;,
+}
+</code></pre></div></div>
+<p>This structure is pretty similar to the <code class="language-plaintext highlighter-rouge">ProxyTransfer</code> struct we defined in the last quest, right? The difference here is with the <code class="language-plaintext highlighter-rouge">Mint</code> account that is essentially the account of your token, and we would want that to be mutable since you can change supplies and so on.</p>
+
+<p>Let’s tackle the <code class="language-plaintext highlighter-rouge">ProxyBurn</code> struct next that will be used to call the <code class="language-plaintext highlighter-rouge">proxy_burn</code> function. That would have a structure similar to this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#[derive(Accounts)]
+pub struct ProxyBurn&lt;'info&gt; {
+    #[account(signer)]
+    pub authority: AccountInfo&lt;'info&gt;,
+    #[account(mut)]
+    pub mint: AccountInfo&lt;'info&gt;,
+    #[account(mut)]
+    pub to: AccountInfo&lt;'info&gt;,
+    pub token_program: AccountInfo&lt;'info&gt;,
+}
+</code></pre></div></div>
+
+<p>This structure is again pretty similar to our earlier structs, right? This also requires a <code class="language-plaintext highlighter-rouge">mint</code> account so that the function could know which <code class="language-plaintext highlighter-rouge">token account</code> has to be disabled.</p>
+
+<p>With that let’s tackle the final account struct, the <code class="language-plaintext highlighter-rouge">ProxySetAuthority</code> and as you might have guessed, it is slightly different than the rest of the structs:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#[derive(Accounts)]
+pub struct ProxySetAuthority&lt;'info&gt; {
+    #[account(signer)]
+    pub current_authority: AccountInfo&lt;'info&gt;,
+    #[account(mut)]
+    pub account_or_mint: AccountInfo&lt;'info&gt;,
+    pub token_program: AccountInfo&lt;'info&gt;,
+}
+</code></pre></div></div>
+
+<p>The accounts here are used to determine who the current authority is and whether that authority is the one who has signed this transaction or not and whether the new authority of the token account is going to be another account or a mint and then there’s the token program again to identify the correct program call.</p>
+
+<p>After defining these accounts, your code screen should look something like this:</p>
+
+<p><img src="https://user-images.githubusercontent.com/32522659/141688706-210bde08-13e1-4cf5-a47c-e2fbf4de8f44.png" alt="image"></p>
+
+<h2 id="say-hi-to-cross-program-invocations-cpis">
+<a class="anchor" href="#say-hi-to-cross-program-invocations-cpis" aria-hidden="true"><span class="octicon octicon-link"></span></a>Say hi to Cross Program Invocations (CPIs)</h2>
+
+<p>We did briefly talk about Cross Program Invocations, right? We don’t really need to get into the details of it and a simple understanding that <code class="language-plaintext highlighter-rouge">CPIs</code> are used to invoke instructions (functions) on another program. To do so on Anchor is pretty straight-forward since it does a lot of stuff for us under the hood. All we need to is:</p>
+<ol>
+  <li>Create a <code class="language-plaintext highlighter-rouge">CpiContext</code> object with the target instructin’s accounts and program.</li>
+  <li>To perform CPI, just use the <code class="language-plaintext highlighter-rouge">cpi</code> module</li>
+  <li>Accounts used for CPI are not specifically denoted as such with the <code class="language-plaintext highlighter-rouge">CpiAccount</code> label since v0.15. Accounts used for CPI are not fundamentally different from <code class="language-plaintext highlighter-rouge">Program</code> or <code class="language-plaintext highlighter-rouge">Signer</code> accounts except for their role and ownership in the specific context in which they are used.</li>
+</ol>
+
+<p>So now with the above points in mind, let’s create implementation blocks <code class="language-plaintext highlighter-rouge">impl</code> which we will use to create the <code class="language-plaintext highlighter-rouge">CpiContext</code>s. We will later use these <code class="language-plaintext highlighter-rouge">CpiContexts</code> to invoke instructions from other programs. Create <code class="language-plaintext highlighter-rouge">impl</code> blocks for all account structs and write the following lines of code:</p>
+
+<p>For <code class="language-plaintext highlighter-rouge">ProxyTransfer</code></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>impl &lt;'a, 'b, 'c, 'info&gt; From&lt;&amp;mut ProxyTransfer&lt;'info&gt;&gt; 
+    for CpiContext&lt;'a, 'b, 'c, 'info, Transfer&lt;'info&gt;&gt;
+{
+
+}
+</code></pre></div></div>
+
+<p>For <code class="language-plaintext highlighter-rouge">ProxyMintTo</code></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>impl&lt;'a, 'b, 'c, 'info&gt; From&lt;&amp;mut ProxyMintTo&lt;'info&gt;&gt;
+    for CpiContext&lt;'a, 'b, 'c, 'info, MintTo&lt;'info&gt;&gt;
+{
+
+}
+</code></pre></div></div>
+
+<p>For <code class="language-plaintext highlighter-rouge">ProxyBurn</code></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>impl&lt;'a, 'b, 'c, 'info&gt; From&lt;&amp;mut ProxyBurn&lt;'info&gt;&gt; 
+    for CpiContext&lt;'a, 'b, 'c, 'info, Burn&lt;'info&gt;&gt; {
+
+}
+</code></pre></div></div>
+
+<p>For <code class="language-plaintext highlighter-rouge">ProxySetAuthority</code></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>impl&lt;'a, 'b, 'c, 'info&gt; From&lt;&amp;mut ProxySetAuthority&lt;'info&gt;&gt;
+    for CpiContext&lt;'a, 'b, 'c, 'info, SetAuthority&lt;'info&gt;&gt;
+{
+
+}
+</code></pre></div></div>
+
+<p>After writing all these, your code screen should look something like this:</p>
+
+<p><img src="https://user-images.githubusercontent.com/32522659/141690321-4a87b981-e327-402a-a78b-de8db72081cb.png" alt="image"></p>
+
+<h2 id="our-first-cpi">
+<a class="anchor" href="#our-first-cpi" aria-hidden="true"><span class="octicon octicon-link"></span></a>Our first CPI</h2>
+
+<p>In the last quest we created all the <code class="language-plaintext highlighter-rouge">impl</code> (implementatuon) blocks for creating the <code class="language-plaintext highlighter-rouge">CpiContexts</code> that we will now use to call the functions from the other program.</p>
+
+<p>Now, let me apologise very quickly, since I hadn’t been very transparent with you. Remember the strange <code class="language-plaintext highlighter-rouge">into</code> keyword we used earlier while writing our program functions without any explanation? Well, let me then introduce you to the wonders of the Rust language. The Rust language provides something called the <a href="https://doc.rust-lang.org/rust-by-example/conversion/from_into.html"><code class="language-plaintext highlighter-rouge">From</code> and <code class="language-plaintext highlighter-rouge">Into</code> traits</a> which is essentially a cool way to convert <code class="language-plaintext highlighter-rouge">typeA</code> <strong>into</strong> <code class="language-plaintext highlighter-rouge">typeB</code>. Since we know from last quest that we require a <code class="language-plaintext highlighter-rouge">CpiContext</code> and a list of <code class="language-plaintext highlighter-rouge">CpiAccounts</code> to perform <code class="language-plaintext highlighter-rouge">CPI</code> and we also know that the functions that we had written in the very beginning are performing <code class="language-plaintext highlighter-rouge">CPI</code>, so logically we come to the conclusion that now we must write <code class="language-plaintext highlighter-rouge">from</code> implementations for those <code class="language-plaintext highlighter-rouge">into</code> that we used, so that they can be converted into the required format which is <code class="language-plaintext highlighter-rouge">CpiContexts</code> and <code class="language-plaintext highlighter-rouge">CpiAccounts</code>.</p>
+
+<p>So, let’s see the first implementation of our <code class="language-plaintext highlighter-rouge">from</code> block that can help convert the parameters of the functions inside of our functions into <code class="language-plaintext highlighter-rouge">CpiContext</code> and <code class="language-plaintext highlighter-rouge">CpiAccounts</code>.
+Write down the below code:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>impl&lt;'a, 'b, 'c, 'info&gt; From&lt;&amp;mut ProxyTransfer&lt;'info&gt;&gt;
+    for CpiContext&lt;'a, 'b, 'c, 'info, Transfer&lt;'info&gt;&gt;
+{
+    fn from(accounts: &amp;mut ProxyTransfer&lt;'info&gt;) -&gt; CpiContext&lt;'a, 'b, 'c, 'info, Transfer&lt;'info&gt;&gt; {
+        let cpi_accounts = Transfer {
+            from: accounts.from.clone(),
+            to: accounts.to.clone(),
+            authority: accounts.authority.clone(),
+        };
+        let cpi_program = accounts.token_program.clone();
+        CpiContext::new(cpi_program, cpi_accounts)
+    }
+}
+</code></pre></div></div>
+
+<p>In the above code block we first create a list of our <code class="language-plaintext highlighter-rouge">CpiAccounts</code> called <code class="language-plaintext highlighter-rouge">cpi_accounts</code>, then we reference the program that we want to call with the variable name of <code class="language-plaintext highlighter-rouge">cpi_program</code> and create the new context using <code class="language-plaintext highlighter-rouge">CpiContext::new</code>. With this implementation our first program <code class="language-plaintext highlighter-rouge">proxy_transfer</code> is completely ready for doing CPIs.</p>
+
+<p>Writing the above code, your code screen should look something like this:</p>
+
+<p><img src="https://user-images.githubusercontent.com/32522659/141691282-f6c48d94-bb64-40e7-933c-19a2f7e32725.png" alt="image"></p>
+
+<h2 id="implementing-all-other-from-blocks">
+<a class="anchor" href="#implementing-all-other-from-blocks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Implementing all other <code class="language-plaintext highlighter-rouge">from</code> blocks</h2>
+
+<p>Based on how we wrote the <code class="language-plaintext highlighter-rouge">from</code> implementation block for <code class="language-plaintext highlighter-rouge">ProxyTransfer</code>, we can write the <code class="language-plaintext highlighter-rouge">from</code> implementation blocks for <code class="language-plaintext highlighter-rouge">ProxyMintTo</code>, <code class="language-plaintext highlighter-rouge">ProxyBurn</code> and <code class="language-plaintext highlighter-rouge">ProxySetAuthority</code> in a very similar fashion. A good exercise for you would be to write all these implementations yourselves.</p>
+
+<p>After your best attempt, match your code with the one that is provided below:</p>
+
+<p>For <code class="language-plaintext highlighter-rouge">ProxyMintTo</code></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>impl&lt;'a, 'b, 'c, 'info&gt; From&lt;&amp;mut ProxyMintTo&lt;'info&gt;&gt;
+    for CpiContext&lt;'a, 'b, 'c, 'info, MintTo&lt;'info&gt;&gt;
+{
+    fn from(accounts: &amp;mut ProxyMintTo&lt;'info&gt;) -&gt; CpiContext&lt;'a, 'b, 'c, 'info, MintTo&lt;'info&gt;&gt; {
+        let cpi_accounts = MintTo {
+            mint: accounts.mint.clone(),
+            to: accounts.to.clone(),
+            authority: accounts.authority.clone(),
+        };
+        let cpi_program = accounts.token_program.clone();
+        CpiContext::new(cpi_program, cpi_accounts)
+    }
+}
+</code></pre></div></div>
+
+<p>For <code class="language-plaintext highlighter-rouge">ProxyBurn</code></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>impl&lt;'a, 'b, 'c, 'info&gt; From&lt;&amp;mut ProxyBurn&lt;'info&gt;&gt; for CpiContext&lt;'a, 'b, 'c, 'info, Burn&lt;'info&gt;&gt; {
+    fn from(accounts: &amp;mut ProxyBurn&lt;'info&gt;) -&gt; CpiContext&lt;'a, 'b, 'c, 'info, Burn&lt;'info&gt;&gt; {
+        let cpi_accounts = Burn {
+            mint: accounts.mint.clone(),
+            to: accounts.to.clone(),
+            authority: accounts.authority.clone(),
+        };
+        let cpi_program = accounts.token_program.clone();
+        CpiContext::new(cpi_program, cpi_accounts)
+    }
+}
+</code></pre></div></div>
+<p>For <code class="language-plaintext highlighter-rouge">ProxySetAuthority</code></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>impl&lt;'a, 'b, 'c, 'info&gt; From&lt;&amp;mut ProxySetAuthority&lt;'info&gt;&gt;
+    for CpiContext&lt;'a, 'b, 'c, 'info, SetAuthority&lt;'info&gt;&gt;
+{
+    fn from(
+        accounts: &amp;mut ProxySetAuthority&lt;'info&gt;,
+    ) -&gt; CpiContext&lt;'a, 'b, 'c, 'info, SetAuthority&lt;'info&gt;&gt; {
+        let cpi_accounts = SetAuthority {
+            account_or_mint: accounts.account_or_mint.clone(),
+            current_authority: accounts.current_authority.clone(),
+        };
+        let cpi_program = accounts.token_program.clone();
+        CpiContext::new(cpi_program, cpi_accounts)
+    }
+}
+</code></pre></div></div>
+<p>Hope that you fared well with writing your own implementations. Now, all the <code class="language-plaintext highlighter-rouge">proxy</code> functions that we wrote earlier are ready to work perfectly, except for one fine detail. Since, the implementations are more or less identical we can move onto the next quest, where we figure out the one final piece of this token-program puzzle before it becomes complete.</p>
+
+<p>Now your screen should look something like:
+<img src="https://user-images.githubusercontent.com/32522659/141691719-3741d4c5-87a5-47bd-bed8-1fbe8348b3ec.png" alt="image"></p>
+
+<h2 id="the-last-implementation-block">
+<a class="anchor" href="#the-last-implementation-block" aria-hidden="true"><span class="octicon octicon-link"></span></a>The last implementation block</h2>
+
+<p>Remember the quest where we talked about <code class="language-plaintext highlighter-rouge">enums</code> and <code class="language-plaintext highlighter-rouge">AccountSerialize</code> and <code class="language-plaintext highlighter-rouge">AccountDeserialize</code>? Well, you might be wondering all is good with enums being used to refer to different states with convenient names, but where exactly did we define the states? You are correct, we did not define the states and in this quest we will be doing exactly the same. We will be assigning meaning to the names within enums using the concept of <a href="https://doc.rust-lang.org/std/keyword.impl.html"><code class="language-plaintext highlighter-rouge">impl</code> for blocks</a>.</p>
+
+<p>Write the below piece of code to implement the <code class="language-plaintext highlighter-rouge">enum</code> that we defined before defining the different account structs. The below skeleton would be later on filled to <code class="language-plaintext highlighter-rouge">match</code> the enum with corresponding meaningful values.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>impl From&lt;AuthorityType&gt; for spl_token::instruction::AuthorityType {
+    fn from(authority_ty: AuthorityType) -&gt; spl_token::instruction::AuthorityType {
+    
+    }
+}
+</code></pre></div></div>
+
+<p>This skeleton of the <code class="language-plaintext highlighter-rouge">impl</code> block is almost the same as previous blocks apart from the difference of <code class="language-plaintext highlighter-rouge">from</code> vs <code class="language-plaintext highlighter-rouge">for</code>. right? Good. Now the implementation going inside the block would be different since we are assiging values to a constant (<code class="language-plaintext highlighter-rouge">enum</code>) and not converting anything into anything. Update the above block with the following code:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>impl From&lt;AuthorityType&gt; for spl_token::instruction::AuthorityType {
+    fn from(authority_ty: AuthorityType) -&gt; spl_token::instruction::AuthorityType {
+        match authority_ty {
+            AuthorityType::MintTokens =&gt; spl_token::instruction::AuthorityType::MintTokens,
+            AuthorityType::FreezeAccount =&gt; spl_token::instruction::AuthorityType::FreezeAccount,
+            AuthorityType::AccountOwner =&gt; spl_token::instruction::AuthorityType::AccountOwner,
+            AuthorityType::CloseAccount =&gt; spl_token::instruction::AuthorityType::CloseAccount,
+        }
+    }
+}
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">match</code> keyword is used in Rust and can be thought of as a sophisticated series of if-else block. Rust provides pattern matching via the <code class="language-plaintext highlighter-rouge">match</code> keyword, which can be used like a C switch. The first matching arm is evaluated and all possible values must be covered.</p>
+
+<p>With this, your coding part for the Anchor program to create your own crypto-currency comes to an end with your screen looking something like:</p>
+
+<p><img src="https://user-images.githubusercontent.com/32522659/141692139-054cf1bb-1d70-4cb2-a2a3-a64871e842de.png" alt="image"></p>
+
+<h2 id="checking-our-code">
+<a class="anchor" href="#checking-our-code" aria-hidden="true"><span class="octicon octicon-link"></span></a>Checking our code</h2>
+
+<p>Before writing the tests to interact with our Anchor program, we can make sure that there are no errors in our code, by running the following command:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>anchor build
+</code></pre></div></div>
+
+<p>If the code compiles without any error and gets built, that’s good news. Our Anchor program code is working fine and we can move ahead. If you are facing some errors, re-verify that you properly followed all instructions from all the quests. Also, if you are using a different version of <code class="language-plaintext highlighter-rouge">anchor</code> make sure that there no changes in the newer version for the code that we wrote, if there are revert to <code class="language-plaintext highlighter-rouge">v0.17.0</code> or update your code accordingly.</p>
+
+<p>Once your program is successfully built, you’ll get a screen similar to this:</p>
+
+<p><img src="https://user-images.githubusercontent.com/32522659/141692572-57eaa84d-38f4-4aeb-8e18-c48b5f7b0047.png" alt="image"></p>
+
+<h2 id="importing-the-necessary-code-required-for-testing-our-contract">
+<a class="anchor" href="#importing-the-necessary-code-required-for-testing-our-contract" aria-hidden="true"><span class="octicon octicon-link"></span></a>Importing the necessary code required for testing our contract</h2>
+
+<p>To begin testing, head over to tests/messengerapp.js and delete everything that’s written there. We are going to be writing our tests from scratch. The first step would be to import the necessary libraries and constants. To do that, use the following code:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const anchor = require("@project-serum/anchor");
+const assert = require("assert");
+</code></pre></div></div>
+
+<p>Now, since we will be using Mocha for testing our programs, we will create the skeleton of where we will be putting our tests. So, basically, how Mocha works is that it takes describe blocks as testing blocks and within those describe blocks there are numerous tests written using the it blocks. So, use the following code to create the skeleton:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>describe('mymoneydapp', () =&gt; {
+  const provider = anchor.Provider.local();
+  anchor.setProvider(provider);
+  const program = anchor.workspace.Mymoneydapp;
+
+  let mint = null;
+  let from = null;
+  let to = null;
+
+  it("Initializes test state", async () =&gt; {
+
+  });
+
+  it("Mints a token", async () =&gt; {
+
+  });
+
+  it("Transfers a token", async () =&gt; {
+
+  });
+
+  it("Burns a token", async () =&gt; {
+
+  });
+
+  it("Set new mint authority", async () =&gt; {
+
+  });
+  
+});
+</code></pre></div></div>
+
+<p>Now, your screen should look something similar to: 
+<img src="https://user-images.githubusercontent.com/32522659/141697347-77d96065-9811-4e8c-b59b-9476ea262ee0.png" alt="image"></p>
+
+<p>The additional things that we coded there were the introduction of provider. The provider is the abstraction of a connection to the Solana network. In the test, the Anchor framework will create the provider for us based on the environment (anchor.Provider.local()).</p>
+
+<p>Now, the program is an abstraction that combines the Provider, idl, and the programID (which is generated when the program is built) and allows us to call RPC methods against our program.</p>
+
+<p>Apart from that we have initialized three variables, namely <code class="language-plaintext highlighter-rouge">mint</code>, <code class="language-plaintext highlighter-rouge">from</code> and <code class="language-plaintext highlighter-rouge">to</code> which we will use throughout our testing.</p>
+
+<p>When we have the above things, we can start calling functions in our program, which is what we will be doing in our next sub-quest.</p>
+
+<h2 id="the-spl-token-testing-boilerplate">
+<a class="anchor" href="#the-spl-token-testing-boilerplate" aria-hidden="true"><span class="octicon octicon-link"></span></a>The SPL Token testing boilerplate</h2>
+
+<p>Ideally, while testing this contract, we should have been able to simply use @solana/web3.js to interact with our Anchor program, but it so happens that Anchor is built off a lot of components from Serum and is thus dependent on Serum. What that also means is that, we cannot simply import and use <code class="language-plaintext highlighter-rouge">@solana/web3.js</code> until <code class="language-plaintext highlighter-rouge">@project-serum/serum</code> uses the same version of <code class="language-plaintext highlighter-rouge">@solana/web3.js</code> as anchor.</p>
+
+<p>So, to mimick the functions from <code class="language-plaintext highlighter-rouge">@solana/web3.js</code>, simply copy and paste the following code. Consider this code as the SPL token client boilerplate for test initialization. Paste this code right below the <code class="language-plaintext highlighter-rouge">describe</code> block we wrote in the last sub-quest.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const serumCmn = require("@project-serum/common");
+const TokenInstructions = require("@project-serum/serum").TokenInstructions;
+
+const TOKEN_PROGRAM_ID = new anchor.web3.PublicKey(
+  TokenInstructions.TOKEN_PROGRAM_ID.toString()
+);
+
+async function getTokenAccount(provider, addr) {
+  return await serumCmn.getTokenAccount(provider, addr);
+}
+
+async function getMintInfo(provider, mintAddr) {
+  return await serumCmn.getMintInfo(provider, mintAddr);
+}
+
+async function createMint(provider, authority) {
+  if (authority === undefined) {
+    authority = provider.wallet.publicKey;
+  }
+  const mint = anchor.web3.Keypair.generate();
+  const instructions = await createMintInstructions(
+    provider,
+    authority,
+    mint.publicKey
+  );
+
+  const tx = new anchor.web3.Transaction();
+  tx.add(...instructions);
+
+  await provider.send(tx, [mint]);
+
+  return mint.publicKey;
+}
+
+async function createMintInstructions(provider, authority, mint) {
+  let instructions = [
+    anchor.web3.SystemProgram.createAccount({
+      fromPubkey: provider.wallet.publicKey,
+      newAccountPubkey: mint,
+      space: 82,
+      lamports: await provider.connection.getMinimumBalanceForRentExemption(82),
+      programId: TOKEN_PROGRAM_ID,
+    }),
+    TokenInstructions.initializeMint({
+      mint,
+      decimals: 0,
+      mintAuthority: authority,
+    }),
+  ];
+  return instructions;
+}
+
+async function createTokenAccount(provider, mint, owner) {
+  const vault = anchor.web3.Keypair.generate();
+  const tx = new anchor.web3.Transaction();
+  tx.add(
+    ...(await createTokenAccountInstrs(provider, vault.publicKey, mint, owner))
+  );
+  await provider.send(tx, [vault]);
+  return vault.publicKey;
+}
+
+async function createTokenAccountInstrs(
+  provider,
+  newAccountPubkey,
+  mint,
+  owner,
+  lamports
+) {
+  if (lamports === undefined) {
+    lamports = await provider.connection.getMinimumBalanceForRentExemption(165);
+  }
+  return [
+    anchor.web3.SystemProgram.createAccount({
+      fromPubkey: provider.wallet.publicKey,
+      newAccountPubkey,
+      space: 165,
+      lamports,
+      programId: TOKEN_PROGRAM_ID,
+    }),
+    TokenInstructions.initializeAccount({
+      account: newAccountPubkey,
+      mint,
+      owner,
+    }),
+  ];
+}
+</code></pre></div></div>
+
+<p>With this, your code screen should look something like:
+<img src="https://user-images.githubusercontent.com/32522659/141693728-43302120-08d4-4053-8acf-37963ee0bab9.png" alt="image"></p>
+
+<p>Before moving onto the next quest, notice that we are using two new packages in the above code. You can download them using the following command:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install @project-serum/common @project-serum/serum
+</code></pre></div></div>
+
+<p>Successfull installation shall lead to this kind of screen:</p>
+
+<p><img src="https://user-images.githubusercontent.com/32522659/141693771-d7235fd1-5007-4e3c-b569-a3c3f2df1b65.png" alt="image"></p>
+
+<h2 id="initializing-the-test-state">
+<a class="anchor" href="#initializing-the-test-state" aria-hidden="true"><span class="octicon octicon-link"></span></a>Initializing the test state</h2>
+
+<p>Let us fill in the first <code class="language-plaintext highlighter-rouge">it</code> block which isn’t exactly testing anything, but is essential as it is setting the state of <code class="language-plaintext highlighter-rouge">mint</code>, the <code class="language-plaintext highlighter-rouge">from</code> account and the <code class="language-plaintext highlighter-rouge">to</code> account that will be used throughout all the tests. Let’s see how we can set the states in the first <code class="language-plaintext highlighter-rouge">it</code> block. Update the first <code class="language-plaintext highlighter-rouge">it</code> block of code as follows:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  it("Initializes test state", async () =&gt; {
+    mint = await createMint(provider);
+    from = await createTokenAccount(provider, mint, provider.wallet.publicKey);
+    to = await createTokenAccount(provider, mint, provider.wallet.publicKey);
+  });
+</code></pre></div></div>
+
+<p>With this, your code screen should look something like this:</p>
+
+<p><img src="https://user-images.githubusercontent.com/32522659/141697272-71cd426e-37ac-4410-9963-37b34addd908.png" alt="image"></p>
+
+<p>All the functions used during the initialization have self-explanatory names, however if you want more depth of understanding and more clarity go through the boilerplate code that we copy pasted in the last quest.</p>
+
+<h2 id="writing-the-test-to-check-minting-of-our-token">
+<a class="anchor" href="#writing-the-test-to-check-minting-of-our-token" aria-hidden="true"><span class="octicon octicon-link"></span></a>Writing the test to check minting of our token</h2>
+
+<p>The method to call the functions of our program is pretty straight-forward. We will use the program RPCs (Remote procedure calls) to access the function. The method to do that is call functions using the format: <code class="language-plaintext highlighter-rouge">program.rpc.proxyMintTo</code> where <code class="language-plaintext highlighter-rouge">proxyMintTo</code> can be any of the functions that we have in the porgram (Solana contract) that we are calling. 
+Let’s now write the test to mint a token. Write the below code to update the <code class="language-plaintext highlighter-rouge">Mints a token</code> it block.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  it("Mints a token", async () =&gt; {
+    await program.rpc.proxyMintTo(new anchor.BN(1000), {
+      accounts: {
+        authority: provider.wallet.publicKey,
+        mint,
+        to: from,
+        tokenProgram: TokenInstructions.TOKEN_PROGRAM_ID,
+      },
+    });
+
+    const fromAccount = await getTokenAccount(provider, from);
+
+    assert.ok(fromAccount.amount.eq(new anchor.BN(1000)));
+  });
+</code></pre></div></div>
+
+<p>What’s happening in the test is pretty straight-forward. We first call the <code class="language-plaintext highlighter-rouge">proxyMintTo</code> function from our program (remember, the function names get converted to camel case from snake case when interacting through JS here) with <code class="language-plaintext highlighter-rouge">amount</code> being 1000, where <code class="language-plaintext highlighter-rouge">BN</code> stands for BigNumber and the list of accounts that we specified in the context of this function. Then, once the function has executed, we grab the tokenAccount <code class="language-plaintext highlighter-rouge">from</code> using the <code class="language-plaintext highlighter-rouge">getTokenAccount</code> function and then check it’s balance which should be equal to the number of tokens we just minted and sent to the <code class="language-plaintext highlighter-rouge">from</code> address.</p>
+
+<p>After this, your code screen should look something like this:
+<img src="https://user-images.githubusercontent.com/32522659/141697297-53397b90-226f-4b24-894a-b784603b486a.png" alt="image"></p>
+
+<h2 id="test-to-transfer-and-burn-our-tokens">
+<a class="anchor" href="#test-to-transfer-and-burn-our-tokens" aria-hidden="true"><span class="octicon octicon-link"></span></a>Test to transfer and burn our tokens</h2>
+
+<p>Now in this quest, let’s test if we can correctly transfer our tokens and also if we can burn some of our supply or not.
+Let’s directly jump into the code to transfer a token. Write the code below to update the <code class="language-plaintext highlighter-rouge">Transfers a token</code> it block:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  it("Transfers a token", async () =&gt; {
+    await program.rpc.proxyTransfer(new anchor.BN(400), {
+      accounts: {
+        authority: provider.wallet.publicKey,
+        to,
+        from,
+        tokenProgram: TokenInstructions.TOKEN_PROGRAM_ID,
+      },
+    });
+
+    const fromAccount = await getTokenAccount(provider, from);
+    const toAccount = await getTokenAccount(provider, to);
+
+    assert.ok(fromAccount.amount.eq(new anchor.BN(600)));
+    assert.ok(toAccount.amount.eq(new anchor.BN(400)));
+  });
+</code></pre></div></div>
+
+<p>As discussed earlier, we use the rpc handlers to call the <code class="language-plaintext highlighter-rouge">proxy_transfer</code> function with the required list of accounts and 400 as the amount from the <code class="language-plaintext highlighter-rouge">from</code> account to the <code class="language-plaintext highlighter-rouge">to</code> account. Since we minted 1000 tokens, after this transfer, the <code class="language-plaintext highlighter-rouge">from</code> account should have 600 (1000 - 400) tokens and the <code class="language-plaintext highlighter-rouge">to</code> account should have 400 tokens with them. This is exactly what we check in the test after the execution of the <code class="language-plaintext highlighter-rouge">proxy_transfer</code> function by grabbing both the accounts and then checking their balances.</p>
+
+<p>Now, similarly to test whether we can burn our tokens or not, write the code below and update the <code class="language-plaintext highlighter-rouge">Burns a token</code> it block.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  it("Burns a token", async () =&gt; {
+    await program.rpc.proxyBurn(new anchor.BN(350), {
+      accounts: {
+        authority: provider.wallet.publicKey,
+        mint,
+        to,
+        tokenProgram: TokenInstructions.TOKEN_PROGRAM_ID,
+      },
+    });
+
+    const toAccount = await getTokenAccount(provider, to);
+    assert.ok(toAccount.amount.eq(new anchor.BN(50)));
+  });
+</code></pre></div></div>
+
+<p>As discussed earlier, we use the rpc handlers to call the <code class="language-plaintext highlighter-rouge">proxy_transfer</code> function with the required list of accounts and 350 as the amount from the <code class="language-plaintext highlighter-rouge">to</code> account. Since the <code class="language-plaintext highlighter-rouge">to</code> account received 400 tokens in just the last test, if we burn 350 tokens then that account should be left with 50 tokens which is exactly what we are testing in this test.</p>
+
+<p>After writing the above tests, you’ll have a code screen that looks something like:</p>
+
+<p><img src="https://user-images.githubusercontent.com/32522659/141696571-d692210e-fd65-452c-a2b5-41a4c0b51595.png" alt="image"></p>
+
+<h2 id="testing-the-transfer-of-authority">
+<a class="anchor" href="#testing-the-transfer-of-authority" aria-hidden="true"><span class="octicon octicon-link"></span></a>Testing the transfer of authority</h2>
+
+<p>In this quest, let’s test if we can correctly transfer the authority of our token to some other account correctly or not.
+Let’s directly jump into the code to transfer the ownership of our token. Write the code below to update the <code class="language-plaintext highlighter-rouge">Setnew mint authority</code> it block:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  it("Set new mint authority", async () =&gt; {
+    const newMintAuthority = anchor.web3.Keypair.generate();
+    await program.rpc.proxySetAuthority(
+      { mintTokens: {} },
+      newMintAuthority.publicKey,
+      {
+        accounts: {
+          accountOrMint: mint,
+          currentAuthority: provider.wallet.publicKey,
+          tokenProgram: TokenInstructions.TOKEN_PROGRAM_ID,
+        },
+      }
+    );
+
+    const mintInfo = await getMintInfo(provider, mint);
+    assert.ok(mintInfo.mintAuthority.equals(newMintAuthority.publicKey));
+  });
+</code></pre></div></div>
+
+<p>As discussed earlier, we use the rpc handlers to call the <code class="language-plaintext highlighter-rouge">proxy_set_authority</code> function with the required list of accounts, the new authority and the authority_type which is that of mintTokens. The address for the new mint authority is generated using the web3 function called <code class="language-plaintext highlighter-rouge">Keypair.generate</code>. Later after the execution of the function, we check the mint authority of our token and it should ideally check out to be the new addresss we just generated.</p>
+
+<h2 id="running-the-tests">
+<a class="anchor" href="#running-the-tests" aria-hidden="true"><span class="octicon octicon-link"></span></a>Running the tests</h2>
+
+<p>Now, that we are done running all the tests, make sure that your local validator is not running. That means make sure that the <code class="language-plaintext highlighter-rouge">solana-test-validator</code> process is not running and the <code class="language-plaintext highlighter-rouge">network</code> is set as localhost by inspecting the results of <code class="language-plaintext highlighter-rouge">solana config get</code>. Once all this is done, it is time for us to actually test the progarm that we wrote. To do that use the following command:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>anchor test
+</code></pre></div></div>
+
+<p>If all the tests pass, you’ll get a screen similar to this:</p>
+
+<p><img src="https://user-images.githubusercontent.com/32522659/141697082-25d461f9-638e-459b-a0b1-4b4645e3e0d7.png" alt="image"></p>
+
+<p>If you get some errors, try debugging those using the error messages you get. Make sure you have accurately followed the code presented in the quests. You are on the same Anchor version as that followed in the quest. With that you’ll find your way out of most of the errors that you might run into.</p>
+
+<p>Congratulations on succesfully creating your own token and testing its functioning :D</p>
+
+  </div><a class="u-url" href="/solana/anchor/tutorial/web3/2021/11/24/Solana-Tutorial-Create-Tokens.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Personal website of Rahul Saxena, aka saxenism, containing his thoughts about web3, EVM and a decentralised world.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/saxenism" target="_blank" title="saxenism"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/saxenism" target="_blank" title="saxenism"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
