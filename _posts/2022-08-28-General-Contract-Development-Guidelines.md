@@ -107,7 +107,10 @@ contract OneWhoCalled {
 
 + Applications like **On Chain Rock-Paper-Scissors** require submitted data (player's move) to be private until some point in time in order to work.
 
-+ The best strategy to use here is to use *commitment scheme* with separate phases: commit phase and then the reveal phase.
++ The best strategy to use here is to use *commitment scheme* with separate phases: commit phase and then the reveal phase (and then the distribute phase if that is required).
+
++ If you have a `distribute` phase in your contract logic it would make sense to include a bond from all involved parties.
 
 + Also, don't implement your own random number generator. Ethereum is a deterministic protocol, so no variable within this protocol can be used as an unpredictable random number.
 > Miners can influence the `block.blockhash() value`
+
