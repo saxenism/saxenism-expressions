@@ -3,7 +3,7 @@ toc: true
 layout: post
 description: Thoughts on what it would take to make web3 a mass movement and my understanding of the true nature of testing in defi/web3.
 categories: [linkedin, non-technical, testing]
-title: Thoughts around testing - LinkedIn Posts
+title: Thoughts around testing - LinkedIn Post(s)
 ---
 
 ## Article 1
@@ -174,4 +174,56 @@ This 5 step process is almost certainly guaranteed to speed up any protocol's te
 Thanks,
 Rahul
 
+## Article 6
+
+I used to absolutely hate testing, when I started with my web3 job.
+
+But now, I have found several critical bugs in our audited code-base and have implemented countless patches for gas optimizations.
+
+How did this seemingly magical transformation happen for me? Let's dive in.
+
+1. Change of attitude
+The biggest factor in this transformation was the change in my own mindset. Fresh out of college, I used to think of testing as something inferior and allegedly less mentally stimulating.
+
+However, over time I realised that the best testers actually have an exceedingly thorough understanding of the entire codebase.
+
+When you know your code-base like the back of your hand, only then can you see things that no one else can, find pattern that no one else can imagine and eventually catch extremely non-trivial bugs
+
+2. Time spent in dedicated practice
+Over time, if anyone sticks with a particular code-base, it is natural that they will get a better feel for what's happening at every nook and corner of their code, which would essentially help them write better tests.
+
+But since I wanted to expedite things, I went ahead and took out time separate from my office hours to study the code base and make notes.
+
+This practice paid direct dividends, as soon after, the quality of my tests increased dramatically
+
+3. Right Tools
+I was never much of a web developer and therefore had no special relationship with Javascript or Typescript.
+
+The testing framework being used in protocol was Hardhat, which ensures that all the tests be written in Typescript with Mocha/Chai.
+
+In this scenario, my mental RAM was many a times split into figuring out the intricacies of JS instead of focusing solely on the quality of my test cases.
+
+With this in mind, I persuaded my team to use a new tool called Dapp.tools which allowed me to test contracts using Solidity itself.
+
+Instant 10x productivity boost.
+
+4. Changing Perspective
+At the beginning, when I was quite unfamiliar with the code-base, I asked my senior developers for a list of tests that I should write.
+
+When granted that list, I made all attempts to make sure that the tests written in the document passed. I didn't think a single line beyond of what was written in those docs.
+
+Over time, when I gained a better understanding of the code base and caught hold of better testing tools, I started testing with the perspective of a user who's hell bent of breaking the protocol.
+
+And voila, bugs and optimizations started popping up like there was no tomorrow.
+
+
+Testing smart contracts has been so rewarding an experience for me, that now I enjoy testing contracts even more than writing them.
+
+Give testing a try with the correct mindset and I bet, you'll love it.
+
+Thank you & Godspeed
+
+PS: I'll attach one of the pages from my notes when I was researching my protocol's code-base for reference
+
+![Testing Handwritten Notes](https://media-exp1.licdn.com/dms/image/C4D22AQGfgiWgv5JbOw/feedshare-shrink_800/0/1647869217217?e=1665014400&v=beta&t=cbaWr5LuJR4K_BydQ0VZojfV3pRsagQoLfMZEJPJ0r0)
 

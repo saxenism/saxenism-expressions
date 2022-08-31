@@ -3,7 +3,7 @@ toc: true
 layout: post
 description: Thoughts on what it would take to make web3 a mass movement and my understanding of the true nature of web3.
 categories: [linkedin, non-technical]
-title: The Web3 Revolution
+title: The Web3 Revolution - LinkedIn Post(s)
 ---
 
 Let's set the records straight.
