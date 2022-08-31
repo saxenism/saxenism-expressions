@@ -275,7 +275,10 @@ Favor pull over push for external calls.</p>
     <p>Applications like <strong>On Chain Rock-Paper-Scissors</strong> require submitted data (player’s move) to be private until some point in time in order to work.</p>
   </li>
   <li>
-    <p>The best strategy to use here is to use <em>commitment scheme</em> with separate phases: commit phase and then the reveal phase.</p>
+    <p>The best strategy to use here is to use <em>commitment scheme</em> with separate phases: commit phase and then the reveal phase (and then the distribute phase if that is required).</p>
+  </li>
+  <li>
+    <p>If you have a <code class="language-plaintext highlighter-rouge">distribute</code> phase in your contract logic it would make sense to include a bond from all involved parties.</p>
   </li>
   <li>
     <p>Also, don’t implement your own random number generator. Ethereum is a deterministic protocol, so no variable within this protocol can be used as an unpredictable random number.</p>
@@ -284,6 +287,7 @@ Favor pull over push for external calls.</p>
     </blockquote>
   </li>
 </ul>
+
 
   </div><a class="u-url" href="/markdown/smart-contract/solidity/security/development/best-practices/2022/08/28/General-Contract-Development-Guidelines.html" hidden></a>
 </article>
