@@ -79,7 +79,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      6 min read
+      7 min read
     
 </span></p>
 
@@ -126,6 +126,17 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h2"><a href="#public-on-chain-data">Public on-chain Data</a></li>
 <li class="toc-entry toc-h2"><a href="#unreliable-participants">Unreliable Participants</a></li>
 <li class="toc-entry toc-h2"><a href="#negation-of-signed-integers">Negation of signed integers</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h1"><a href="#precautions">Precautions</a>
+<ul>
+<li class="toc-entry toc-h2"><a href="#general">General</a></li>
+<li class="toc-entry toc-h2"><a href="#upgradeability">Upgradeability</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#use-a-registry-contract-to-store-the-latest-version-of-a-contract">Use a registry contract to store the latest version of a contract</a></li>
+<li class="toc-entry toc-h3"><a href="#use-a-delegatecall-to-forward-data-and-calls">Use a DELEGATECALL to forward data and calls</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul><h1 id="general-contract-development-guidelines-best-practices">
@@ -338,6 +349,52 @@ contract Negation {
 </li>
   <li>Or try using integers of higher capacity. Example: <code class="language-plaintext highlighter-rouge">int16</code> instead of <code class="language-plaintext highlighter-rouge">int8</code>.</li>
 </ul>
+
+<h1 id="precautions">
+<a class="anchor" href="#precautions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Precautions</h1>
+
+<h2 id="general">
+<a class="anchor" href="#general" aria-hidden="true"><span class="octicon octicon-link"></span></a>General</h2>
+
+<p>Shit happens and even after your best efforts, your contract could fail.</p>
+
+<p>Therefore, architect your contracts in a way that allows them to fail gracefully, and with minimal damage.</p>
+
+<div class="Toast Toast--warning googoo">
+   <span class="Toast-icon"><svg class="octicon octicon-alert" viewbox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M8.22 1.754a.25.25 0 00-.44 0L1.698 13.132a.25.25 0 00.22.368h12.164a.25.25 0 00.22-.368L8.22 1.754zm-1.763-.707c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0114.082 15H1.918a1.75 1.75 0 01-1.543-2.575L6.457 1.047zM9 11a1 1 0 11-2 0 1 1 0 012 0zm-.25-5.25a.75.75 0 00-1.5 0v2.5a.75.75 0 001.5 0v-2.5z"></path></svg></span>
+   <span class="Toast-content">Always be mindful of even the fail-safe mechanisms you add, because even they or their interaction among themselves can become a vulnerability</span>
+</div>
+
+<h2 id="upgradeability">
+<a class="anchor" href="#upgradeability" aria-hidden="true"><span class="octicon octicon-link"></span></a>Upgradeability</h2>
+
+<p>This is important to fix a bug when discovered or do something after freezing the assets inside of the contract.</p>
+
+<p>You should implement emergency stop or circuit breakers into the contract code along with mechanism to upgrade the contract. This is because, if you need to reach a consensus for upgrading the contracts, till that time, the funds should remain safe.</p>
+
+<h3 id="use-a-registry-contract-to-store-the-latest-version-of-a-contract">
+<a class="anchor" href="#use-a-registry-contract-to-store-the-latest-version-of-a-contract" aria-hidden="true"><span class="octicon octicon-link"></span></a>Use a registry contract to store the latest version of a contract</h3>
+
+<ul>
+  <li>
+    <p>Calls are not forwarded. Users fetch the current address each time before interacting with it.</p>
+  </li>
+  <li>
+    <p>Few disadvantages:</p>
+    <ul>
+      <li>Porting the existing data to the new contract would be difficult.</li>
+      <li>You HAVE to make sure that a user NEVER uses anything but the most updated set of contracts, which again can be a bit difficult.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="use-a-delegatecall-to-forward-data-and-calls">
+<a class="anchor" href="#use-a-delegatecall-to-forward-data-and-calls" aria-hidden="true"><span class="octicon octicon-link"></span></a>Use a <code class="language-plaintext highlighter-rouge">DELEGATECALL</code> to forward data and calls</h3>
+
+<p>When you use <code class="language-plaintext highlighter-rouge">delegatecall</code> from the caller contract to the called contract, the storage, current address and balance still refer to the calling contract, only the code is taken from the called address.</p>
+
+<p>There are a lot of ways of implementing this, for more information, read the post of Upgradation in my website.</p>
+
 
   </div><a class="u-url" href="/markdown/smart-contract/solidity/security/development/best-practices/2022/08/28/General-Contract-Development-Guidelines.html" hidden></a>
 </article>
