@@ -156,3 +156,34 @@ To counter this, we can:
 
 + Check value of variable before negation and throw if it is `INT_MIN`
 + Or try using integers of higher capacity. Example: `int16` instead of `int8`.
+
+# Precautions
+
+## General
+
+Shit happens and even after your best efforts, your contract could fail.
+
+Therefore, architect your contracts in a way that allows them to fail gracefully, and with minimal damage.
+
+{% include alert.html text="Always be mindful of even the fail-safe mechanisms you add, because even they or their interaction among themselves can become a vulnerability" %}
+
+## Upgradeability
+
+This is important to fix a bug when discovered or do something after freezing the assets inside of the contract.
+
+You should implement emergency stop or circuit breakers into the contract code along with mechanism to upgrade the contract. This is because, if you need to reach a consensus for upgrading the contracts, till that time, the funds should remain safe.
+
+### Use a registry contract to store the latest version of a contract
+
++ Calls are not forwarded. Users fetch the current address each time before interacting with it.
+
++ Few disadvantages:
+    + Porting the existing data to the new contract would be difficult.
+    + You HAVE to make sure that a user NEVER uses anything but the most updated set of contracts, which again can be a bit difficult.
+
+### Use a `DELEGATECALL` to forward data and calls
+
+When you use `delegatecall` from the caller contract to the called contract, the storage, current address and balance still refer to the calling contract, only the code is taken from the called address.
+
+There are a lot of ways of implementing this, for more information, read the post of Upgradation in my website.
+
