@@ -114,3 +114,45 @@ contract OneWhoCalled {
 + Also, don't implement your own random number generator. Ethereum is a deterministic protocol, so no variable within this protocol can be used as an unpredictable random number.
 > Miners can influence the `block.blockhash() value`
 
++ Will create a sample contract for an on-chain game of rock-paper-scissors to demonstrate the commit-reveal-distribute method.
+
+## Unreliable Participants
+
++ Your contract should not rely on a party to act a certain way for the entire contract logic to play out.
+    + For example, in the earlier discussed rock-paper-scissor game, if player 1 decides to submit their hashed move and bet money plus bond money and then player 2 decides to not submit their move at all. It is possible that according to your contract's logic player1's money is locked until the game is completed.
+    We need to avoid such situations
+
++ If circumventing an actor's willingness to comply for a contract logic to play out is not feasible, try to incentivize them by providing either economic incentives or time constraints (locks).
+
+## Negation of signed integers
+
+Signed integers in Solidity range from `2^(N-1)` to `2^(N-1)-1`. That means there is no positive equivalence for the `INT_MIN`.
+
+Observe the below contract:
+
+```
+// SPDX-License-Identifier: MIT
+
+pragma solidity 0.8.7;
+
+contract Negation {
+    function negateInt8(int8 num) public pure returns(int8) {
+        return -num;
+    }
+
+    function negateInt16(int16 num) public pure returns(int16) {
+        return -num;
+    }
+
+    int8 public a = negateInt8(-128); // -128
+    int16 public b = negateInt16(-256); // 256
+    int public c = negateInt16(-32768); // -32768
+}
+```
+
+So, when dealing with `int` in Solidity it is important to keep a check to see whether the negation does not return the same number.
+
+To counter this, we can:
+
++ Check value of variable before negation and throw if it is `INT_MIN`
++ Or try using integers of higher capacity. Example: `int16` instead of `int8`.
