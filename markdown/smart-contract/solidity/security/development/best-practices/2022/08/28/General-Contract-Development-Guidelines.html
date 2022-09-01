@@ -79,7 +79,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      4 min read
+      6 min read
     
 </span></p>
 
@@ -124,6 +124,8 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h2"><a href="#external-calls">External Calls</a></li>
 <li class="toc-entry toc-h2"><a href="#force-feeding-ether">Force Feeding Ether</a></li>
 <li class="toc-entry toc-h2"><a href="#public-on-chain-data">Public on-chain Data</a></li>
+<li class="toc-entry toc-h2"><a href="#unreliable-participants">Unreliable Participants</a></li>
+<li class="toc-entry toc-h2"><a href="#negation-of-signed-integers">Negation of signed integers</a></li>
 </ul>
 </li>
 </ul><h1 id="general-contract-development-guidelines-best-practices">
@@ -280,14 +282,62 @@ Favor pull over push for external calls.</p>
   <li>
     <p>If you have a <code class="language-plaintext highlighter-rouge">distribute</code> phase in your contract logic it would make sense to include a bond from all involved parties.</p>
   </li>
-  <li>
-    <p>Also, don’t implement your own random number generator. Ethereum is a deterministic protocol, so no variable within this protocol can be used as an unpredictable random number.</p>
+  <li>Also, don’t implement your own random number generator. Ethereum is a deterministic protocol, so no variable within this protocol can be used as an unpredictable random number.
     <blockquote>
       <p>Miners can influence the <code class="language-plaintext highlighter-rouge">block.blockhash() value</code></p>
     </blockquote>
   </li>
+  <li>Will create a sample contract for an on-chain game of rock-paper-scissors to demonstrate the commit-reveal-distribute method.</li>
 </ul>
 
+<h2 id="unreliable-participants">
+<a class="anchor" href="#unreliable-participants" aria-hidden="true"><span class="octicon octicon-link"></span></a>Unreliable Participants</h2>
+
+<ul>
+  <li>Your contract should not rely on a party to act a certain way for the entire contract logic to play out.
+    <ul>
+      <li>For example, in the earlier discussed rock-paper-scissor game, if player 1 decides to submit their hashed move and bet money plus bond money and then player 2 decides to not submit their move at all. It is possible that according to your contract’s logic player1’s money is locked until the game is completed.
+  We need to avoid such situations</li>
+    </ul>
+  </li>
+  <li>If circumventing an actor’s willingness to comply for a contract logic to play out is not feasible, try to incentivize them by providing either economic incentives or time constraints (locks).</li>
+</ul>
+
+<h2 id="negation-of-signed-integers">
+<a class="anchor" href="#negation-of-signed-integers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Negation of signed integers</h2>
+
+<p>Signed integers in Solidity range from <code class="language-plaintext highlighter-rouge">2^(N-1)</code> to <code class="language-plaintext highlighter-rouge">2^(N-1)-1</code>. That means there is no positive equivalence for the <code class="language-plaintext highlighter-rouge">INT_MIN</code>.</p>
+
+<p>Observe the below contract:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// SPDX-License-Identifier: MIT
+
+pragma solidity 0.8.7;
+
+contract Negation {
+    function negateInt8(int8 num) public pure returns(int8) {
+        return -num;
+    }
+
+    function negateInt16(int16 num) public pure returns(int16) {
+        return -num;
+    }
+
+    int8 public a = negateInt8(-128); // -128
+    int16 public b = negateInt16(-256); // 256
+    int public c = negateInt16(-32768); // -32768
+}
+</code></pre></div></div>
+
+<p>So, when dealing with <code class="language-plaintext highlighter-rouge">int</code> in Solidity it is important to keep a check to see whether the negation does not return the same number.</p>
+
+<p>To counter this, we can:</p>
+
+<ul>
+  <li>Check value of variable before negation and throw if it is <code class="language-plaintext highlighter-rouge">INT_MIN</code>
+</li>
+  <li>Or try using integers of higher capacity. Example: <code class="language-plaintext highlighter-rouge">int16</code> instead of <code class="language-plaintext highlighter-rouge">int8</code>.</li>
+</ul>
 
   </div><a class="u-url" href="/markdown/smart-contract/solidity/security/development/best-practices/2022/08/28/General-Contract-Development-Guidelines.html" hidden></a>
 </article>
