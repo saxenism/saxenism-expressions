@@ -1,0 +1,120 @@
+
+<h2 id="general">General</h2>
+
+<ol>
+  <li>
+    <p>Solidity supports if, else and else if statements.</p>
+  </li>
+  <li>
+    <p>Ternary operators are also supported.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">for</code>, <code class="language-plaintext highlighter-rouge">while</code> and <code class="language-plaintext highlighter-rouge">do while</code> loops are supported. But anything apart from <code class="language-plaintext highlighter-rouge">for</code> is rarely used.</p>
+  </li>
+</ol>
+
+<p>4.Arrays</p>
+
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">uint</span><span class="p">[]</span> <span class="k">public</span> <span class="n">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">];</span>
+<span class="kt">uint</span><span class="p">[]</span> <span class="k">public</span> <span class="n">arr</span><span class="p">;</span>
+<span class="kt">uint</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="k">public</span> <span class="n">fixedSizeArr</span><span class="p">;</span>
+<span class="c1">// Solidity can also return entire arrays
+</span><span class="k">returns</span><span class="p">(</span><span class="kt">uint</span><span class="p">[]</span> <span class="k">memory</span><span class="p">)</span>
+
+<span class="c1">// Creating an array in memory. Only fixed sized arrays can be created
+</span>
+<span class="k">function</span> <span class="n">createArray</span><span class="p">()</span> <span class="k">public</span> <span class="p">{</span>
+    <span class="kt">uint</span><span class="p">[]</span> <span class="k">memory</span> <span class="n">arr</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">uint</span><span class="p">[](</span><span class="mi">5</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// Deleting an array element can be done in two ways:
+// 1. Maintain array order: Shift all elements post deleted element one place left and pop last element
+// 2. Do not maintain array order: Copy last element to the deleted index. Pop the last element.
+</span></code></pre></div></div>
+
+<ol>
+  <li>Enums</li>
+</ol>
+
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">enum</span> <span class="n">Status</span> <span class="p">{</span>
+    <span class="n">Pending</span><span class="p">,</span>
+    <span class="n">Accepted</span><span class="p">,</span>
+    <span class="n">EnRoute</span><span class="p">,</span>
+    <span class="n">Delievered</span><span class="p">,</span>
+    <span class="n">Cancelled</span><span class="p">,</span>
+    <span class="n">Refunded</span>
+<span class="p">}</span>
+
+<span class="n">Status</span> <span class="k">public</span> <span class="n">status</span><span class="p">;</span> <span class="c1">// Default status is 0, ie, Pending 
+</span>
+<span class="n">status</span> <span class="o">=</span> <span class="n">Status</span><span class="p">.</span><span class="n">Cancelled</span><span class="p">;</span> <span class="c1">// Setting the status to Cancelled
+</span>
+<span class="k">delete</span> <span class="n">status</span><span class="p">;</span> <span class="c1">// Resets the status to 0, ie, Pending
+</span>
+<span class="c1">// A good practice would be to declare all the enums in your project inside a single file and then import that file
+// in different files where the enums are to be used.
+</span></code></pre></div></div>
+
+<h2 id="constant-vs-immutable">Constant vs Immutable</h2>
+
+<p>Both immutable and constant are keywords that can be used on state variables to restrict modifications to their state. The difference is that constant variables can never be changed after compilation, while immutable variables can be set within the constructor.</p>
+
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">pragma</span> <span class="n">solidity</span> <span class="o">&gt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">4</span> <span class="o">&lt;</span><span class="mf">0.7</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="k">contract</span> <span class="n">C</span> <span class="p">{</span>
+    <span class="kt">uint</span> <span class="k">constant</span> <span class="n">X</span> <span class="o">=</span> <span class="mi">32</span><span class="o">**</span><span class="mi">22</span> <span class="o">+</span> <span class="mi">8</span><span class="p">;</span>
+    <span class="kt">string</span> <span class="k">constant</span> <span class="n">TEXT</span> <span class="o">=</span> <span class="s">"abc"</span><span class="p">;</span>
+    <span class="kt">bytes32</span> <span class="k">constant</span> <span class="n">MY_HASH</span> <span class="o">=</span> <span class="nb">keccak256</span><span class="p">(</span><span class="s">"abc"</span><span class="p">);</span>
+    <span class="kt">uint</span> <span class="kr">immutable</span> <span class="n">decimals</span><span class="p">;</span>
+    <span class="kt">uint</span> <span class="kr">immutable</span> <span class="n">maxBalance</span><span class="p">;</span>
+    <span class="kt">address</span> <span class="kr">immutable</span> <span class="n">owner</span> <span class="o">=</span> <span class="n">msg</span><span class="p">.</span><span class="n">sender</span><span class="p">;</span>
+
+    <span class="k">constructor</span><span class="p">(</span><span class="kt">uint</span> <span class="n">_decimals</span><span class="p">,</span> <span class="kt">address</span> <span class="n">_reference</span><span class="p">)</span> <span class="k">public</span> <span class="p">{</span>
+        <span class="n">decimals</span> <span class="o">=</span> <span class="n">_decimals</span><span class="p">;</span>
+        <span class="c1">// Assignments to immutables can even access the environment.
+</span>        <span class="n">maxBalance</span> <span class="o">=</span> <span class="n">_reference</span><span class="p">.</span><span class="nb">balance</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">function</span> <span class="n">isBalanceTooHigh</span><span class="p">(</span><span class="kt">address</span> <span class="n">_other</span><span class="p">)</span> <span class="k">public</span> <span class="k">view</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">bool</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">_other</span><span class="p">.</span><span class="nb">balance</span> <span class="o">&gt;</span> <span class="n">maxBalance</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<p>Compared to regular state variables, the gas costs of constant &amp; immutable variables are much lower.</p>
+
+<p>a) For a constant variable, the expression assigned to it is copied to all the places where it is accessed and also re-evaluated each time. This allows for local optimizations.</p>
+
+<blockquote>
+  <p>Reevaluated each time means:
+If you have something like, uint area = 2 * PI * 5; 
+This will get reevaluated to the exact value at time of pasting the value of PI here.</p>
+</blockquote>
+
+<p>b) Immutable variables are evaluated once at construction time and their value is copied to all the places in the code where they are accessed. For these values, 32 bytes are reserved.</p>
+
+<p>-&gt; Due to this, constant values can sometimes be cheaper than immutable values.</p>
+
+<h2 id="wei-and-ethere">Wei and Ethere</h2>
+
+<p>Just as <code class="language-plaintext highlighter-rouge">1 ether == 1e18</code>, <code class="language-plaintext highlighter-rouge">1 wei == 1</code></p>
+
+<h2 id="gas">Gas</h2>
+
+<p>Price paid in Ether = Gas Price * Gas spent</p>
+
+<p><em>Gas Price</em> is the amount of Ether you are willing to pay per gas. Usually denoted in gwei, which is equal to 1e9.</p>
+
+<p><em>Gas Spent</em> is the total number of gas spent while doing all the operations required in a particular txn.</p>
+
+<p>Unused gas is refunded.</p>
+
+<p>Two caps of gas:</p>
+<ol>
+  <li>Block gas limit</li>
+  <li>gas limit (that is set by you, ie the maximum gas you are willing to pay for a particular transaction)</li>
+</ol>
+
