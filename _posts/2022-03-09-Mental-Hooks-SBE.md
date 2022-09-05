@@ -1,3 +1,10 @@
+---
+toc: true
+layout: post
+description: Short notes (reminder hooks) about extreme basics of Solidity from Solidity-by-example
+categories: [web3, solidity, solidity-by-example, language-tricks, beginner]
+title: Solidity-By-Example
+---
 
 ## General
 
