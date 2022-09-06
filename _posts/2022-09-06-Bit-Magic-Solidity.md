@@ -33,13 +33,23 @@ Binary representation of (x-1) can be obtained by simply flipping all the bits t
 Example (Confirm using [this website](https://www.rapidtables.com/convert/number/decimal-to-binary.html) if you want)
 
 7 = 0111
+
 6 = 0110
 
+---
+
 70 = 1000110
+
 69 = 1000101
 
+---
+
 420 = 110100100
+
 419 = 110100011
+
+
+----
 
 So, now if you created a number of N bits with all 1's, and did an & with the number x in question, you will get the value of the last N bits.
 
@@ -54,6 +64,8 @@ function getLastNBits(uint x, uint n) external pure returns(uint256) {
 
 ## Most significant bit position
 
+Keep on right-shifting the number until it all becomes 0. Count the number of times, you had to do this operations. That's all.
+
 ```solidity
 
 function mostSignificantBit(uint256 x) public pure returns(uint256) {
@@ -67,6 +79,12 @@ function mostSignificantBit(uint256 x) public pure returns(uint256) {
 ```
 
 ## Get first N bits
+
+Same concept as the function `getLastNBits` we discussed above.
+
+The only change here would be in the mask where we shift n number of 1's to the beginning of the mask and keep the rest as 0's.
+
+Another tip would be, if length is not available, then use the function `mostSignificantBit` we discussed before.
 
 ```solidity
 
