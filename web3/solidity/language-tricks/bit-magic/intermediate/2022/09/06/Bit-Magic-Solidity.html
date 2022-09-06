@@ -144,14 +144,23 @@ window.onload = wrap_img;
 
 <p>Example (Confirm using <a href="https://www.rapidtables.com/convert/number/decimal-to-binary.html">this website</a> if you want)</p>
 
-<p>7 = 0111
-6 = 0110</p>
+<p>7 = 0111</p>
 
-<p>70 = 1000110
-69 = 1000101</p>
+<p>6 = 0110</p>
 
-<p>420 = 110100100
-419 = 110100011</p>
+<hr>
+
+<p>70 = 1000110</p>
+
+<p>69 = 1000101</p>
+
+<hr>
+
+<p>420 = 110100100</p>
+
+<p>419 = 110100011</p>
+
+<hr>
 
 <p>So, now if you created a number of N bits with all 1’s, and did an &amp; with the number x in question, you will get the value of the last N bits.</p>
 
@@ -166,6 +175,8 @@ window.onload = wrap_img;
 <h2 id="most-significant-bit-position">
 <a class="anchor" href="#most-significant-bit-position" aria-hidden="true"><span class="octicon octicon-link"></span></a>Most significant bit position</h2>
 
+<p>Keep on right-shifting the number until it all becomes 0. Count the number of times, you had to do this operations. That’s all.</p>
+
 <div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 <span class="k">function</span> <span class="n">mostSignificantBit</span><span class="p">(</span><span class="kt">uint256</span> <span class="n">x</span><span class="p">)</span> <span class="k">public</span> <span class="k">pure</span> <span class="k">returns</span><span class="p">(</span><span class="kt">uint256</span><span class="p">)</span> <span class="p">{</span>
     <span class="kt">uint</span> <span class="n">i</span><span class="p">;</span>
@@ -179,6 +190,12 @@ window.onload = wrap_img;
 
 <h2 id="get-first-n-bits">
 <a class="anchor" href="#get-first-n-bits" aria-hidden="true"><span class="octicon octicon-link"></span></a>Get first N bits</h2>
+
+<p>Same concept as the function <code class="language-plaintext highlighter-rouge">getLastNBits</code> we discussed above.</p>
+
+<p>The only change here would be in the mask where we shift n number of 1’s to the beginning of the mask and keep the rest as 0’s.</p>
+
+<p>Another tip would be, if length is not available, then use the function <code class="language-plaintext highlighter-rouge">mostSignificantBit</code> we discussed before.</p>
 
 <div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 <span class="k">function</span> <span class="n">getFirstNBits</span><span class="p">(</span><span class="kt">uint</span> <span class="n">x</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">n</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">len</span><span class="p">)</span> <span class="k">public</span> <span class="k">pure</span> <span class="k">returns</span><span class="p">(</span><span class="kt">uint256</span><span class="p">)</span> <span class="p">{</span>
