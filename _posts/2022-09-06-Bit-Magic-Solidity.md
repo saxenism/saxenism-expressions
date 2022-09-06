@@ -66,4 +66,13 @@ function mostSignificantBit(uint256 x) public pure returns(uint256) {
 
 ```
 
-## Get Last N significant bits
+## Get first N bits
+
+```solidity
+
+function getFirstNBits(uint x, uint n, uint len) public pure returns(uint256) {
+    uint mask = ((1 << n) - 1) << (len - n);
+    return x & mask;
+}
+
+```
