@@ -79,7 +79,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      1 min read
+      2 min read
     
 </span></p>
 
@@ -114,6 +114,7 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h2"><a href="#get-last-n-bits">Get Last N bits</a></li>
 <li class="toc-entry toc-h2"><a href="#most-significant-bit-position">Most significant bit position</a></li>
 <li class="toc-entry toc-h2"><a href="#get-first-n-bits">Get first N bits</a></li>
+<li class="toc-entry toc-h2"><a href="#is-power-of-2">Is Power of 2</a></li>
 </ul>
 </li>
 </ul><h1 id="bit-magic">
@@ -203,6 +204,20 @@ window.onload = wrap_img;
     <span class="k">return</span> <span class="n">x</span> <span class="o">&amp;</span> <span class="n">mask</span><span class="p">;</span>
 <span class="p">}</span>
 
+</code></pre></div></div>
+
+<h2 id="is-power-of-2">
+<a class="anchor" href="#is-power-of-2" aria-hidden="true"><span class="octicon octicon-link"></span></a>Is Power of 2</h2>
+
+<p>If x is a power of 2, then x will have only 1 set bit, rest all will be 0’s. And then for (x-1) all bits will be set apart from the earlier leading 1. Therefore, if x would be a power of 2, then x&amp;(x-1) will always give 0 as the result.</p>
+
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">function</span> <span class="n">isPowerOfTwo</span><span class="p">(</span><span class="kt">uint</span> <span class="n">x</span><span class="p">)</span> <span class="k">external</span> <span class="k">pure</span> <span class="k">returns</span><span class="p">(</span><span class="kt">bool</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+    
 </code></pre></div></div>
 
   </div><a class="u-url" href="/web3/solidity/language-tricks/bit-magic/intermediate/2022/09/06/Bit-Magic-Solidity.html" hidden></a>
