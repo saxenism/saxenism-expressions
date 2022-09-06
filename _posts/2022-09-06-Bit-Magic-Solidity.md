@@ -94,3 +94,17 @@ function getFirstNBits(uint x, uint n, uint len) public pure returns(uint256) {
 }
 
 ```
+
+## Is Power of 2
+
+If x is a power of 2, then x will have only 1 set bit, rest all will be 0's. And then for (x-1) all bits will be set apart from the earlier leading 1. Therefore, if x would be a power of 2, then x&(x-1) will always give 0 as the result.
+
+```solidity
+
+function isPowerOfTwo(uint x) external pure returns(bool) {
+        if(x == 0) return true;
+
+        return (x & (x-1) == 0);
+    }
+    
+```
