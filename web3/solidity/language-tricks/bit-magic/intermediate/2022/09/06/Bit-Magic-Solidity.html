@@ -113,7 +113,7 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h2"><a href="#bitwise-operations">Bitwise Operations</a></li>
 <li class="toc-entry toc-h2"><a href="#get-last-n-bits">Get Last N bits</a></li>
 <li class="toc-entry toc-h2"><a href="#most-significant-bit-position">Most significant bit position</a></li>
-<li class="toc-entry toc-h2"><a href="#get-last-n-significant-bits">Get Last N significant bits</a></li>
+<li class="toc-entry toc-h2"><a href="#get-first-n-bits">Get first N bits</a></li>
 </ul>
 </li>
 </ul><h1 id="bit-magic">
@@ -177,8 +177,16 @@ window.onload = wrap_img;
 
 </code></pre></div></div>
 
-<h2 id="get-last-n-significant-bits">
-<a class="anchor" href="#get-last-n-significant-bits" aria-hidden="true"><span class="octicon octicon-link"></span></a>Get Last N significant bits</h2>
+<h2 id="get-first-n-bits">
+<a class="anchor" href="#get-first-n-bits" aria-hidden="true"><span class="octicon octicon-link"></span></a>Get first N bits</h2>
+
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">function</span> <span class="n">getFirstNBits</span><span class="p">(</span><span class="kt">uint</span> <span class="n">x</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">n</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">len</span><span class="p">)</span> <span class="k">public</span> <span class="k">pure</span> <span class="k">returns</span><span class="p">(</span><span class="kt">uint256</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">uint</span> <span class="n">mask</span> <span class="o">=</span> <span class="p">((</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">n</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">len</span> <span class="o">-</span> <span class="n">n</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">&amp;</span> <span class="n">mask</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
 
   </div><a class="u-url" href="/web3/solidity/language-tricks/bit-magic/intermediate/2022/09/06/Bit-Magic-Solidity.html" hidden></a>
 </article>
