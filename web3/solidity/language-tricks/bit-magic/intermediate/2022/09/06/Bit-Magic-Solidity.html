@@ -115,6 +115,7 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h2"><a href="#most-significant-bit-position">Most significant bit position</a></li>
 <li class="toc-entry toc-h2"><a href="#get-first-n-bits">Get first N bits</a></li>
 <li class="toc-entry toc-h2"><a href="#is-power-of-2">Is Power of 2</a></li>
+<li class="toc-entry toc-h2"><a href="#count-number-of-set-bits">Count number of set bits</a></li>
 </ul>
 </li>
 </ul><h1 id="bit-magic">
@@ -217,7 +218,24 @@ window.onload = wrap_img;
 
         <span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">);</span>
     <span class="p">}</span>
-    
+
+</code></pre></div></div>
+
+<h2 id="count-number-of-set-bits">
+<a class="anchor" href="#count-number-of-set-bits" aria-hidden="true"><span class="octicon octicon-link"></span></a>Count number of set bits</h2>
+
+<p>As explained in the previous algorithm, the relationship between the bits of x and x-1. So as in x-1, the rightmost 1 and bits right to it are flipped, then by performing x&amp;(x-1), and storing it in x, will reduce x to a number containing number of ones(in its binary form) less than the previous state of x, thus increasing the value of count in each iteration.</p>
+
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">function</span> <span class="n">countSetBits</span><span class="p">(</span><span class="kt">uint</span> <span class="n">x</span><span class="p">)</span> <span class="k">public</span> <span class="k">pure</span> <span class="k">returns</span><span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">uint</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">x</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+        <span class="o">++</span><span class="n">count</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">count</span><span class="p">;</span>
+<span class="p">}</span>
+
 </code></pre></div></div>
 
   </div><a class="u-url" href="/web3/solidity/language-tricks/bit-magic/intermediate/2022/09/06/Bit-Magic-Solidity.html" hidden></a>
