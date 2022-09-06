@@ -106,5 +106,22 @@ function isPowerOfTwo(uint x) external pure returns(bool) {
 
         return (x & (x-1) == 0);
     }
-    
+
+```
+
+## Count number of set bits
+
+As explained in the previous algorithm, the relationship between the bits of x and x-1. So as in x-1, the rightmost 1 and bits right to it are flipped, then by performing x&(x-1), and storing it in x, will reduce x to a number containing number of ones(in its binary form) less than the previous state of x, thus increasing the value of count in each iteration.
+
+```solidity
+
+function countSetBits(uint x) public pure returns(uint) {
+    uint count = 0;
+    while (x != 0) {
+        x = x & (x-1);
+        ++count;
+    }
+    return count;
+}
+
 ```
