@@ -116,6 +116,7 @@ window.onload = wrap_img;
 </li>
 <li class="toc-entry toc-h2"><a href="#stark-vs-snark">Stark vs Snark</a></li>
 <li class="toc-entry toc-h2"><a href="#cairo">Cairo</a></li>
+<li class="toc-entry toc-h2"><a href="#first-lines-of-cairo">First lines of Cairo</a></li>
 </ul><h2 id="validity-proofs-starknet-zksync">
 <a class="anchor" href="#validity-proofs-starknet-zksync" aria-hidden="true"><span class="octicon octicon-link"></span></a>Validity Proofs (StarkNet, zkSync)</h2>
 
@@ -197,6 +198,29 @@ window.onload = wrap_img;
 <p>The Cairo CPU is quite different than your regular x86 in the sense that your x86 is very good at logical operations but bad at division, the case is inverted in case of Cairo CPU.</p>
 
 <p>Cairo helps you program non-determinism into your program (I do not understand what that means. Yet.)</p>
+
+<h2 id="first-lines-of-cairo">
+<a class="anchor" href="#first-lines-of-cairo" aria-hidden="true"><span class="octicon octicon-link"></span></a>First lines of Cairo</h2>
+
+<pre><code class="language-cairo"># fun with cairo
+
+func sqr(a) -&gt; (a):
+    return (a = a * a)
+end
+
+func add_num_square(x, y) -&gt; (x):
+    let a = x + y
+    let (z) = sqr(a = a)
+    return (x = z)
+end
+
+func main():
+    let (x) = add_num_square(x = 1, y = 3)
+    assert x = 16
+    return ()
+end
+
+</code></pre>
 
   </div><a class="u-url" href="/web3/cairo/starknet/beginner/2022/09/07/Cairo-101.html" hidden></a>
 </article>
