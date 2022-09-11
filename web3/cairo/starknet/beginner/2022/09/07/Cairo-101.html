@@ -79,7 +79,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      3 min read
+      4 min read
     
 </span></p>
 
@@ -105,6 +105,8 @@ window.onload = wrap_img;
 
   <div class="post-content e-content" itemprop="articleBody">
     <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h2"><a href="#asic-to-cpu">ASIC to CPU</a></li>
+<li class="toc-entry toc-h2"><a href="#stark">STARK</a></li>
 <li class="toc-entry toc-h2"><a href="#validity-proofs-starknet-zksync">Validity Proofs (StarkNet, zkSync)</a></li>
 <li class="toc-entry toc-h2"><a href="#proofs">Proofs</a></li>
 <li class="toc-entry toc-h2"><a href="#the-case-of-middle-men">The case of Middle Men</a></li>
@@ -117,7 +119,42 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h2"><a href="#stark-vs-snark">Stark vs Snark</a></li>
 <li class="toc-entry toc-h2"><a href="#cairo">Cairo</a></li>
 <li class="toc-entry toc-h2"><a href="#first-lines-of-cairo">First lines of Cairo</a></li>
-</ul><h2 id="validity-proofs-starknet-zksync">
+</ul><h2 id="asic-to-cpu">
+<a class="anchor" href="#asic-to-cpu" aria-hidden="true"><span class="octicon octicon-link"></span></a>ASIC to CPU</h2>
+
+<ol>
+  <li>
+    <p>ASIC (Application Specific Integrated Circuits) are specialized, fast, expensive and very hard to design.</p>
+  </li>
+  <li>
+    <p>CPUs are general purpose, slower, cheaper and easier to program for. A single architecture for multiple purposes.</p>
+  </li>
+  <li>
+    <p>Choosing between ASIC and CPU is a case between <em>efficiency vs flexibility</em></p>
+  </li>
+</ol>
+
+<h2 id="stark">
+<a class="anchor" href="#stark" aria-hidden="true"><span class="octicon octicon-link"></span></a>STARK</h2>
+
+<ol>
+  <li>
+    <p>STARK is a family of cryptographic proof systems that can be used for privacy and scalability.</p>
+  </li>
+  <li>
+    <p>STARK proves statments, saying that a computation was executed correctly.</p>
+  </li>
+  <li>
+    <p>Examples for provable statements:
+ 3.1 The 1000th number in the Fibonacci sequence is X.
+ 3.2 I have 100 signed bank txns that are valid</p>
+  </li>
+  <li>
+    <p>Starkware/Starknet focuses on scalability instead of privacy and the primary focus is to reduce the verification time as much as possible.</p>
+  </li>
+</ol>
+
+<h2 id="validity-proofs-starknet-zksync">
 <a class="anchor" href="#validity-proofs-starknet-zksync" aria-hidden="true"><span class="octicon octicon-link"></span></a>Validity Proofs (StarkNet, zkSync)</h2>
 
 <p>ZK Proofs == Validity Proofs</p>
