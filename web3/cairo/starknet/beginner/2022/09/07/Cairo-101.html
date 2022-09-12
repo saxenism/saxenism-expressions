@@ -107,6 +107,8 @@ window.onload = wrap_img;
     <ul id="toc" class="section-nav">
 <li class="toc-entry toc-h2"><a href="#asic-to-cpu">ASIC to CPU</a></li>
 <li class="toc-entry toc-h2"><a href="#stark">STARK</a></li>
+<li class="toc-entry toc-h2"><a href="#what-is-starknet">What is StarkNet</a></li>
+<li class="toc-entry toc-h2"><a href="#wallets-on-starknet">Wallets on StarkNet</a></li>
 <li class="toc-entry toc-h2"><a href="#validity-proofs-starknet-zksync">Validity Proofs (StarkNet, zkSync)</a></li>
 <li class="toc-entry toc-h2"><a href="#proofs">Proofs</a></li>
 <li class="toc-entry toc-h2"><a href="#the-case-of-middle-men">The case of Middle Men</a></li>
@@ -145,14 +147,29 @@ window.onload = wrap_img;
     <p>STARK proves statments, saying that a computation was executed correctly.</p>
   </li>
   <li>
-    <p>Examples for provable statements:
- 3.1 The 1000th number in the Fibonacci sequence is X.
- 3.2 I have 100 signed bank txns that are valid</p>
+    <p>Examples for provable statements:</p>
+
+    <p>3.1. The 1000th number in the Fibonacci sequence is X.
+ 3.2. I have 100 signed bank txns that are valid</p>
   </li>
   <li>
     <p>Starkware/Starknet focuses on scalability instead of privacy and the primary focus is to reduce the verification time as much as possible.</p>
   </li>
 </ol>
+
+<h2 id="what-is-starknet">
+<a class="anchor" href="#what-is-starknet" aria-hidden="true"><span class="octicon octicon-link"></span></a>What is StarkNet</h2>
+
+<p>StarkNet is a permissionless decentralized Validity-rollup (ZK-Rollup). It operates as an L2 network over Ethereum, enabling any dApp to achieve unlimited scale for its computation - without compromising Ethereum’s composability and security (thanks to STARK).</p>
+
+<p>StarkNet contracts and the StarkNet OS are written in Cairo - supporting the deployment and scaling of any use case, whatever the business logic.</p>
+
+<h2 id="wallets-on-starknet">
+<a class="anchor" href="#wallets-on-starknet" aria-hidden="true"><span class="octicon octicon-link"></span></a>Wallets on StarkNet</h2>
+
+<p>In StarkNet there is only one type of accounts - smart contract accounts (this is called Account Abstraction), in contrast to Ethereum where there are wallets and smart contracts. Therefore, every wallet on StarkNet is a smart contract and there is no distinction between them and other smart contracts.</p>
+
+<p>Therefore, to create a new wallet, you need to deploy a transaction that publishes your smart contract wallet to the network.</p>
 
 <h2 id="validity-proofs-starknet-zksync">
 <a class="anchor" href="#validity-proofs-starknet-zksync" aria-hidden="true"><span class="octicon octicon-link"></span></a>Validity Proofs (StarkNet, zkSync)</h2>
