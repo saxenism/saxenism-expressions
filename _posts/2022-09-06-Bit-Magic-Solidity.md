@@ -125,3 +125,73 @@ function countSetBits(uint x) public pure returns(uint) {
 }
 
 ```
+
+## Pack a number of bools into a single slot (inside uint256)
+
+As you may know the most expensive operation in Ethereum is storing data (SSTORE). So you should always look for ways to reduce the storage requirements.
+
+Don't need to explain much. Code is enough.
+
+```solidity
+
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.7;
+
+contract BitManipulations {
+    bool[33] public arr = [true, false, true, false,true, false,true, false,true, false,true, false,true, false,true, false,true, false,true, false,true, false,true, false,true, false,true, false,true, false,true, false, false];
+    /*
+    0: true     
+    1: false
+    2: true
+    3: false
+    4: true
+    5: false
+    6: true
+    7: false
+    8: true
+    9: false
+    10: true
+    11: false
+    12: true
+    13: false
+    14: true
+    .
+    .
+    .
+    */
+    uint256 public packedBool;
+
+    function findNthBool(uint256 position) public view returns(bool) {
+        return (true ? ((packedBool >> position) & 1) > 0 : false);
+    }
+
+    function findNthBool2(uint256 position) public view returns(bool) {
+        return (true ? ((packedBool >> position) & 1) == 1 : false);
+    }
+
+    function findNthBool3(uint256 position) public view returns(bool) {
+        return (true ? ((packedBool >> position) & 1) != 0 : false);
+    }
+
+    function packBool() external {
+        uint256 length = arr.length;
+    
+        for(uint i; i < length; ) {
+            setNthBool(i, arr[i]);
+            unchecked {
+                ++i;
+            }
+        }
+    }
+
+    function setNthBool(uint256 _position, bool _value) internal {
+        if(_value) {
+            packedBool |= (1 << _position);
+        } else {
+            packedBool &=  ~ (1 << _position);
+        }
+    }
+}
+
+```
