@@ -122,7 +122,11 @@ window.onload = wrap_img;
 </ul>
 </li>
 <li class="toc-entry toc-h2"><a href="#stark-vs-snark">Stark vs Snark</a></li>
-<li class="toc-entry toc-h2"><a href="#cairo">Cairo</a></li>
+<li class="toc-entry toc-h2"><a href="#cairo">Cairo</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#from-the-documentation">From the documentation</a></li>
+</ul>
+</li>
 <li class="toc-entry toc-h2"><a href="#first-lines-of-cairo">First lines of Cairo</a></li>
 </ul><h2 id="asic-to-cpu">
 <a class="anchor" href="#asic-to-cpu" aria-hidden="true"><span class="octicon octicon-link"></span></a>ASIC to CPU</h2>
@@ -257,6 +261,22 @@ window.onload = wrap_img;
 <p>The Cairo CPU is quite different than your regular x86 in the sense that your x86 is very good at logical operations but bad at division, the case is inverted in case of Cairo CPU.</p>
 
 <p>Cairo helps you program non-determinism into your program (I do not understand what that means. Yet.)</p>
+
+<h3 id="from-the-documentation">
+<a class="anchor" href="#from-the-documentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>From the documentation</h3>
+
+<ol>
+  <li>
+    <p>Cairo is not a high-level programming language but a low-level programming language with powerful syntactical sugar. Cairo is powerful enough to write almost anything that can run on the Cairo VM.</p>
+  </li>
+  <li>
+    <p><em>Recursion instead of loops</em></p>
+  </li>
+</ol>
+
+<p>Cairo memory is immutable and once something is written to a slot, it cannot be changed in the future and hence we try and use recursions instead of loops.</p>
+
+<p>Loops are possible, but very complicated to implement in Cairo (this might change in Cairo v1.0)</p>
 
 <h2 id="first-lines-of-cairo">
 <a class="anchor" href="#first-lines-of-cairo" aria-hidden="true"><span class="octicon octicon-link"></span></a>First lines of Cairo</h2>
