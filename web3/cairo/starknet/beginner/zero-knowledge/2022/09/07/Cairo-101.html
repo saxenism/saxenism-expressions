@@ -130,6 +130,7 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h2"><a href="#first-lines-of-cairo">First lines of Cairo</a>
 <ul>
 <li class="toc-entry toc-h3"><a href="#sum-of-all-elements-of-an-array">Sum of all elements of an array</a></li>
+<li class="toc-entry toc-h3"><a href="#product-of-all-even-entries-of-the-array">Product of all even entries of the array</a></li>
 </ul>
 </li>
 </ul><h2 id="asic-to-cpu">
@@ -400,6 +401,56 @@ func main{output_ptr: felt*}() {
     
     let sum_of_array = arr_sum(arr = ptr, size = SIZE_ARRAY);
     serialize_word(sum_of_array);
+    
+    return();
+}
+
+</code></pre>
+
+<h3 id="product-of-all-even-entries-of-the-array">
+<a class="anchor" href="#product-of-all-even-entries-of-the-array" aria-hidden="true"><span class="octicon octicon-link"></span></a>Product of all even entries of the array</h3>
+
+<pre><code class="language-cairo">
+%builtins output
+
+from starkware.cairo.common.serialize import serialize_word as print
+from starkware.cairo.common.alloc import alloc
+
+func arr_sum(arr: felt*, size) -&gt; felt {
+    if(size == 0) {
+        return 0;
+    }
+    
+    let sum_of_others = arr_sum(arr = arr + 1, size = size - 1);
+    return arr[0] + sum_of_others;
+}
+
+func arr_product(arr: felt*, size) -&gt; felt {
+    if(size == 0) {
+        return 1;
+    }
+    
+    // This is assuming an even length of array
+    let prod_of_others = arr_product(arr = arr + 2, size = size - 2);
+    return arr[0] * prod_of_others;
+}
+
+func main{output_ptr: felt*}() {
+
+    const ARR_SIZE = 4;
+    // Initializing space for an array
+    let (ptr) = alloc();
+    // Putting out the initial values in the array
+    assert [ptr] = 40;
+    assert [ptr + 1] = 3;
+    assert [ptr + 2] = 2;
+    assert [ptr + 3] = 1;
+    
+    // let sum_of_array = arr_sum(ptr, ARR_SIZE);
+    // print(sum_of_array);
+    
+    let product_of_even_array = arr_product(arr = ptr, size = ARR_SIZE);
+    print(product_of_even_array);
     
     return();
 }
