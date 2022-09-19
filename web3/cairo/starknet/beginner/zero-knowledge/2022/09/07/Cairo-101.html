@@ -79,7 +79,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      5 min read
+      9 min read
     
 </span></p>
 
@@ -127,7 +127,11 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h3"><a href="#from-the-documentation">From the documentation</a></li>
 </ul>
 </li>
-<li class="toc-entry toc-h2"><a href="#first-lines-of-cairo">First lines of Cairo</a></li>
+<li class="toc-entry toc-h2"><a href="#first-lines-of-cairo">First lines of Cairo</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#sum-of-all-elements-of-an-array">Sum of all elements of an array</a></li>
+</ul>
+</li>
 </ul><h2 id="asic-to-cpu">
 <a class="anchor" href="#asic-to-cpu" aria-hidden="true"><span class="octicon octicon-link"></span></a>ASIC to CPU</h2>
 
@@ -278,6 +282,71 @@ window.onload = wrap_img;
 
 <p>Loops are possible, but very complicated to implement in Cairo (this might change in Cairo v1.0)</p>
 
+<ol>
+  <li><em>Assert Statements</em></li>
+</ol>
+
+<p>In Cairo, assert statements such as</p>
+<pre><code class="language-cairo">assert [ptr] = 0;
+</code></pre>
+
+<p>will assert that the value of memory cell at address <code class="language-plaintext highlighter-rouge">ptr</code> is indeed 0 or not <strong>iff</strong> the value of the memory cell at address <code class="language-plaintext highlighter-rouge">ptr</code> was already 0. Otherwise, Cairo will set the value of [ptr] to 0 and then assert it to be equal to 0, making the assert to pass.</p>
+
+<p>Also you can’t re-set the value of [ptr] if you’ve already set it before, this behaviour is again a testimony to the fact that the Cairo memory is immutable.</p>
+
+<ol>
+  <li>Writing a <em>main()</em> function</li>
+</ol>
+
+<p>Consider the following function</p>
+
+<pre><code class="language-cairo">
+%builtins output
+
+from starkware.cairo.common.serialize import serialize_word
+
+func main{output_ptr: felt*}() {
+    serialize_word(1234);
+    serialize_word(4321);
+    return ();
+}
+
+</code></pre>
+
+<p>The <code class="language-plaintext highlighter-rouge">main()</code> function is the starting point of all Cairo prorams.</p>
+
+<p>The <code class="language-plaintext highlighter-rouge">%builtin outputs</code> helps Cairo communicate with the external world, think <code class="language-plaintext highlighter-rouge">cout</code> from C++. The communication with the builtin is done by reading/writing values to the memory. The output builtin is quite simple: Declaring it using %builtins turns the signature of main() to main{output_ptr: felt*}().</p>
+
+<p><code class="language-plaintext highlighter-rouge">{}</code> represents implicit arguments.</p>
+
+<p>The argument (from the main function) points to the beginning of the memory segment to which the program output should be written. The program then returns a pointer to the memory that marks the end of the output. The convention we use in Cairo, is that the end of a memory segment always points to the <strong>memory cell after the last written cell.</strong></p>
+
+<p>The function <code class="language-plaintext highlighter-rouge">serialize_word</code> takes one implicit argument (and thus returns one implicit argument) and takes one explicit argument (the one that we need to write)</p>
+
+<p><code class="language-plaintext highlighter-rouge">serialize_output(x)</code> writes x to the memory cell pointed by <code class="language-plaintext highlighter-rouge">output_ptr</code> (that is, <code class="language-plaintext highlighter-rouge">[output_ptr]</code>) and returns <code class="language-plaintext highlighter-rouge">output_ptr + 1</code>. Now the implicit argument mechanism kicks in: in the first call to serialize_word() the Cairo compiler passes the value of output_ptr as the implicit argument. In the second call it uses the value returned by the first call.</p>
+
+<p>The import statement is well…. an import statement. You could also have done <code class="language-plaintext highlighter-rouge">... import serialize_word as foo</code> to use the name <code class="language-plaintext highlighter-rouge">foo</code> for <code class="language-plaintext highlighter-rouge">serialize_word</code>.</p>
+
+<ol>
+  <li>Field Elements (felt)</li>
+</ol>
+
+<p>What we mean by a felt in Cairo is an integer in the range -P/2 &lt; x &lt; P/2 where P is a very large (prime) number (currently it is a 252-bit number, which is a number with 76 decimal digits). All calculations (multiplication, addition, subtraction) are done as modulo P.</p>
+
+<p>The important distinction here is in division. Do not think of division in felts as normal integer division. As long as the numerator is perfectly divisible by the denominator, you will get the expected output, but for something like 7/3 instead of 2 (or 2.333…) you will get an arbitrarily large number.</p>
+
+<p>This is because, for division to be successful in Cairo, it must satisfy the equation</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(x/y) * y = x
+
+</code></pre></div></div>
+
+<p>So, (6/2) * 2 is indeed 6, but (7/2)*2 != 7, right?</p>
+
+<p>But you know what is correct value of <code class="language-plaintext highlighter-rouge">y</code> in the second case? See this:</p>
+
+<p>(P + 7 / 2) * 2 = P + 7 and (P + 7) modulo P is 7. Therefore, the answer to this division of 7/3 is (P+7)/2</p>
+
 <h2 id="first-lines-of-cairo">
 <a class="anchor" href="#first-lines-of-cairo" aria-hidden="true"><span class="octicon octicon-link"></span></a>First lines of Cairo</h2>
 
@@ -298,6 +367,42 @@ func main():
     assert x = 16
     return ()
 end
+
+</code></pre>
+
+<h3 id="sum-of-all-elements-of-an-array">
+<a class="anchor" href="#sum-of-all-elements-of-an-array" aria-hidden="true"><span class="octicon octicon-link"></span></a>Sum of all elements of an array</h3>
+
+<pre><code class="language-cairo">
+%builtins output
+
+from starkware.cairo.common.serialize import serialize_word
+from starkware.cairo.common.alloc import alloc
+
+func arr_sum(arr: felt*, size) -&gt; felt {
+    if(size == 0) {
+        return 0;
+    }
+    
+    let sum_of_rest = arr_sum(arr = arr + 1, size = size - 1);
+    return arr[0] + sum_of_rest;
+}
+
+func main{output_ptr: felt*}() {
+    const SIZE_ARRAY = 3;
+    
+    // allocate an array
+    let (ptr) = alloc();
+    
+    assert[ptr] = 33;
+    assert[ptr + 1] = 44;
+    assert[ptr + 2] = 69;
+    
+    let sum_of_array = arr_sum(arr = ptr, size = SIZE_ARRAY);
+    serialize_word(sum_of_array);
+    
+    return();
+}
 
 </code></pre>
 
