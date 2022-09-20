@@ -79,7 +79,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      9 min read
+      11 min read
     
 </span></p>
 
@@ -133,6 +133,7 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h3"><a href="#product-of-all-even-entries-of-the-array">Product of all even entries of the array</a></li>
 </ul>
 </li>
+<li class="toc-entry toc-h2"><a href="#the-15-puzzle">The 15-Puzzle</a></li>
 </ul><h2 id="asic-to-cpu">
 <a class="anchor" href="#asic-to-cpu" aria-hidden="true"><span class="octicon octicon-link"></span></a>ASIC to CPU</h2>
 
@@ -456,6 +457,70 @@ func main{output_ptr: felt*}() {
 }
 
 </code></pre>
+
+<h2 id="the-15-puzzle">
+<a class="anchor" href="#the-15-puzzle" aria-hidden="true"><span class="octicon octicon-link"></span></a>The 15-Puzzle</h2>
+
+<p>%builtins output</p>
+
+<p>from starkware.cairo.common.serialize import serialize_word as print</p>
+
+<p>struct Location {
+    row: felt,
+    col: felt,
+}</p>
+
+<p>// Location*
+// The expression Location* instructs Cairo to interpret <code class="language-plaintext highlighter-rouge">loc</code> as the address of a <code class="language-plaintext highlighter-rouge">Location</code> instance.
+// This means that it will expect that the value of the memory at address <code class="language-plaintext highlighter-rouge">loc</code> is the row of the location, and
+// the value at address <code class="language-plaintext highlighter-rouge">loc + 1</code> is the column. loc.row and loc.col is just syntatic sugar</p>
+
+<p>// Tempvar
+// The scope of a temporary variable is limited. Using it is delicate since a temporary variable maybe revoked due to jumps/function calls etc.</p>
+
+<p>// &lt; operator
+// In cairo, the less than operation is a complicated operation and so Cairo has a builtin called range-check that allows comparing values</p>
+
+<p>// return()
+// In Cairo the return statment is not implicit even if the function does not return anything</p>
+
+<p>func verify_adjacent_locations(loc0: Location<em>, loc1: Location</em>) {
+    alloc_locals;
+    local row_diff = loc0.row - loc1.row;
+    local col_diff = loc0.col - loc1.col;</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>if(row_diff == 0) {
+    assert col_diff * col_diff = 1;
+    return ();
+} else {
+    assert row_diff * row_diff = 1;
+    assert col_diff = 0;
+    return();
+} }
+</code></pre></div></div>
+
+<p>// local variables are much more less restricted than tempvar and can be accessed till the end of a function without exception
+// alloc_locals allocates memory required for the local variables of the function. Usually, this should be the first statement in a function which uses local variables.</p>
+
+<p>func verify_valid_location(loc: Location*) {
+    // Check that row is in range 0-3
+    tempavar row = loc.row;
+    assert row * (row - 1) * (row - 2) * (row - 3) = 0;</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// Check that column is in range 0-3
+tempvar col = loc.col;
+assert col * (col - 1) * (col - 2) * (col - 3) = 0;
+
+return (); }
+</code></pre></div></div>
+
+<p>// A reference is defined using a <code class="language-plaintext highlighter-rouge">let</code> statement.
+// So, let x = y<em>y</em>y</p>
+
+<p>func main{output_ptr: felt*}(){
+    print(214);
+    return();
+}</p>
 
   </div><!-- from https://github.com/utterance/utterances -->
 <script src="https://utteranc.es/client.js"
