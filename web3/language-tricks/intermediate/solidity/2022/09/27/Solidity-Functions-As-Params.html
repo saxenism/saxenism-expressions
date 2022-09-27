@@ -106,7 +106,19 @@ window.onload = wrap_img;
   <div class="post-content e-content" itemprop="articleBody">
     <ul id="toc" class="section-nav">
 <li class="toc-entry toc-h2"><a href="#function-types">Function Types</a></li>
-<li class="toc-entry toc-h2"><a href="#example">Example</a></li>
+<li class="toc-entry toc-h2"><a href="#example">Example</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#1-format-of-function-types-is-the-following">1. Format of function types is the following:</a></li>
+<li class="toc-entry toc-h3"><a href="#2-conversions">2. Conversions</a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#21-pure-can-be-converted-to-view-and-non-payable">2.1 pure can be converted to view and non-payable</a></li>
+<li class="toc-entry toc-h4"><a href="#22-view-can-be-converted-to-non-payable">2.2 view can be converted to non-payable</a></li>
+<li class="toc-entry toc-h4"><a href="#23-non-payable-can-be-converted-to-payable">2.3 non-payable can be converted to payable</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h3"><a href="#3-a-short-mock-implementation-of-this-concept">3. A short mock implementation of this concept</a></li>
+</ul>
+</li>
 </ul><h2 id="function-types">
 <a class="anchor" href="#function-types" aria-hidden="true"><span class="octicon octicon-link"></span></a>Function Types</h2>
 
@@ -119,9 +131,8 @@ window.onload = wrap_img;
 <h2 id="example">
 <a class="anchor" href="#example" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example</h2>
 
-<ol>
-  <li>Format of function types is the following:</li>
-</ol>
+<h3 id="1-format-of-function-types-is-the-following">
+<a class="anchor" href="#1-format-of-function-types-is-the-following" aria-hidden="true"><span class="octicon octicon-link"></span></a>1. Format of function types is the following:</h3>
 
 <div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="p">(</span><span class="o">&lt;</span><span class="n">parameter</span> <span class="n">types</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span><span class="k">internal</span> <span class="o">|</span> <span class="k">external</span><span class="p">}</span> <span class="p">[</span><span class="k">pure</span> <span class="o">|</span> <span class="k">view</span> <span class="o">|</span> <span class="k">payable</span><span class="p">]</span> <span class="p">[</span><span class="k">returns</span><span class="p">(</span><span class="o">&lt;</span><span class="k">return</span> <span class="n">types</span><span class="o">&gt;</span><span class="p">)]</span>
 </code></pre></div></div>
@@ -130,9 +141,8 @@ window.onload = wrap_img;
   <p>Note : Function types can only be internal or external. Also, the <code class="language-plaintext highlighter-rouge">return types</code> cannot be empty if the function in question does not return anything, in this case, completely omit the <code class="language-plaintext highlighter-rouge">returns</code> keyword.</p>
 </blockquote>
 
-<ol>
-  <li>Conversions</li>
-</ol>
+<h3 id="2-conversions">
+<a class="anchor" href="#2-conversions" aria-hidden="true"><span class="octicon octicon-link"></span></a>2. Conversions</h3>
 
 <p>function <code class="language-plaintext highlighter-rouge">A</code> can be converted to function <code class="language-plaintext highlighter-rouge">B</code> if they identical parameter types, identical return types, identical internal/external propery, and state mutability of <code class="language-plaintext highlighter-rouge">A</code> is more restrictive than <code class="language-plaintext highlighter-rouge">B</code>.</p>
 
@@ -140,14 +150,19 @@ window.onload = wrap_img;
 
 <p>Also, rememeber that all <code class="language-plaintext highlighter-rouge">non-payable</code> functions are <code class="language-plaintext highlighter-rouge">payable</code> (accepting 0 Ether), but no non-payable is payable. Therefore <code class="language-plaintext highlighter-rouge">non-payable</code> is more restrictive.</p>
 
-<p>So,
-2.1 <code class="language-plaintext highlighter-rouge">pure</code> can be converted to <code class="language-plaintext highlighter-rouge">view</code> and <code class="language-plaintext highlighter-rouge">non-payable</code>
-2.2 <code class="language-plaintext highlighter-rouge">view</code> can be converted to <code class="language-plaintext highlighter-rouge">non-payable</code>
-2.3 <code class="language-plaintext highlighter-rouge">non-payable</code> can be converted to <code class="language-plaintext highlighter-rouge">payable</code></p>
+<p>So,</p>
+<h4 id="21-pure-can-be-converted-to-view-and-non-payable">
+<a class="anchor" href="#21-pure-can-be-converted-to-view-and-non-payable" aria-hidden="true"><span class="octicon octicon-link"></span></a>2.1 <code class="language-plaintext highlighter-rouge">pure</code> can be converted to <code class="language-plaintext highlighter-rouge">view</code> and <code class="language-plaintext highlighter-rouge">non-payable</code>
+</h4>
+<h4 id="22-view-can-be-converted-to-non-payable">
+<a class="anchor" href="#22-view-can-be-converted-to-non-payable" aria-hidden="true"><span class="octicon octicon-link"></span></a>2.2 <code class="language-plaintext highlighter-rouge">view</code> can be converted to <code class="language-plaintext highlighter-rouge">non-payable</code>
+</h4>
+<h4 id="23-non-payable-can-be-converted-to-payable">
+<a class="anchor" href="#23-non-payable-can-be-converted-to-payable" aria-hidden="true"><span class="octicon octicon-link"></span></a>2.3 <code class="language-plaintext highlighter-rouge">non-payable</code> can be converted to <code class="language-plaintext highlighter-rouge">payable</code>
+</h4>
 
-<ol>
-  <li>A short mock implementation of this concept</li>
-</ol>
+<h3 id="3-a-short-mock-implementation-of-this-concept">
+<a class="anchor" href="#3-a-short-mock-implementation-of-this-concept" aria-hidden="true"><span class="octicon octicon-link"></span></a>3. A short mock implementation of this concept</h3>
 
 <div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 <span class="c1">// SPDX-License-Identifier: MIT
