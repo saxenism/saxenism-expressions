@@ -6,7 +6,7 @@ categories: [web3, language-tricks, beginner, solidity]
 title: Solidity - Typecasting Addresses to Uint
 ---
 
-## ASIC to CPU
+## Convert address to uint and back
 
 
 ```solidity
