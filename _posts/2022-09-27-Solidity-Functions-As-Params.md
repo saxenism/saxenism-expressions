@@ -16,7 +16,7 @@ These function types can be used to pass and return functions from function call
 
 ## Example
 
-1. Format of function types is the following:
+### 1. Format of function types is the following:
 
 ```solidity
 function (<parameter types>) {internal | external} [pure | view | payable] [returns(<return types>)]
@@ -24,7 +24,7 @@ function (<parameter types>) {internal | external} [pure | view | payable] [retu
 
 > Note : Function types can only be internal or external. Also, the `return types` cannot be empty if the function in question does not return anything, in this case, completely omit the `returns` keyword.
 
-2. Conversions
+### 2. Conversions
 
 function `A` can be converted to function `B` if they identical parameter types, identical return types, identical internal/external propery, and state mutability of `A` is more restrictive than `B`.
 
@@ -33,11 +33,11 @@ Since `view` says that no state will be changed whereas `pure` says no state var
 Also, rememeber that all `non-payable` functions are `payable` (accepting 0 Ether), but no non-payable is payable. Therefore `non-payable` is more restrictive. 
 
 So,
-2.1 `pure` can be converted to `view` and `non-payable`
-2.2 `view` can be converted to `non-payable`
-2.3 `non-payable` can be converted to `payable`
+#### 2.1 `pure` can be converted to `view` and `non-payable`
+#### 2.2 `view` can be converted to `non-payable`
+#### 2.3 `non-payable` can be converted to `payable`
 
-3. A short mock implementation of this concept
+### 3. A short mock implementation of this concept
 
 ```solidity
 
