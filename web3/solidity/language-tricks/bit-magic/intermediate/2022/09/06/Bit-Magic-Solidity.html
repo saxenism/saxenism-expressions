@@ -79,7 +79,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      4 min read
+      5 min read
     
 </span></p>
 
@@ -119,9 +119,12 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h2"><a href="#pack-a-number-of-bools-into-a-single-slot-inside-uint256">Pack a number of bools into a single slot (inside uint256)</a></li>
 </ul>
 </li>
-<li class="toc-entry toc-h1"><a href="#xor-hacking">XOR Hacking</a>
+<li class="toc-entry toc-h1"><a href="#extreme-basics---part-1">Extreme Basics - Part 1</a>
 <ul>
 <li class="toc-entry toc-h2"><a href="#detect-if-two-numbers-have-opposite-signs">Detect if two numbers have opposite signs</a></li>
+<li class="toc-entry toc-h2"><a href="#detect-if-number-is-even-or-odd">Detect if number is even or odd</a></li>
+<li class="toc-entry toc-h2"><a href="#add-1-to-an-integer">Add 1 to an integer</a></li>
+<li class="toc-entry toc-h2"><a href="#swap-two-numbers">Swap Two Numbers</a></li>
 </ul>
 </li>
 </ul><h1 id="bit-magic">
@@ -312,8 +315,8 @@ window.onload = wrap_img;
 
 </code></pre></div></div>
 
-<h1 id="xor-hacking">
-<a class="anchor" href="#xor-hacking" aria-hidden="true"><span class="octicon octicon-link"></span></a>XOR Hacking</h1>
+<h1 id="extreme-basics---part-1">
+<a class="anchor" href="#extreme-basics---part-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Extreme Basics - Part 1</h1>
 
 <p>The XOR operator (^) returns 0 for same bits and 1 for different bits.</p>
 
@@ -335,6 +338,56 @@ Also, if we get x^y as 1 for the leftmost bit, it would mean that it’s a negat
 <div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
     <span class="k">function</span> <span class="n">oppositeSigns</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">)</span> <span class="k">external</span> <span class="k">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">bool</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">^</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+
+</code></pre></div></div>
+
+<h2 id="detect-if-number-is-even-or-odd">
+<a class="anchor" href="#detect-if-number-is-even-or-odd" aria-hidden="true"><span class="octicon octicon-link"></span></a>Detect if number is even or odd</h2>
+
+<p>For a number to be even, the last bit (2^0) should not be set and similarly for odd numbers the last bit is set. So, simply check what’s the last bit of the number.</p>
+
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="k">function</span> <span class="n">isEven</span><span class="p">(</span><span class="kt">uint</span> <span class="n">x</span><span class="p">)</span> <span class="k">external</span> <span class="k">pure</span> <span class="k">returns</span><span class="p">(</span><span class="kt">bool</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">&amp;</span> <span class="mi">1</span> <span class="o">==</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+
+</code></pre></div></div>
+
+<h2 id="add-1-to-an-integer">
+<a class="anchor" href="#add-1-to-an-integer" aria-hidden="true"><span class="octicon octicon-link"></span></a>Add 1 to an integer</h2>
+
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="cm">/*
+        Since we know that negative numbers are stored as 2's complement in Solidity (and other programming languages), we can use that fact to add 1 to a number (integer)
+        2's complement is 1's complement plus 1 and 1's complement is simply inverting all bits of the given number
+        Therefore, by reverse engineering, if we did -(~x) we should get x + 1, right?
+    */</span>
+    <span class="k">function</span> <span class="n">add1ToInt</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="k">external</span> <span class="k">pure</span> <span class="k">returns</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="o">-</span><span class="p">(</span><span class="o">~</span><span class="n">x</span><span class="p">);</span>
+    <span class="p">}</span>
+
+</code></pre></div></div>
+
+<h2 id="swap-two-numbers">
+<a class="anchor" href="#swap-two-numbers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Swap Two Numbers</h2>
+
+<p>Alright agreed that this is a bit of an overkill, since Solidity natively provides a cool way to swap values of two numbers, but I’m autistic and let’s just go with the flow :P</p>
+
+<p>Also, the native method to swap two values is ofc more gas efficient.</p>
+
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="kt">uint</span> <span class="k">public</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+    <span class="kt">uint</span> <span class="k">public</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+
+    <span class="k">function</span> <span class="n">swapTwoNumbers</span><span class="p">()</span> <span class="k">external</span> <span class="p">{</span>
+        <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">function</span> <span class="n">swapTwoNumbersBitManipulation</span><span class="p">()</span> <span class="k">external</span> <span class="p">{</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">a</span> <span class="o">^</span> <span class="n">b</span><span class="p">;</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">b</span> <span class="o">^</span> <span class="n">a</span><span class="p">;</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">a</span> <span class="o">^</span> <span class="n">b</span><span class="p">;</span>
     <span class="p">}</span>
 
 </code></pre></div></div>
