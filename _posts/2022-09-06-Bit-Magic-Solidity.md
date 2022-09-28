@@ -102,9 +102,7 @@ If x is a power of 2, then x will have only 1 set bit, rest all will be 0's. And
 ```solidity
 
 function isPowerOfTwo(uint x) external pure returns(bool) {
-        if(x == 0) return true;
-
-        return (x & (x-1) == 0);
+        return (x == 0 || x & (x-1) == 0);
     }
 
 ```
@@ -116,7 +114,7 @@ As explained in the previous algorithm, the relationship between the bits of x a
 ```solidity
 
 function countSetBits(uint x) public pure returns(uint) {
-    uint count = 0;
+    uint count;
     while (x != 0) {
         x = x & (x-1);
         ++count;
