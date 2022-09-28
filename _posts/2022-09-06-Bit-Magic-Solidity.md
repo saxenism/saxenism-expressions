@@ -193,3 +193,31 @@ contract BitManipulations {
 }
 
 ```
+
+# XOR Hacking
+
+The XOR operator (^) returns 0 for same bits and 1 for different bits.
+
+
+Truth Table:
+| x1 | x2 | x1 ^ x2 |
+| -- | -- | -- |
+| 0 | 0 | 0 |
+| 0 | 1 | 1 |
+| 1 | 0 | 1 |
+| 1 | 1 | 0 |
+
+
+## Detect if two numbers have opposite signs
+
+Since we know that the leftmost bit for a positive integer is 0 and for negative is 1.
+Therefore, with the xor of the leftmost bits, if we get 1, the signs were different.
+Also, if we get x^y as 1 for the leftmost bit, it would mean that it's a negative number and therefore less than 0
+
+```solidity
+
+    function oppositeSigns(int x, int y) external pure returns (bool) {
+        return (x ^ y < 0);
+    }
+
+```
