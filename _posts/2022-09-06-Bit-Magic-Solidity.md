@@ -161,15 +161,15 @@ contract BitManipulations {
     uint256 public packedBool;
 
     function findNthBool(uint256 position) public view returns(bool) {
-        return (true ? ((packedBool >> position) & 1) > 0 : false);
+        return ((packedBool >> position) & 1 > 0);
     }
 
     function findNthBool2(uint256 position) public view returns(bool) {
-        return (true ? ((packedBool >> position) & 1) == 1 : false);
+        return ((packedBool >> position) & 1 == 1);
     }
 
     function findNthBool3(uint256 position) public view returns(bool) {
-        return (true ? ((packedBool >> position) & 1) != 0 : false);
+        return ((packedBool >> position) & 1 != 0);
     }
 
     function packBool() external {
