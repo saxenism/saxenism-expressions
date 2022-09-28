@@ -194,7 +194,7 @@ contract BitManipulations {
 
 ```
 
-# XOR Hacking
+# Extreme Basics - Part 1
 
 The XOR operator (^) returns 0 for same bits and 1 for different bits.
 
@@ -218,6 +218,56 @@ Also, if we get x^y as 1 for the leftmost bit, it would mean that it's a negativ
 
     function oppositeSigns(int x, int y) external pure returns (bool) {
         return (x ^ y < 0);
+    }
+
+```
+
+## Detect if number is even or odd
+
+For a number to be even, the last bit (2^0) should not be set and similarly for odd numbers the last bit is set. So, simply check what's the last bit of the number.
+
+```solidity
+
+    function isEven(uint x) external pure returns(bool) {
+        return (x & 1 == 0);
+    }
+
+```
+
+## Add 1 to an integer
+
+```solidity
+
+    /*
+        Since we know that negative numbers are stored as 2's complement in Solidity (and other programming languages), we can use that fact to add 1 to a number (integer)
+        2's complement is 1's complement plus 1 and 1's complement is simply inverting all bits of the given number
+        Therefore, by reverse engineering, if we did -(~x) we should get x + 1, right?
+    */
+    function add1ToInt(int x) external pure returns(int) {
+        return -(~x);
+    }
+
+```
+
+## Swap Two Numbers
+
+Alright agreed that this is a bit of an overkill, since Solidity natively provides a cool way to swap values of two numbers, but I'm autistic and let's just go with the flow :P
+
+Also, the native method to swap two values is ofc more gas efficient.
+
+```solidity
+
+    uint public a = 5;
+    uint public b = 10;
+
+    function swapTwoNumbers() external {
+        (a, b) = (b, a);
+    }
+
+    function swapTwoNumbersBitManipulation() external {
+        a = a ^ b;
+        b = b ^ a;
+        a = a ^ b;
     }
 
 ```
