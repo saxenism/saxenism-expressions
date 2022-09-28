@@ -79,7 +79,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      3 min read
+      4 min read
     
 </span></p>
 
@@ -117,6 +117,11 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h2"><a href="#is-power-of-2">Is Power of 2</a></li>
 <li class="toc-entry toc-h2"><a href="#count-number-of-set-bits">Count number of set bits</a></li>
 <li class="toc-entry toc-h2"><a href="#pack-a-number-of-bools-into-a-single-slot-inside-uint256">Pack a number of bools into a single slot (inside uint256)</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h1"><a href="#xor-hacking">XOR Hacking</a>
+<ul>
+<li class="toc-entry toc-h2"><a href="#detect-if-two-numbers-have-opposite-signs">Detect if two numbers have opposite signs</a></li>
 </ul>
 </li>
 </ul><h1 id="bit-magic">
@@ -304,6 +309,33 @@ window.onload = wrap_img;
         <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">}</span>
+
+</code></pre></div></div>
+
+<h1 id="xor-hacking">
+<a class="anchor" href="#xor-hacking" aria-hidden="true"><span class="octicon octicon-link"></span></a>XOR Hacking</h1>
+
+<p>The XOR operator (^) returns 0 for same bits and 1 for different bits.</p>
+
+<p>Truth Table:
+| x1 | x2 | x1 ^ x2 |
+| – | – | – |
+| 0 | 0 | 0 |
+| 0 | 1 | 1 |
+| 1 | 0 | 1 |
+| 1 | 1 | 0 |</p>
+
+<h2 id="detect-if-two-numbers-have-opposite-signs">
+<a class="anchor" href="#detect-if-two-numbers-have-opposite-signs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Detect if two numbers have opposite signs</h2>
+
+<p>Since we know that the leftmost bit for a positive integer is 0 and for negative is 1.
+Therefore, with the xor of the leftmost bits, if we get 1, the signs were different.
+Also, if we get x^y as 1 for the leftmost bit, it would mean that it’s a negative number and therefore less than 0</p>
+
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="k">function</span> <span class="n">oppositeSigns</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">)</span> <span class="k">external</span> <span class="k">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">bool</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">^</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
 
 </code></pre></div></div>
 
