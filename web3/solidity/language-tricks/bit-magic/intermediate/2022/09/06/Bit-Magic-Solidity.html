@@ -79,7 +79,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      5 min read
+      8 min read
     
 </span></p>
 
@@ -125,6 +125,12 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h2"><a href="#detect-if-number-is-even-or-odd">Detect if number is even or odd</a></li>
 <li class="toc-entry toc-h2"><a href="#add-1-to-an-integer">Add 1 to an integer</a></li>
 <li class="toc-entry toc-h2"><a href="#swap-two-numbers">Swap Two Numbers</a></li>
+<li class="toc-entry toc-h2"><a href="#turn-off-nth-bit-in-a-number">Turn off n’th bit in a number</a></li>
+<li class="toc-entry toc-h2"><a href="#turn-on-nth-bit-in-a-number">Turn on Nth bit in a number</a></li>
+<li class="toc-entry toc-h2"><a href="#check-if-the-nth-bit-is-set-for-a-number">Check if the nth bit is set for a number</a></li>
+<li class="toc-entry toc-h2"><a href="#toggle-nth-bit">Toggle nth bit</a></li>
+<li class="toc-entry toc-h2"><a href="#unset-the-rightmost-set-bit-in-a-number">Unset the rightmost set bit in a number</a></li>
+<li class="toc-entry toc-h2"><a href="#find-position-of-rightmost-set-bit">Find position of rightmost set bit</a></li>
 </ul>
 </li>
 </ul><h1 id="bit-magic">
@@ -322,11 +328,11 @@ window.onload = wrap_img;
 
 <p>Truth Table:
 | x1 | x2 | x1 ^ x2 |
-| – | – | – |
-| 0 | 0 | 0 |
-| 0 | 1 | 1 |
-| 1 | 0 | 1 |
-| 1 | 1 | 0 |</p>
+| – | – | ——- |
+| 0  | 0  | 0       |
+| 0  | 1  | 1       |
+| 1  | 0  | 1       |
+| 1  | 1  | 0       |</p>
 
 <h2 id="detect-if-two-numbers-have-opposite-signs">
 <a class="anchor" href="#detect-if-two-numbers-have-opposite-signs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Detect if two numbers have opposite signs</h2>
@@ -388,6 +394,98 @@ Also, if we get x^y as 1 for the leftmost bit, it would mean that it’s a negat
         <span class="n">a</span> <span class="o">=</span> <span class="n">a</span> <span class="o">^</span> <span class="n">b</span><span class="p">;</span>
         <span class="n">b</span> <span class="o">=</span> <span class="n">b</span> <span class="o">^</span> <span class="n">a</span><span class="p">;</span>
         <span class="n">a</span> <span class="o">=</span> <span class="n">a</span> <span class="o">^</span> <span class="n">b</span><span class="p">;</span>
+    <span class="p">}</span>
+
+</code></pre></div></div>
+
+<h2 id="turn-off-nth-bit-in-a-number">
+<a class="anchor" href="#turn-off-nth-bit-in-a-number" aria-hidden="true"><span class="octicon octicon-link"></span></a>Turn off n’th bit in a number</h2>
+
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="cm">/*
+        What we want to accomplish here is a bitwise &amp; of the nth bit with 0 so that it becomes 0 and since we do not want to disturb the 
+        other bits of the number x, we do a bitwise &amp; of bits of number x with all 1's.
+    */</span>
+
+    <span class="k">function</span> <span class="n">turnOffNthBit</span><span class="p">(</span><span class="kt">uint</span> <span class="n">x</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">n</span><span class="p">)</span> <span class="k">external</span> <span class="k">pure</span> <span class="k">returns</span><span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="o">&amp;</span> <span class="o">~</span><span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">n</span><span class="p">);</span>
+    <span class="p">}</span>
+
+</code></pre></div></div>
+
+<h2 id="turn-on-nth-bit-in-a-number">
+<a class="anchor" href="#turn-on-nth-bit-in-a-number" aria-hidden="true"><span class="octicon octicon-link"></span></a>Turn on Nth bit in a number</h2>
+
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    
+    <span class="cm">/*
+    Similar to the last function, here since we want to turn ON a bit, we will do a bitwise OR of the nth bit with 1 and for the rest of the bits, we'll do a bitwise OR with 0, so that they do not get disturbed.
+    */</span>
+
+    <span class="k">function</span> <span class="n">turnOnNthBit</span><span class="p">(</span><span class="kt">uint</span> <span class="n">x</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">n</span><span class="p">)</span> <span class="k">external</span> <span class="k">pure</span> <span class="k">returns</span><span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="o">|</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">n</span><span class="p">);</span>
+    <span class="p">}</span>
+
+</code></pre></div></div>
+
+<h2 id="check-if-the-nth-bit-is-set-for-a-number">
+<a class="anchor" href="#check-if-the-nth-bit-is-set-for-a-number" aria-hidden="true"><span class="octicon octicon-link"></span></a>Check if the nth bit is set for a number</h2>
+
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="k">function</span> <span class="n">checkNthBit</span><span class="p">(</span><span class="kt">uint</span> <span class="n">x</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">n</span><span class="p">)</span> <span class="k">external</span> <span class="k">pure</span> <span class="k">returns</span><span class="p">(</span><span class="kt">bool</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="o">&amp;</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">n</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+
+</code></pre></div></div>
+
+<h2 id="toggle-nth-bit">
+<a class="anchor" href="#toggle-nth-bit" aria-hidden="true"><span class="octicon octicon-link"></span></a>Toggle nth bit</h2>
+
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="c1">// We'll use the fact that: 0 ^ 1 = 1 and 1 ^ 1 = 0
+</span>
+    <span class="k">function</span> <span class="n">toggleNthBit</span><span class="p">(</span><span class="kt">uint</span> <span class="n">x</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">n</span><span class="p">)</span> <span class="k">external</span> <span class="k">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="o">^</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">n</span><span class="p">);</span>
+    <span class="p">}</span>
+
+</code></pre></div></div>
+
+<h2 id="unset-the-rightmost-set-bit-in-a-number">
+<a class="anchor" href="#unset-the-rightmost-set-bit-in-a-number" aria-hidden="true"><span class="octicon octicon-link"></span></a>Unset the rightmost set bit in a number</h2>
+
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="c1">// We'll use the property of n and n-1 here again.
+</span>
+    <span class="k">function</span> <span class="n">unsetRightmostBit</span><span class="p">(</span><span class="kt">uint</span> <span class="n">x</span><span class="p">)</span> <span class="k">external</span> <span class="k">pure</span> <span class="k">returns</span><span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+
+</code></pre></div></div>
+
+<h2 id="find-position-of-rightmost-set-bit">
+<a class="anchor" href="#find-position-of-rightmost-set-bit" aria-hidden="true"><span class="octicon octicon-link"></span></a>Find position of rightmost set bit</h2>
+
+<p>The idea here would be to first no n &amp; (n - 1) and then do a xor of the resultant with the original number n. After this the only set bit in the number would be the rightmost one.</p>
+
+<p>The latter part of the logic can also be used to <strong>determine the position of the only set bit</strong> in a number.</p>
+
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="k">function</span> <span class="n">findPositionOfRightmostSetBit</span><span class="p">(</span><span class="kt">uint</span> <span class="n">n</span><span class="p">)</span> <span class="k">external</span> <span class="k">pure</span> <span class="k">returns</span><span class="p">(</span><span class="kt">uint</span> <span class="n">count</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">uint</span> <span class="n">num</span> <span class="o">=</span> <span class="n">n</span> <span class="o">^</span> <span class="p">(</span><span class="n">n</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">));</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">num</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">num</span> <span class="o">&gt;&gt;=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="o">++</span><span class="n">count</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">function</span> <span class="n">findPositionOfRightmostSetBit_Negation</span> <span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="k">external</span> <span class="k">pure</span> <span class="k">returns</span><span class="p">(</span><span class="kt">uint</span> <span class="n">count</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">n</span> <span class="o">&amp;</span> <span class="mi">1</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// Number is odd
+</span>        <span class="p">}</span>
+        <span class="kt">int</span> <span class="n">num</span> <span class="o">=</span> <span class="n">n</span> <span class="o">&amp;</span> <span class="o">-</span><span class="n">n</span><span class="p">;</span>
+        <span class="k">while</span><span class="p">(</span><span class="n">num</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">num</span> <span class="o">&gt;&gt;=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="o">++</span><span class="n">count</span><span class="p">;</span>
+        <span class="p">}</span>
     <span class="p">}</span>
 
 </code></pre></div></div>
