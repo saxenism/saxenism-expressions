@@ -79,7 +79,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      9 min read
+      10 min read
     
 </span></p>
 
@@ -137,6 +137,7 @@ window.onload = wrap_img;
 <ul>
 <li class="toc-entry toc-h2"><a href="#find-number-of-bits-to-be-flipped-to-change-one-number-to-another">Find number of bits to be flipped to change one number to another</a></li>
 <li class="toc-entry toc-h2"><a href="#calculate-xor-from-1-to-n">Calculate xor from 1 to N</a></li>
+<li class="toc-entry toc-h2"><a href="#equal-sum-and-xor">Equal Sum and XOR</a></li>
 </ul>
 </li>
 </ul><h1 id="bit-magic">
@@ -550,8 +551,47 @@ Also, if we get x^y as 1 for the leftmost bit, it would mean that it’s a negat
         <span class="p">}</span>
     <span class="p">}</span>
 
+</code></pre></div></div>
+
+<h2 id="equal-sum-and-xor">
+<a class="anchor" href="#equal-sum-and-xor" aria-hidden="true"><span class="octicon octicon-link"></span></a>Equal Sum and XOR</h2>
+
+<p>Given a positive integer N, find all <code class="language-plaintext highlighter-rouge">i</code> such that N+i == N^i, where 0 &lt;= i &lt;= N</p>
+
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="k">function</span> <span class="n">findSumEqualToXor</span><span class="p">(</span><span class="kt">uint</span> <span class="n">n</span><span class="p">)</span> <span class="k">external</span> <span class="k">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span> <span class="n">counter</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">uint</span> <span class="n">i</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span><span class="p">((</span><span class="n">n</span><span class="o">^</span><span class="n">i</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="n">i</span><span class="p">))</span> <span class="p">{</span>
+                <span class="kr">unchecked</span> <span class="p">{</span>
+                    <span class="o">++</span><span class="n">counter</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="kr">unchecked</span> <span class="p">{</span>
+                <span class="o">++</span><span class="n">i</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c1">// This function is made possible because of the formula:
+</span>    <span class="c1">// (n + i) = (n ^ i) + 2*(n &amp; i)
+</span>    <span class="c1">// So, according to the requirement we only need to find all instances where n &amp; i == 0
+</span>    <span class="c1">// To do that we find all unset bits of n and find number of possible combinations (which is 2 raised to the power no of unset bits)
+</span>    <span class="k">function</span> <span class="n">findSumEqualToXorEfficient</span><span class="p">(</span><span class="kt">uint</span> <span class="n">n</span><span class="p">)</span> <span class="k">external</span> <span class="k">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span> <span class="n">counter</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">uint</span> <span class="n">unsetBits</span><span class="p">;</span>
+        <span class="k">while</span><span class="p">(</span><span class="n">n</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">n</span> <span class="o">&amp;</span> <span class="mi">1</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="o">++</span><span class="n">unsetBits</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">n</span> <span class="o">&gt;&gt;=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">counter</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">unsetBits</span><span class="p">);</span>
+    <span class="p">}</span>
 
 </code></pre></div></div>
+
+<blockquote>
+  <p>Takeaway: Remember this formula if you can -&gt; (n+i) = (n^i) + 2*(n&amp;i)</p>
+</blockquote>
 
   </div><!-- from https://github.com/utterance/utterances -->
 <script src="https://utteranc.es/client.js"
