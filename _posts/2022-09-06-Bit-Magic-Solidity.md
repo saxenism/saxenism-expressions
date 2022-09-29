@@ -485,7 +485,7 @@ Given a positive integer N, find all `i` such that N+i == N^i, where 0 <= i <= N
 
 ## Add Two Numbers (Important property)
 
-Well this question itself is trivial, but the property used here can be prove to be quite useful when you want to relate bitwise operations to addition, then you can use this property.
+Well this question itself is trivial, but the property used here can prove to be quite useful when you want to relate bitwise operations to addition.
 
 ```solidity
 
