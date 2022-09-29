@@ -201,11 +201,11 @@ The XOR operator (^) returns 0 for same bits and 1 for different bits.
 
 Truth Table:
 | x1 | x2 | x1 ^ x2 |
-| -- | -- | -- |
-| 0 | 0 | 0 |
-| 0 | 1 | 1 |
-| 1 | 0 | 1 |
-| 1 | 1 | 0 |
+| -- | -- | ------- |
+| 0  | 0  | 0       |
+| 0  | 1  | 1       |
+| 1  | 0  | 1       |
+| 1  | 1  | 0       |
 
 
 ## Detect if two numbers have opposite signs
@@ -268,6 +268,98 @@ Also, the native method to swap two values is ofc more gas efficient.
         a = a ^ b;
         b = b ^ a;
         a = a ^ b;
+    }
+
+```
+
+## Turn off n'th bit in a number
+
+```solidity
+
+    /*
+        What we want to accomplish here is a bitwise & of the nth bit with 0 so that it becomes 0 and since we do not want to disturb the 
+        other bits of the number x, we do a bitwise & of bits of number x with all 1's.
+    */
+
+    function turnOffNthBit(uint x, uint n) external pure returns(uint) {
+        return x & ~(1 << n);
+    }
+
+```
+
+## Turn on Nth bit in a number
+
+```solidity
+    
+    /*
+    Similar to the last function, here since we want to turn ON a bit, we will do a bitwise OR of the nth bit with 1 and for the rest of the bits, we'll do a bitwise OR with 0, so that they do not get disturbed.
+    */
+
+    function turnOnNthBit(uint x, uint n) external pure returns(uint) {
+        return x | (1 << n);
+    }
+
+```
+
+## Check if the nth bit is set for a number
+
+```solidity
+
+    function checkNthBit(uint x, uint n) external pure returns(bool) {
+        return x & (1 << n) != 0;
+    }
+
+```
+
+## Toggle nth bit
+
+```solidity
+
+    // We'll use the fact that: 0 ^ 1 = 1 and 1 ^ 1 = 0
+
+    function toggleNthBit(uint x, uint n) external pure returns (uint) {
+        return x ^ (1 << n);
+    }
+
+```
+
+## Unset the rightmost set bit in a number
+
+```solidity
+
+    // We'll use the property of n and n-1 here again.
+
+    function unsetRightmostBit(uint x) external pure returns(uint) {
+        return x & (x-1);
+    }
+
+```
+
+## Find position of rightmost set bit
+
+The idea here would be to first no n & (n - 1) and then do a xor of the resultant with the original number n. After this the only set bit in the number would be the rightmost one.
+
+The latter part of the logic can also be used to **determine the position of the only set bit** in a number.
+
+```solidity
+
+    function findPositionOfRightmostSetBit(uint n) external pure returns(uint count) {
+        uint num = n ^ (n & (n-1));
+        while (num != 0) {
+            num >>= 1;
+            ++count;
+        }
+    }
+
+    function findPositionOfRightmostSetBit_Negation (int n) external pure returns(uint count) {
+        if(n & 1 == 1) {
+            return 1; // Number is odd
+        }
+        int num = n & -n;
+        while(num != 0) {
+            num >>= 1;
+            ++count;
+        }
     }
 
 ```
