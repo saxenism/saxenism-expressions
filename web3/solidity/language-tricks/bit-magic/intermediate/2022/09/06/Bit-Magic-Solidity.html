@@ -156,7 +156,11 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h2"><a href="#get-the-most-significant-bit-position-in-a-given-number">Get the most significant bit position in a given number</a></li>
 </ul>
 </li>
-<li class="toc-entry toc-h1"><a href="#advanced-problems-solved-via-bit-manipulations">Advanced problems solved via bit manipulations</a></li>
+<li class="toc-entry toc-h1"><a href="#advanced-problems-solved-via-bit-manipulations">Advanced problems solved via bit manipulations</a>
+<ul>
+<li class="toc-entry toc-h2"><a href="#add-two-numbers-important-property">Add Two Numbers (Important property)</a></li>
+</ul>
+</li>
 </ul><h1 id="bit-magic">
 <a class="anchor" href="#bit-magic" aria-hidden="true"><span class="octicon octicon-link"></span></a>Bit Magic</h1>
 
@@ -636,6 +640,22 @@ Also, if we get x^y as 1 for the leftmost bit, it would mean that it’s a negat
 
 <h1 id="advanced-problems-solved-via-bit-manipulations">
 <a class="anchor" href="#advanced-problems-solved-via-bit-manipulations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Advanced problems solved via bit manipulations</h1>
+
+<h2 id="add-two-numbers-important-property">
+<a class="anchor" href="#add-two-numbers-important-property" aria-hidden="true"><span class="octicon octicon-link"></span></a>Add Two Numbers (Important property)</h2>
+
+<p>Well this question itself is trivial, but the property used here can be prove to be quite useful when you want to relate bitwise operations to addition, then you can use this property.</p>
+
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="k">function</span> <span class="n">addTwoNumbers</span><span class="p">(</span><span class="kt">uint</span> <span class="n">x</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">y</span><span class="p">)</span> <span class="k">external</span> <span class="k">pure</span> <span class="k">returns</span><span class="p">(</span><span class="kt">uint</span> <span class="n">sum</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">sum</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">&amp;</span> <span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">x</span> <span class="o">|</span> <span class="n">y</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">function</span> <span class="n">addTwoNumbers2</span><span class="p">(</span><span class="kt">uint</span> <span class="n">x</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">y</span><span class="p">)</span> <span class="k">public</span> <span class="k">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span> <span class="n">sum</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">sum</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">?</span> <span class="n">x</span> <span class="o">:</span> <span class="n">addTwoNumbers2</span><span class="p">((</span><span class="n">x</span> <span class="o">^</span> <span class="n">y</span><span class="p">),</span> <span class="p">(</span><span class="n">x</span> <span class="o">&amp;</span> <span class="n">y</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">));</span>
+    <span class="p">}</span>
+
+</code></pre></div></div>
 
   </div><!-- from https://github.com/utterance/utterances -->
 <script src="https://utteranc.es/client.js"
