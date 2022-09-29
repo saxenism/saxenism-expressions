@@ -94,7 +94,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      10 min read
+      11 min read
     
 </span></p>
 
@@ -153,8 +153,10 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h2"><a href="#find-number-of-bits-to-be-flipped-to-change-one-number-to-another">Find number of bits to be flipped to change one number to another</a></li>
 <li class="toc-entry toc-h2"><a href="#calculate-xor-from-1-to-n">Calculate xor from 1 to N</a></li>
 <li class="toc-entry toc-h2"><a href="#equal-sum-and-xor">Equal Sum and XOR</a></li>
+<li class="toc-entry toc-h2"><a href="#get-the-most-significant-bit-position-in-a-given-number">Get the most significant bit position in a given number</a></li>
 </ul>
 </li>
+<li class="toc-entry toc-h1"><a href="#advanced-problems-solved-via-bit-manipulations">Advanced problems solved via bit manipulations</a></li>
 </ul><h1 id="bit-magic">
 <a class="anchor" href="#bit-magic" aria-hidden="true"><span class="octicon octicon-link"></span></a>Bit Magic</h1>
 
@@ -486,7 +488,7 @@ Also, if we get x^y as 1 for the leftmost bit, it would mean that it’s a negat
 <h2 id="find-position-of-rightmost-set-bit">
 <a class="anchor" href="#find-position-of-rightmost-set-bit" aria-hidden="true"><span class="octicon octicon-link"></span></a>Find position of rightmost set bit</h2>
 
-<p>The idea here would be to first no n &amp; (n - 1) and then do a xor of the resultant with the original number n. After this the only set bit in the number would be the rightmost one.</p>
+<p>The idea here would be to first do n &amp; (n - 1) and then do a xor of the resultant with the original number n. After this the only set bit in the number would be the rightmost one.</p>
 
 <p>The latter part of the logic can also be used to <strong>determine the position of the only set bit</strong> in a number.</p>
 
@@ -607,6 +609,33 @@ Also, if we get x^y as 1 for the leftmost bit, it would mean that it’s a negat
 <blockquote>
   <p>Takeaway: Remember this formula if you can -&gt; (n+i) = (n^i) + 2*(n&amp;i)</p>
 </blockquote>
+
+<h2 id="get-the-most-significant-bit-position-in-a-given-number">
+<a class="anchor" href="#get-the-most-significant-bit-position-in-a-given-number" aria-hidden="true"><span class="octicon octicon-link"></span></a>Get the most significant bit position in a given number</h2>
+
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="k">function</span> <span class="n">findMSB</span><span class="p">(</span><span class="kt">uint256</span> <span class="n">n</span><span class="p">)</span> <span class="k">external</span> <span class="k">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// Since this is uint256, this will have 256 bits. So we will have to take appropriate number of steps.
+</span>        <span class="c1">// The number of ORs we do would be based on the bits present in number n.
+</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">|</span> <span class="p">(</span><span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">// Now starting 2 bits are set in n
+</span>        <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">|</span> <span class="p">(</span><span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="mi">2</span><span class="p">);</span> <span class="c1">// Now starting 4 bits are set in n
+</span>        <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">|</span> <span class="p">(</span><span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="mi">4</span><span class="p">);</span> <span class="c1">// Now starting 8 bits are set in n
+</span>        <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">|</span> <span class="p">(</span><span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">);</span> <span class="c1">// Now starting 16 bits are set in n
+</span>        <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">|</span> <span class="p">(</span><span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="mi">16</span><span class="p">);</span> <span class="c1">// Now starting 32 bits are set in n
+</span>        <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">|</span> <span class="p">(</span><span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="mi">32</span><span class="p">);</span> <span class="c1">// Now starting 64 bits are set in n
+</span>        <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">|</span> <span class="p">(</span><span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="mi">64</span><span class="p">);</span> <span class="c1">// Now starting 128 bits are set in n
+</span>        <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">|</span> <span class="p">(</span><span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="mi">128</span><span class="p">);</span> <span class="c1">// Now starting 256 bits are set in n
+</span>
+        <span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// Now it's 1 set bit (higher than the original MSB) and rest are 0s
+</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+
+</code></pre></div></div>
+
+<h1 id="advanced-problems-solved-via-bit-manipulations">
+<a class="anchor" href="#advanced-problems-solved-via-bit-manipulations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Advanced problems solved via bit manipulations</h1>
 
   </div><!-- from https://github.com/utterance/utterances -->
 <script src="https://utteranc.es/client.js"
