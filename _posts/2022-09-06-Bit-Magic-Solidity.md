@@ -417,5 +417,42 @@ Given a number N, calculate the value of xoring all number from 1 to N.
         }
     }
 
+```
+
+## Equal Sum and XOR
+
+Given a positive integer N, find all `i` such that N+i == N^i, where 0 <= i <= N
+
+```solidity
+
+    function findSumEqualToXor(uint n) external pure returns (uint counter) {
+        for(uint i; i <= n; ) {
+            if((n^i) == (n+i)) {
+                unchecked {
+                    ++counter;
+                }
+            }
+            unchecked {
+                ++i;
+            }
+        }
+    }
+
+    // This function is made possible because of the formula:
+    // (n + i) = (n ^ i) + 2*(n & i)
+    // So, according to the requirement we only need to find all instances where n & i == 0
+    // To do that we find all unset bits of n and find number of possible combinations (which is 2 raised to the power no of unset bits)
+    function findSumEqualToXorEfficient(uint n) external pure returns (uint counter) {
+        uint unsetBits;
+        while(n != 0) {
+            if(n & 1 == 0) {
+                ++unsetBits;
+            }
+            n >>= 1;
+        }
+        counter = (1 << unsetBits);
+    }
 
 ```
+
+> Takeaway: Remember this formula if you can -> (n+i) = (n^i) + 2*(n&i)
