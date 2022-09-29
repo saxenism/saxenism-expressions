@@ -337,7 +337,7 @@ Also, the native method to swap two values is ofc more gas efficient.
 
 ## Find position of rightmost set bit
 
-The idea here would be to first no n & (n - 1) and then do a xor of the resultant with the original number n. After this the only set bit in the number would be the rightmost one.
+The idea here would be to first do n & (n - 1) and then do a xor of the resultant with the original number n. After this the only set bit in the number would be the rightmost one.
 
 The latter part of the logic can also be used to **determine the position of the only set bit** in a number.
 
@@ -456,3 +456,29 @@ Given a positive integer N, find all `i` such that N+i == N^i, where 0 <= i <= N
 ```
 
 > Takeaway: Remember this formula if you can -> (n+i) = (n^i) + 2*(n&i)
+
+## Get the most significant bit position in a given number
+
+```solidity
+
+    function findMSB(uint256 n) external pure returns (uint) {
+        // Since this is uint256, this will have 256 bits. So we will have to take appropriate number of steps.
+        // The number of ORs we do would be based on the bits present in number n.
+
+        n = n | (n >> 1); // Now starting 2 bits are set in n
+        n = n | (n >> 2); // Now starting 4 bits are set in n
+        n = n | (n >> 4); // Now starting 8 bits are set in n
+        n = n | (n >> 8); // Now starting 16 bits are set in n
+        n = n | (n >> 16); // Now starting 32 bits are set in n
+        n = n | (n >> 32); // Now starting 64 bits are set in n
+        n = n | (n >> 64); // Now starting 128 bits are set in n
+        n = n | (n >> 128); // Now starting 256 bits are set in n
+
+        n += 1; // Now it's 1 set bit (higher than the original MSB) and rest are 0s
+
+        return (n >> 1);
+    }
+
+```
+
+# Advanced problems solved via bit manipulations
