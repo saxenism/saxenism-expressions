@@ -79,7 +79,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      8 min read
+      9 min read
     
 </span></p>
 
@@ -136,6 +136,7 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h1"><a href="#puzzles-incorporating-multiple-tricks">Puzzles (Incorporating multiple tricks)</a>
 <ul>
 <li class="toc-entry toc-h2"><a href="#find-number-of-bits-to-be-flipped-to-change-one-number-to-another">Find number of bits to be flipped to change one number to another</a></li>
+<li class="toc-entry toc-h2"><a href="#calculate-xor-from-1-to-n">Calculate xor from 1 to N</a></li>
 </ul>
 </li>
 </ul><h1 id="bit-magic">
@@ -516,6 +517,41 @@ Also, if we get x^y as 1 for the leftmost bit, it would mean that it’s a negat
  
 </code></pre></div></div>
 
+<h2 id="calculate-xor-from-1-to-n">
+<a class="anchor" href="#calculate-xor-from-1-to-n" aria-hidden="true"><span class="octicon octicon-link"></span></a>Calculate xor from 1 to N</h2>
+
+<p>Given a number N, calculate the value of xoring all number from 1 to N.</p>
+
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="c1">// This is the naive method to calculate the xor from 1 to N.
+</span>    
+    <span class="k">function</span> <span class="n">calculateXorToN</span><span class="p">(</span><span class="kt">uint</span> <span class="n">N</span><span class="p">)</span> <span class="k">external</span> <span class="k">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span> <span class="n">result</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">uint</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">N</span><span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
+            <span class="n">result</span> <span class="o">^=</span> <span class="n">i</span><span class="p">;</span>
+            <span class="kr">unchecked</span> <span class="p">{</span>
+                <span class="o">++</span><span class="n">i</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c1">// There isn't some big brain math happening behind (hopefully). This is just observed as a pattern that repeats and hence we use the deductions
+</span>    <span class="c1">// from observing that pattern while calculating xor from 1 to N.
+</span>    <span class="c1">// And ofc this function is also much more gas efficient
+</span>    <span class="k">function</span> <span class="n">calculateXorToNEfficient</span><span class="p">(</span><span class="kt">uint</span> <span class="n">N</span><span class="p">)</span> <span class="k">external</span> <span class="k">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span> <span class="n">result</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">uint</span> <span class="n">moduloN</span> <span class="o">=</span> <span class="n">N</span><span class="o">%</span><span class="mi">4</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">moduloN</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">N</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">moduloN</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">moduloN</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+
+</code></pre></div></div>
 
   </div><!-- from https://github.com/utterance/utterances -->
 <script src="https://utteranc.es/client.js"
