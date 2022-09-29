@@ -363,3 +363,23 @@ The latter part of the logic can also be used to **determine the position of the
     }
 
 ```
+
+# Puzzles (Incorporating multiple tricks)
+
+## Find number of bits to be flipped to change one number to another
+
+The idea here is to xor the two numbers. This will result in a number whose bit representation will only have set bits where the bits were different in the input numbers.
+
+After that the problem is reduced to simply counting the set bits.
+
+```solidity
+
+    function bitsToFlip(uint x, uint y) external pure returns (uint counter) {
+        uint xoredNumber = x ^ y;
+        while(xoredNumber != 0) {
+            xoredNumber = xoredNumber & (xoredNumber - 1);
+            ++counter;
+        }
+    }
+ 
+```
