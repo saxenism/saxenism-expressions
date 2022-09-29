@@ -384,3 +384,38 @@ After that the problem is reduced to simply counting the set bits.
  
 ```
 
+## Calculate xor from 1 to N
+
+Given a number N, calculate the value of xoring all number from 1 to N.
+
+```solidity
+
+    // This is the naive method to calculate the xor from 1 to N.
+    
+    function calculateXorToN(uint N) external pure returns (uint result) {
+        for(uint i = 1; i <= N; ) {
+            result ^= i;
+            unchecked {
+                ++i;
+            }
+        }
+    }
+
+    // There isn't some big brain math happening behind (hopefully). This is just observed as a pattern that repeats and hence we use the deductions
+    // from observing that pattern while calculating xor from 1 to N.
+    // And ofc this function is also much more gas efficient
+    function calculateXorToNEfficient(uint N) external pure returns (uint result) {
+        uint moduloN = N%4;
+        if(moduloN == 0) {
+            result = N;
+        } else if(moduloN == 1) {
+            result = 1;
+        } else if(moduloN == 2) {
+            result = N + 1;
+        } else {
+            result = 0;
+        }
+    }
+
+
+```
