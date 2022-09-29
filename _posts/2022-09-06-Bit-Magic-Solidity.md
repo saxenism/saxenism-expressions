@@ -391,7 +391,7 @@ Given a number N, calculate the value of xoring all number from 1 to N.
 ```solidity
 
     // This is the naive method to calculate the xor from 1 to N.
-    
+
     function calculateXorToN(uint N) external pure returns (uint result) {
         for(uint i = 1; i <= N; ) {
             result ^= i;
@@ -401,9 +401,9 @@ Given a number N, calculate the value of xoring all number from 1 to N.
         }
     }
 
-    // There isn't some big brain math happening behind (hopefully). This is just observed as a pattern that repeats and hence we use the deductions
-    // from observing that pattern while calculating xor from 1 to N.
-    // And ofc this function is also much more gas efficient
+    /*
+    There isn't some big brain math happening behind (hopefully). This is just observed as a pattern that repeats and hence we use the deductions from observing that pattern while calculating xor from 1 to N. And ofc this function is also much more gas efficient
+    */
     function calculateXorToNEfficient(uint N) external pure returns (uint result) {
         uint moduloN = N%4;
         if(moduloN == 0) {
