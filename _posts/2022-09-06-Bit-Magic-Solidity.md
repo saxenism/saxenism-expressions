@@ -482,3 +482,19 @@ Given a positive integer N, find all `i` such that N+i == N^i, where 0 <= i <= N
 ```
 
 # Advanced problems solved via bit manipulations
+
+## Add Two Numbers (Important property)
+
+Well this question itself is trivial, but the property used here can be prove to be quite useful when you want to relate bitwise operations to addition, then you can use this property.
+
+```solidity
+
+    function addTwoNumbers(uint x, uint y) external pure returns(uint sum) {
+        sum = (x & y) + (x | y);
+    }
+
+    function addTwoNumbers2(uint x, uint y) public pure returns (uint sum) {
+        sum = (y == 0 ? x : addTwoNumbers2((x ^ y), (x & y) << 1));
+    }
+
+```
