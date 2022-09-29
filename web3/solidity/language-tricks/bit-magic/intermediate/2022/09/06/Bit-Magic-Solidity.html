@@ -133,6 +133,11 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h2"><a href="#find-position-of-rightmost-set-bit">Find position of rightmost set bit</a></li>
 </ul>
 </li>
+<li class="toc-entry toc-h1"><a href="#puzzles-incorporating-multiple-tricks">Puzzles (Incorporating multiple tricks)</a>
+<ul>
+<li class="toc-entry toc-h2"><a href="#find-number-of-bits-to-be-flipped-to-change-one-number-to-another">Find number of bits to be flipped to change one number to another</a></li>
+</ul>
+</li>
 </ul><h1 id="bit-magic">
 <a class="anchor" href="#bit-magic" aria-hidden="true"><span class="octicon octicon-link"></span></a>Bit Magic</h1>
 
@@ -488,6 +493,27 @@ Also, if we get x^y as 1 for the leftmost bit, it would mean that it’s a negat
         <span class="p">}</span>
     <span class="p">}</span>
 
+</code></pre></div></div>
+
+<h1 id="puzzles-incorporating-multiple-tricks">
+<a class="anchor" href="#puzzles-incorporating-multiple-tricks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Puzzles (Incorporating multiple tricks)</h1>
+
+<h2 id="find-number-of-bits-to-be-flipped-to-change-one-number-to-another">
+<a class="anchor" href="#find-number-of-bits-to-be-flipped-to-change-one-number-to-another" aria-hidden="true"><span class="octicon octicon-link"></span></a>Find number of bits to be flipped to change one number to another</h2>
+
+<p>The idea here is to xor the two numbers. This will result in a number whose bit representation will only have set bits where the bits were different in the input numbers.</p>
+
+<p>After that the problem is reduced to simply counting the set bits.</p>
+
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="k">function</span> <span class="n">bitsToFlip</span><span class="p">(</span><span class="kt">uint</span> <span class="n">x</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">y</span><span class="p">)</span> <span class="k">external</span> <span class="k">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span> <span class="n">counter</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">uint</span> <span class="n">xoredNumber</span> <span class="o">=</span> <span class="n">x</span> <span class="o">^</span> <span class="n">y</span><span class="p">;</span>
+        <span class="k">while</span><span class="p">(</span><span class="n">xoredNumber</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">xoredNumber</span> <span class="o">=</span> <span class="n">xoredNumber</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">xoredNumber</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="o">++</span><span class="n">counter</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+ 
 </code></pre></div></div>
 
   </div><!-- from https://github.com/utterance/utterances -->
