@@ -3,7 +3,7 @@ toc: true
 layout: post
 description: See the wonders that are possible with the manipulation of bits and save some gas as a by-product
 categories: [web3, solidity, language-tricks, bit-magic, intermediate]
-title: Solidity - Bit Magic
+title: Solidity - Bit Magic (Hot Dev Alpha!!)
 ---
 
 # Bit Magic
