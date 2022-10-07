@@ -518,3 +518,34 @@ Well this question itself is trivial, but the property used here can prove to be
     }
 
 ```
+
+## Exponentiation
+
+To calculate x**y, we can obviously do `x**y` and that would also be a more gas efficient choice, but here's how you would do it if you were to exponentiate with using only bit manipulations:
+
+```solidity
+
+    // Calculate x**y
+    function fastExponentiation(uint x, uint y) external pure returns (uint ans) { // Execution Cost of 2**4 = 16 was 23373
+        // Stores final answer
+        ans = 1;
+        while (y > 0) {
+            uint last_bit = (y & 1);
+            
+            // Check if current LSB is set
+            if (last_bit == 1) {
+                ans *= x;
+            }
+    
+            x *= x;
+    
+            // Right shift
+            y >>= 1;
+        }
+    }
+
+    function normalExponentiation(uint x, uint y) external pure returns (uint) { // Execution Cost of 2**4 = 16 was 22561
+        return (x**y);
+    }
+
+```
