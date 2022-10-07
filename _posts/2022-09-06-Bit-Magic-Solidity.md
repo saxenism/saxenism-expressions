@@ -6,6 +6,8 @@ categories: [web3, solidity, language-tricks, bit-magic, intermediate]
 title: Solidity - Bit Magic (Hot Dev Alpha!!)
 ---
 
+Last Edited: 7th October 2022
+
 # Bit Magic
 
 ## Bitwise Operations
