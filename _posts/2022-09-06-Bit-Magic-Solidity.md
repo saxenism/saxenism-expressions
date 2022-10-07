@@ -78,7 +78,7 @@ function mostSignificantBit(uint256 x) public pure returns(uint256) {
 
 ```
 
-###NOTE
+### NOTE
 As pointed out by [devtooligan](https://twitter.com/devtooligan), the above approach would return 1 for both x = 0 and x = 1, which is somewhat of a problem. So, a safer implementation as suggested by him is:
 
 ```solidity
@@ -94,6 +94,9 @@ function mostSignificantBit(uint256 x) public pure returns(uint256) {
 
 ```
 
+Btw this implementation would also change the answer from 0-indexed to 1-indexed.
+
+Cheers.
 
 ## Get first N bits
 
