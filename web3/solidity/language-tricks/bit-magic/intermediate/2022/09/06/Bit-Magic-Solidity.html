@@ -94,7 +94,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      11 min read
+      12 min read
     
 </span></p>
 
@@ -227,6 +227,21 @@ window.onload = wrap_img;
     <span class="kt">uint</span> <span class="n">i</span><span class="p">;</span>
     <span class="k">while</span><span class="p">((</span><span class="n">x</span> <span class="o">&gt;&gt;=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span> 
         <span class="o">++</span><span class="n">i</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">i</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<p>###NOTE
+As pointed out by <a href="https://twitter.com/devtooligan">devtooligan</a>, the above approach would return 1 for both x = 0 and x = 1, which is somewhat of a problem. So, a safer implementation as suggested by him is:</p>
+
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">function</span> <span class="n">mostSignificantBit</span><span class="p">(</span><span class="kt">uint256</span> <span class="n">x</span><span class="p">)</span> <span class="k">public</span> <span class="k">pure</span> <span class="k">returns</span><span class="p">(</span><span class="kt">uint256</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">uint</span> <span class="n">i</span><span class="p">;</span>
+    <span class="k">while</span><span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span> 
+        <span class="o">++</span><span class="n">i</span><span class="p">;</span>
+        <span class="n">x</span> <span class="o">&gt;&gt;=</span> <span class="mi">1</span><span class="p">;</span>
     <span class="p">}</span>
     <span class="k">return</span> <span class="n">i</span><span class="p">;</span>
 <span class="p">}</span>
