@@ -39,7 +39,7 @@ That is not the case. Solidity stores data starting from left, meaning it is (pr
 
 Let me illustrate this point with [a picture](https://gateway.pinata.cloud/ipfs/QmZvGzhf9o6j837xF7eYLnufEACDa2MEvG8qh9TRz3k7bv):
 
-![](/images/bit_packing.jpeg)
+![Big/Little Endian Explanation](https://user-images.githubusercontent.com/32522659/194752317-bfb99eeb-f452-4991-99ff-df6c6b9ba102.jpeg)
 
 # Onto the code
 
