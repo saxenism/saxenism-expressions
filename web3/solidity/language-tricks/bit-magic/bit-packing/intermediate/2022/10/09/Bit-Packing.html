@@ -154,11 +154,11 @@ Yes, I did love it. <br></p>
 
 <p>A good place to learn these concepts or revisit them is <a href="https://www.geeksforgeeks.org/bitwise-operators-in-c-cpp/">this gfg blog</a>.</p>
 
-<p>Next is the biggest pitfall of all. This is where I tripped hard and my mind almost broke (since I could not make sense of the ERC721A contract because of this assumption of mine). Since, most of might have native languages where we read that language from left to right you would naturally expect Solidity to also be storing data the same way (from left to right).</p>
+<p>Next is the biggest pitfall of all. This is where I tripped hard and my mind almost broke (since I could not make sense of the ERC721A contract). Since, most of us might have native languages where we read that language from left to right you would naturally expect Solidity to also have the first stored data on the leftmost end and last saved data on the rightmost end.</p>
 
 <p><em>BUT BUT BUT</em></p>
 
-<p>That is not the case. Solidity stores data starting from left, meaning it is (probably) Little Endian. A good primer about Endianess can be found in <a href="https://www.freecodecamp.org/news/what-is-endianness-big-endian-vs-little-endian/">this freecodecamp article</a>.</p>
+<p>That is not the case. Solidity stores data starting from right, meaning it is (probably) Little Endian. Basically, if you were to store four numbers A,B,C and D in that order, inside of a word they would be stored as [D,C,B,A]. A good primer about Endianess can be found in <a href="https://www.freecodecamp.org/news/what-is-endianness-big-endian-vs-little-endian/">this freecodecamp article</a>.</p>
 
 <p>Let me illustrate this point with <a href="https://gateway.pinata.cloud/ipfs/QmZvGzhf9o6j837xF7eYLnufEACDa2MEvG8qh9TRz3k7bv">a picture</a>:</p>
 
