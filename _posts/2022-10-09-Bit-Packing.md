@@ -1,9 +1,11 @@
 ---
 toc: true
 layout: post
+comments: true
 description: Let's understand how we can yet again shave off some gas by using bit magic to pack more data into a word than can be usually done.
 categories: [web3, solidity, language-tricks, bit-magic, bit-packing, intermediate]
 title: Solidity - Bit Packing
+sticky_rank: 2
 ---
 
 # Introduction and Motivation
@@ -37,7 +39,7 @@ That is not the case. Solidity stores data starting from left, meaning it is (pr
 
 Let me illustrate this point with [a picture](https://gateway.pinata.cloud/ipfs/QmZvGzhf9o6j837xF7eYLnufEACDa2MEvG8qh9TRz3k7bv):
 
-![Big Endian/Little Endian stuff](./images/bit_packing.jpeg)
+![](/images/bit_packing.jpeg)
 
 # Onto the code
 

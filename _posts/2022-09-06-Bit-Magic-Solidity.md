@@ -1,9 +1,11 @@
 ---
 toc: true
 layout: post
+comments: true
 description: See the wonders that are possible with the manipulation of bits and save some gas as a by-product
 categories: [web3, solidity, language-tricks, bit-magic, intermediate]
 title: Solidity - Bit Magic (Hot Dev Alpha!!)
+sticky_rank: 1
 ---
 
 Last Edited: 7th October 2022
