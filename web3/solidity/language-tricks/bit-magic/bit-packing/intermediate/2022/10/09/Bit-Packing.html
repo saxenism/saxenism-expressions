@@ -94,7 +94,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      5 min read
+      7 min read
     
 </span></p>
 
@@ -205,18 +205,21 @@ Yes, I did love it. <br></p>
         <span class="n">serDumbledore</span> <span class="o">=</span> <span class="n">msg</span><span class="p">.</span><span class="n">sender</span><span class="p">;</span>
     <span class="p">}</span>
 
-    <span class="k">mapping</span> <span class="p">(</span><span class="kt">address</span> <span class="o">=&gt;</span> <span class="kt">bool</span><span class="p">)</span> <span class="k">private</span> <span class="n">_studentGraded</span><span class="p">;</span>
+    <span class="c1">// These separate mappings are to separate the effect of calling normal functions and bit magic functions
+</span>    <span class="k">mapping</span> <span class="p">(</span><span class="kt">address</span> <span class="o">=&gt;</span> <span class="kt">bool</span><span class="p">)</span> <span class="k">private</span> <span class="n">_studentGraded</span><span class="p">;</span>
     <span class="k">mapping</span> <span class="p">(</span><span class="kt">address</span> <span class="o">=&gt;</span> <span class="kt">bool</span><span class="p">)</span> <span class="k">private</span> <span class="n">_studentGradedBitMagic</span><span class="p">;</span>
 
     <span class="k">mapping</span> <span class="p">(</span><span class="kt">address</span> <span class="o">=&gt;</span> <span class="n">ScoreCard</span><span class="p">)</span> <span class="k">private</span> <span class="n">results</span><span class="p">;</span>
     <span class="k">mapping</span> <span class="p">(</span><span class="kt">address</span> <span class="o">=&gt;</span> <span class="kt">uint256</span><span class="p">)</span> <span class="k">private</span> <span class="n">bitMagicResults</span><span class="p">;</span>
 
-    <span class="k">modifier</span> <span class="n">onlyHeadmaster</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// Only Dumbledore can grade students
+</span>    <span class="k">modifier</span> <span class="n">onlyHeadmaster</span><span class="p">()</span> <span class="p">{</span>
         <span class="nb">require</span><span class="p">(</span><span class="n">msg</span><span class="p">.</span><span class="n">sender</span> <span class="o">==</span> <span class="n">serDumbledore</span><span class="p">,</span> <span class="s">"Only the headmaster can do this action"</span><span class="p">);</span>
         <span class="n">_</span><span class="p">;</span>
     <span class="p">}</span>
 
-    <span class="k">modifier</span> <span class="n">graded</span><span class="p">(</span><span class="kt">address</span> <span class="n">_student</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// The students can only be graded once
+</span>    <span class="k">modifier</span> <span class="n">graded</span><span class="p">(</span><span class="kt">address</span> <span class="n">_student</span><span class="p">)</span> <span class="p">{</span>
         <span class="nb">require</span><span class="p">(</span><span class="o">!</span><span class="n">_studentGraded</span><span class="p">[</span><span class="n">_student</span><span class="p">],</span> <span class="s">"Student has already been graded"</span><span class="p">);</span>
         <span class="n">_</span><span class="p">;</span>
     <span class="p">}</span>
@@ -239,6 +242,7 @@ Yes, I did love it. <br></p>
     <span class="p">}</span>
 
     <span class="c1">// Execution Cost: 139811
+</span>    <span class="c1">// The grades for each of the four subjects are generated randomly and then stored in the *results* mapping against the address of the particular _student
 </span>    <span class="k">function</span> <span class="n">gradeStudents</span><span class="p">(</span><span class="kt">address</span> <span class="n">_student</span><span class="p">)</span> <span class="k">public</span> <span class="n">onlyHeadmaster</span> <span class="n">graded</span><span class="p">(</span><span class="n">_student</span><span class="p">)</span> <span class="p">{</span>
         <span class="kt">uint</span> <span class="n">datda_score</span> <span class="o">=</span> <span class="kt">uint</span><span class="p">(</span><span class="nb">keccak256</span><span class="p">(</span><span class="n">abi</span><span class="p">.</span><span class="n">encodePacked</span><span class="p">(</span><span class="n">_student</span><span class="p">,</span> <span class="s">"defenceAgainstTheDarkArts"</span><span class="p">,</span> <span class="n">block</span><span class="p">.</span><span class="n">difficulty</span><span class="p">,</span> <span class="n">block</span><span class="p">.</span><span class="n">timestamp</span><span class="p">)))</span> <span class="o">%</span> <span class="mi">100</span><span class="p">;</span>
         <span class="kt">uint</span> <span class="n">potions_score</span> <span class="o">=</span> <span class="kt">uint</span><span class="p">(</span><span class="nb">keccak256</span><span class="p">(</span><span class="n">abi</span><span class="p">.</span><span class="n">encodePacked</span><span class="p">(</span><span class="n">_student</span><span class="p">,</span> <span class="s">"potions"</span><span class="p">,</span> <span class="n">block</span><span class="p">.</span><span class="n">difficulty</span><span class="p">,</span> <span class="n">block</span><span class="p">.</span><span class="n">timestamp</span><span class="p">)))</span> <span class="o">%</span> <span class="mi">100</span><span class="p">;</span>
@@ -251,6 +255,7 @@ Yes, I did love it. <br></p>
     <span class="p">}</span>
 
     <span class="c1">// Execution Cost: 31229
+</span>    <span class="c1">// Grab the results of student with address _student
 </span>    <span class="k">function</span> <span class="n">getStudentResults</span><span class="p">(</span><span class="kt">address</span> <span class="n">_student</span><span class="p">)</span> <span class="k">external</span> <span class="k">view</span> <span class="k">returns</span><span class="p">(</span><span class="kt">uint</span><span class="p">,</span> <span class="kt">uint</span><span class="p">,</span> <span class="kt">uint</span><span class="p">,</span> <span class="kt">uint</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="n">results</span><span class="p">[</span><span class="n">_student</span><span class="p">].</span><span class="n">defenceAgainstTheDarkArts</span><span class="p">,</span> 
@@ -264,7 +269,10 @@ Yes, I did love it. <br></p>
 // Let's try some bit magic now. The way of the Bit Magician (Frankly it's just bit packing. Nothing fancy :P)
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 </span>
-    <span class="k">function</span> <span class="n">packMarksIntoASingleUint</span><span class="p">(</span><span class="kt">uint</span> <span class="n">a</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">b</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">c</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">d</span><span class="p">)</span> <span class="k">private</span> <span class="k">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span> <span class="n">packedResult</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Takes four 8 bytes uints and pack it into a single uint256 
+</span>    <span class="c1">// Initialize a number `packedMarksUint` which has 256 0's
+</span>    <span class="c1">// Take the number that you want to pack, shift it to its required place(0th bit, 64th bit, 128th bit or the 192nd bit) and do an OR with the 64 0's at that place of the `packedMarksUint` uint.
+</span>    <span class="k">function</span> <span class="n">packMarksIntoASingleUint</span><span class="p">(</span><span class="kt">uint</span> <span class="n">a</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">b</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">c</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">d</span><span class="p">)</span> <span class="k">private</span> <span class="k">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span> <span class="n">packedResult</span><span class="p">)</span> <span class="p">{</span>
         <span class="kt">uint</span> <span class="n">packedMarksUint</span><span class="p">;</span>
 
         <span class="n">packedMarksUint</span> <span class="o">=</span> <span class="n">packedMarksUint</span> <span class="o">|</span> <span class="kt">uint64</span><span class="p">(</span><span class="n">a</span><span class="p">);</span> <span class="c1">// This stores the Defence Against the Dark Arts grades
@@ -276,14 +284,17 @@ Yes, I did love it. <br></p>
     <span class="p">}</span>
 
     <span class="c1">// Execution Cost: 25229
+</span>    <span class="c1">// Logic is to shift the target number to the leftmost end and then do an *&amp;* with 64 1's to reveal that particular number
+</span>    <span class="c1">// For the rightmost number, we only need to shift it to the leftmost position and cast it to uint64. That does the same thing.
 </span>    <span class="k">function</span> <span class="n">getStudentResultsBitMagic</span><span class="p">(</span><span class="kt">address</span> <span class="n">_student</span><span class="p">)</span> <span class="k">external</span> <span class="k">view</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span> <span class="n">_datda</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">_potions</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">_transfigurations</span><span class="p">,</span> <span class="kt">uint64</span> <span class="n">_comc</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">_datda</span> <span class="o">=</span> <span class="p">(</span><span class="n">bitMagicResults</span><span class="p">[</span><span class="n">_student</span><span class="p">]</span> <span class="o">&amp;</span> <span class="p">((</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">64</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">));</span>
+        <span class="n">_datda</span> <span class="o">=</span> <span class="p">(</span><span class="n">bitMagicResults</span><span class="p">[</span><span class="n">_student</span><span class="p">]</span> <span class="o">&amp;</span> <span class="n">SINGLE_SUBJECT_MASK</span><span class="p">);</span>
         <span class="n">_potions</span> <span class="o">=</span> <span class="p">((</span><span class="n">bitMagicResults</span><span class="p">[</span><span class="n">_student</span><span class="p">]</span> <span class="o">&gt;&gt;</span> <span class="n">POTIONS_POSITION</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">SINGLE_SUBJECT_MASK</span><span class="p">);</span>
         <span class="n">_transfigurations</span> <span class="o">=</span> <span class="p">((</span><span class="n">bitMagicResults</span><span class="p">[</span><span class="n">_student</span><span class="p">]</span> <span class="o">&gt;&gt;</span> <span class="n">TRANSFIGURATION_POSITION</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">SINGLE_SUBJECT_MASK</span><span class="p">);</span>
         <span class="n">_comc</span> <span class="o">=</span> <span class="kt">uint64</span><span class="p">(</span><span class="n">bitMagicResults</span><span class="p">[</span><span class="n">_student</span><span class="p">]</span> <span class="o">&gt;&gt;</span> <span class="n">CARE_OF_MAGICAL_CREATURES_POSITION</span><span class="p">);</span>
     <span class="p">}</span>
 
     <span class="c1">// Execution Cost: 73430 
+</span>    <span class="c1">// The grades for each of the four subjects are generated randomly and then stored as a packed uint256 in the *bitMagicResults* mapping against the address of the particular _student
 </span>    <span class="k">function</span> <span class="n">gradeStudentsWithBitMagic</span><span class="p">(</span><span class="kt">address</span> <span class="n">_student</span><span class="p">)</span> <span class="k">external</span> <span class="n">onlyHeadmaster</span> <span class="n">gradedBitMagic</span><span class="p">(</span><span class="n">_student</span><span class="p">)</span> <span class="p">{</span>
         <span class="kt">uint</span> <span class="n">datda_score</span> <span class="o">=</span> <span class="kt">uint</span><span class="p">(</span><span class="nb">keccak256</span><span class="p">(</span><span class="n">abi</span><span class="p">.</span><span class="n">encodePacked</span><span class="p">(</span><span class="n">_student</span><span class="p">,</span> <span class="s">"defenceAgainstTheDarkArts"</span><span class="p">,</span> <span class="n">block</span><span class="p">.</span><span class="n">difficulty</span><span class="p">,</span> <span class="n">block</span><span class="p">.</span><span class="n">timestamp</span><span class="p">)))</span> <span class="o">%</span> <span class="mi">100</span><span class="p">;</span>
         <span class="kt">uint</span> <span class="n">potions_score</span> <span class="o">=</span> <span class="kt">uint</span><span class="p">(</span><span class="nb">keccak256</span><span class="p">(</span><span class="n">abi</span><span class="p">.</span><span class="n">encodePacked</span><span class="p">(</span><span class="n">_student</span><span class="p">,</span> <span class="s">"potions"</span><span class="p">,</span> <span class="n">block</span><span class="p">.</span><span class="n">difficulty</span><span class="p">,</span> <span class="n">block</span><span class="p">.</span><span class="n">timestamp</span><span class="p">)))</span> <span class="o">%</span> <span class="mi">100</span><span class="p">;</span>
