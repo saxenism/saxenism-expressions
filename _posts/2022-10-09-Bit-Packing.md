@@ -35,7 +35,9 @@ Next is the biggest pitfall of all. This is where I tripped hard and my mind alm
 
 *BUT BUT BUT*
 
-That is not the case. Solidity stores data starting from right, meaning it is (probably) Little Endian. Basically, if you were to store four numbers A,B,C and D in that order, inside of a word they would be stored as [D,C,B,A]. A good primer about Endianess can be found in [this freecodecamp article](https://www.freecodecamp.org/news/what-is-endianness-big-endian-vs-little-endian/).
+That is not the case. Basically, if you were to store four numbers A,B,C and D in that order, inside of a word you would expect that word to look like this: [A,B,C,D] but they would be stored as [D,C,B,A]. 
+
+(Slightly relevant: ) A good primer about Endianess can be found in [this freecodecamp article](https://www.freecodecamp.org/news/what-is-endianness-big-endian-vs-little-endian/).
 
 Let me illustrate this point with [a picture](https://gateway.pinata.cloud/ipfs/QmZvGzhf9o6j837xF7eYLnufEACDa2MEvG8qh9TRz3k7bv):
 
