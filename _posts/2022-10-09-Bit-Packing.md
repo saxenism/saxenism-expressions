@@ -80,17 +80,20 @@ contract BitPackingAlpha {
         serDumbledore = msg.sender;
     }
 
+    // These separate mappings are to separate the effect of calling normal functions and bit magic functions
     mapping (address => bool) private _studentGraded;
     mapping (address => bool) private _studentGradedBitMagic;
 
     mapping (address => ScoreCard) private results;
     mapping (address => uint256) private bitMagicResults;
 
+    // Only Dumbledore can grade students
     modifier onlyHeadmaster() {
         require(msg.sender == serDumbledore, "Only the headmaster can do this action");
         _;
     }
 
+    // The students can only be graded once
     modifier graded(address _student) {
         require(!_studentGraded[_student], "Student has already been graded");
         _;
@@ -114,6 +117,7 @@ contract BitPackingAlpha {
     }
 
     // Execution Cost: 139811
+    // The grades for each of the four subjects are generated randomly and then stored in the *results* mapping against the address of the particular _student
     function gradeStudents(address _student) public onlyHeadmaster graded(_student) {
         uint datda_score = uint(keccak256(abi.encodePacked(_student, "defenceAgainstTheDarkArts", block.difficulty, block.timestamp))) % 100;
         uint potions_score = uint(keccak256(abi.encodePacked(_student, "potions", block.difficulty, block.timestamp))) % 100;
@@ -126,6 +130,7 @@ contract BitPackingAlpha {
     }
 
     // Execution Cost: 31229
+    // Grab the results of student with address _student
     function getStudentResults(address _student) external view returns(uint, uint, uint, uint) {
         return (
             results[_student].defenceAgainstTheDarkArts, 
@@ -139,6 +144,9 @@ contract BitPackingAlpha {
 // Let's try some bit magic now. The way of the Bit Magician (Frankly it's just bit packing. Nothing fancy :P)
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    // Takes four 8 bytes uints and pack it into a single uint256 
+    // Initialize a number `packedMarksUint` which has 256 0's
+    // Take the number that you want to pack, shift it to its required place(0th bit, 64th bit, 128th bit or the 192nd bit) and do an OR with the 64 0's at that place of the `packedMarksUint` uint.
     function packMarksIntoASingleUint(uint a, uint b, uint c, uint d) private pure returns (uint packedResult) {
         uint packedMarksUint;
 
@@ -151,14 +159,17 @@ contract BitPackingAlpha {
     }
 
     // Execution Cost: 25229
+    // Logic is to shift the target number to the leftmost end and then do an *&* with 64 1's to reveal that particular number
+    // For the rightmost number, we only need to shift it to the leftmost position and cast it to uint64. That does the same thing.
     function getStudentResultsBitMagic(address _student) external view returns (uint _datda, uint _potions, uint _transfigurations, uint64 _comc) {
-        _datda = (bitMagicResults[_student] & ((1 << 64) - 1));
+        _datda = (bitMagicResults[_student] & SINGLE_SUBJECT_MASK);
         _potions = ((bitMagicResults[_student] >> POTIONS_POSITION) & SINGLE_SUBJECT_MASK);
         _transfigurations = ((bitMagicResults[_student] >> TRANSFIGURATION_POSITION) & SINGLE_SUBJECT_MASK);
         _comc = uint64(bitMagicResults[_student] >> CARE_OF_MAGICAL_CREATURES_POSITION);
     }
 
     // Execution Cost: 73430 
+    // The grades for each of the four subjects are generated randomly and then stored as a packed uint256 in the *bitMagicResults* mapping against the address of the particular _student
     function gradeStudentsWithBitMagic(address _student) external onlyHeadmaster gradedBitMagic(_student) {
         uint datda_score = uint(keccak256(abi.encodePacked(_student, "defenceAgainstTheDarkArts", block.difficulty, block.timestamp))) % 100;
         uint potions_score = uint(keccak256(abi.encodePacked(_student, "potions", block.difficulty, block.timestamp))) % 100;
