@@ -4,6 +4,7 @@ layout: post
 description: Your one stop guide to learning everything about the EVM.
 categories: [evm, solidity, security, deep-dive, evm-internals]
 title: An EVM Deep Dive
+sticky_rank: 2
 ---
 
 # EVM-Varta (Let's talk about the EVM)
