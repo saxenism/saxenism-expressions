@@ -140,11 +140,11 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h2"><a href="#block-gas-limit">Block Gas Limit</a></li>
 <li class="toc-entry toc-h2"><a href="#decisions-regarding-block-gas-limit">Decisions regarding block gas limit</a></li>
 <li class="toc-entry toc-h2"><a href="#femboy-capital-definitely-not-as-detailed-as-the-ethereum-book">Femboy Capital (Definitely not as detailed as the Ethereum book)</a></li>
+<li class="toc-entry toc-h2"><a href="#uncategorised--scratch-space">Uncategorised / Scratch Space</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#transactions">Transactions</a></li>
 </ul>
 </li>
-<li class="toc-entry toc-h1"><a href="#wip">WIP</a>
-<ul>
-<li class="toc-entry toc-h2"><a href="#about-yul-picked-from-documentation-itself">About Yul (picked from documentation itself)</a></li>
 </ul>
 </li>
 </ul><h1 id="evm-varta-lets-talk-about-the-evm">
@@ -183,7 +183,6 @@ window.onload = wrap_img;
   <li><a href="https://saxenism.github.io/EVM-Varta/#block-gas-limit">Block Gas Limit</a></li>
   <li><a href="https://saxenism.github.io/EVM-Varta/#decisions-regarding-block-gas-limit">Decisions regarding block gas Limit</a></li>
   <li><a href="https://saxenism.github.io/EVM-Varta/#femboy-capital-definitely-not-as-detailed-as-the-ethereum-book">Femboy Capital</a></li>
-  <li><a href="https://saxenism.github.io/EVM-Varta/#wip">WIP</a></li>
 </ul>
 
 <h2 id="what-is-an-evm">
@@ -527,20 +526,68 @@ End of Ethereuem Book
   </li>
 </ul>
 
-<h1 id="wip">
-<a class="anchor" href="#wip" aria-hidden="true"><span class="octicon octicon-link"></span></a>WIP</h1>
-<h2 id="about-yul-picked-from-documentation-itself">
-<a class="anchor" href="#about-yul-picked-from-documentation-itself" aria-hidden="true"><span class="octicon octicon-link"></span></a>About Yul (picked from documentation itself)</h2>
+<h2 id="uncategorised--scratch-space">
+<a class="anchor" href="#uncategorised--scratch-space" aria-hidden="true"><span class="octicon octicon-link"></span></a>Uncategorised / Scratch Space</h2>
+
+<h3 id="transactions">
+<a class="anchor" href="#transactions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Transactions</h3>
 
 <ol>
-  <li>Yul provides for loops, if and switch statements</li>
-  <li>No explicit statements for SWAP, DUP, JUMPDEST, JUMP and JUMPI are provided (as they obfuscate data flow and control flow)</li>
-  <li>Statements such as mul(add(x, y),z) are preferred over 7 y x add mul, because it becomes easier to see which opcode is being used for which operand</li>
-  <li>Yul is desigend for a stack based machine (EVM) but it does not expose the programmer to the complexity of the stack itself</li>
-  <li>Yul is statically typed, but also there is a default type (integer word of the target machine) that can be omitted.</li>
-  <li>Yul does not have any built-in operations, functions or types in its pure form.
-  6.1 There exists only one specified dialect of Yul (EVM dialect) and that uses the EVM opcodes as builtin functions and defines only the type u256 (native 256-bit type of EVM)</li>
+  <li>A transaction is a message that is sent from one account to another account.</li>
 </ol>
+
+<p>That account can be the sender itself or it could be an empty field too.</p>
+
+<p>The transaction can include binary data (called <em>payload</em>) and Ether.</p>
+
+<ol>
+  <li>
+    <p>If the target contains code, then that code is executed with the payload being used as the input.</p>
+  </li>
+  <li>
+    <p>If the target account is not set, the transaction creates a <em>new contract</em>. The address of the new contract is derived from the <em>address of the deployer</em> + <em>their nonce(number of transactions done by deployer)</em>.</p>
+  </li>
+  <li>
+    <p>The output data of this execution is permanently stored as the code of the contract.</p>
+  </li>
+  <li>
+    <p>The payload of such a contract creation is taken to be the EVM bytecode and executed. This means that in order to create a contract, we do not send the code of the contract, but that code which returns the code of the contract upon execution.</p>
+  </li>
+</ol>
+
+<blockquote>
+  <p>Note: While a contract is being created, its code is still empty. Because of that we should call back into the contract under construction until its constructor has finished executing.</p>
+</blockquote>
+
+<p>Basically you cannot call the functions of the contract that you are deploying inside of the constructor, externally.</p>
+
+<blockquote>
+  <p>This is assuming that you know that you can call a function internally and externally.</p>
+</blockquote>
+
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="c1">//SPDX-License-Idenitifier: MIT
+</span>
+<span class="k">pragma</span> <span class="n">solidity</span> <span class="mf">0.8</span><span class="p">.</span><span class="mi">17</span><span class="p">;</span>
+
+<span class="k">contract</span> <span class="n">Sourabh</span> <span class="p">{</span>
+    <span class="kt">uint</span> <span class="k">public</span> <span class="n">constructor_value</span><span class="p">;</span>
+    <span class="kt">uint</span> <span class="k">public</span> <span class="n">constructor_value2</span><span class="p">;</span>
+    <span class="kt">uint</span> <span class="k">public</span> <span class="n">constructor_value3</span><span class="p">;</span>
+
+    <span class="k">constructor</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">constructor_value</span> <span class="o">=</span> <span class="n">generateRandomNumber</span><span class="p">();</span>
+        <span class="n">constructor_value2</span> <span class="o">=</span> <span class="n">Sourabh</span><span class="p">.</span><span class="n">generateRandomNumber</span><span class="p">();</span>
+        <span class="c1">// constructor_value3 = address(this).generateRandomNumber();
+</span>    <span class="p">}</span>
+
+    <span class="k">function</span> <span class="n">generateRandomNumber</span><span class="p">()</span> <span class="k">public</span> <span class="k">view</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kt">uint256</span><span class="p">(</span><span class="nb">keccak256</span><span class="p">(</span><span class="n">abi</span><span class="p">.</span><span class="n">encodePacked</span><span class="p">(</span><span class="n">block</span><span class="p">.</span><span class="n">timestamp</span><span class="p">,</span> <span class="n">block</span><span class="p">.</span><span class="n">difficulty</span><span class="p">,</span> <span class="n">block</span><span class="p">.</span><span class="n">number</span><span class="p">)));</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
 
   </div><!-- from https://github.com/utterance/utterances -->
 <script src="https://utteranc.es/client.js"
