@@ -399,3 +399,85 @@ The exact formula used is:
 memory_size_word = (memory_byte_size + 31) / 32
 memory_cost = (memory_size_word ** 2) / 512 + (3 * memory_size_word)
 ```
+
+### Stack
+
+1. Stack has a width of 32 bytes (1 word) and a depth of 1024 entries.
+
+2. Technically only the topmost stack item is accessible but we do have the option to copy any of the top 16 entries and put it on top of the stack or swap the top element with any of the top 16 entries.
+
+3. Example. This is what happens when you use the *SWAP16* opcode:
+
+        **Stack input**
+        --------
+
+        a: value to swap.
+
+        ignored value.
+
+        ignored value.
+
+        ignored value.
+
+        ignored value.
+
+        ignored value.
+
+        ignored value.
+
+        ignored value.
+
+        ignored value.
+
+        ignored value.
+
+        ignored value.
+
+        ignored value.
+
+        ignored value.
+
+        ignored value.
+
+        ignored value.
+
+        ignored value.
+
+        b: value to swap.
+
+        **Stack output**
+        ------
+
+        b: swapped value.
+
+        ignored value.
+
+        ignored value.
+
+        ignored value.
+
+        ignored value.
+
+        ignored value.
+
+        ignored value.
+
+        ignored value.
+
+        ignored value.
+
+        ignored value.
+
+        ignored value.
+
+        ignored value.
+
+        ignored value.
+
+        ignored value.
+
+        ignored value.
+
+        ignored value.
+
+        a: swapped value.
