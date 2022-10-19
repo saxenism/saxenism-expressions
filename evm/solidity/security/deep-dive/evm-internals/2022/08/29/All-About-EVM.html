@@ -94,7 +94,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      15 min read
+      17 min read
     
 </span></p>
 
@@ -143,6 +143,7 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h2"><a href="#uncategorised--scratch-space">Uncategorised / Scratch Space</a>
 <ul>
 <li class="toc-entry toc-h3"><a href="#transactions">Transactions</a></li>
+<li class="toc-entry toc-h3"><a href="#memory">Memory</a></li>
 </ul>
 </li>
 </ul>
@@ -570,14 +571,14 @@ End of Ethereuem Book
 </span>
 <span class="k">pragma</span> <span class="n">solidity</span> <span class="mf">0.8</span><span class="p">.</span><span class="mi">17</span><span class="p">;</span>
 
-<span class="k">contract</span> <span class="n">Sourabh</span> <span class="p">{</span>
+<span class="k">contract</span> <span class="n">TransactionTests</span> <span class="p">{</span>
     <span class="kt">uint</span> <span class="k">public</span> <span class="n">constructor_value</span><span class="p">;</span>
     <span class="kt">uint</span> <span class="k">public</span> <span class="n">constructor_value2</span><span class="p">;</span>
     <span class="kt">uint</span> <span class="k">public</span> <span class="n">constructor_value3</span><span class="p">;</span>
 
     <span class="k">constructor</span><span class="p">()</span> <span class="p">{</span>
         <span class="n">constructor_value</span> <span class="o">=</span> <span class="n">generateRandomNumber</span><span class="p">();</span>
-        <span class="n">constructor_value2</span> <span class="o">=</span> <span class="n">Sourabh</span><span class="p">.</span><span class="n">generateRandomNumber</span><span class="p">();</span>
+        <span class="n">constructor_value2</span> <span class="o">=</span> <span class="n">TransactionTests</span><span class="p">.</span><span class="n">generateRandomNumber</span><span class="p">();</span>
         <span class="c1">// constructor_value3 = address(this).generateRandomNumber();
 </span>    <span class="p">}</span>
 
@@ -588,6 +589,64 @@ End of Ethereuem Book
 
 </code></pre></div></div>
 
+<h3 id="memory">
+<a class="anchor" href="#memory" aria-hidden="true"><span class="octicon octicon-link"></span></a>Memory</h3>
+
+<ol>
+  <li>
+    <p>Memory is linear, while storage is not.</p>
+  </li>
+  <li>
+    <p>Memory can also be addressed at byte level.</p>
+  </li>
+  <li>
+    <p>In the GETH (Go implementation of EVM), the memory is represented as an array of bytes.</p>
+  </li>
+  <li>
+    <p>Consider memory as a consecutive (linear) stack where each entry is 1 byte (not 1 word ~ 32 bytes). So, when you will do <em>MSTORE8(offset, value)</em>, this will use up one memory slot at the offset mentioned.</p>
+  </li>
+  <li>
+    <p>However, if you did something like <em>MSTORE(offset, value)</em>, then this would take up 32 entries in the stack in the following format:</p>
+
+    <div class="language-plaintext highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code> B32
+
+ B31
+
+ B30
+
+ .
+
+ .
+
+ .
+
+ .
+
+ B3
+
+ B2
+
+ B1
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p>Where Bn is the nth Byte of the value that you used in  <em>MSTORE</em>.</p>
+
+<ol>
+  <li>
+    <p>During an execution, the whole memory is accessible, but not for free. When an offset(location) is accessed for the first time (either read or write), it may trigger a memory expansion, which will cost gas. A memory expansion may be triggered when the offset used is bigger than any used before. When that happens, the cost of accessing that higher offset is computed and removed from the total gas available in the current context.</p>
+  </li>
+  <li>
+    <p>The cost grows quadratically with the size, making higher offsets more costly and discouraging to use too much memory. Any opcode accessing memory may trigger an expansion (including, for example, MLOAD, RETURN or CALLDATACOPY).</p>
+  </li>
+</ol>
+
+<p>The exact formula used is:</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>memory_size_word <span class="o">=</span> <span class="o">(</span>memory_byte_size + 31<span class="o">)</span> / 32
+memory_cost <span class="o">=</span> <span class="o">(</span>memory_size_word <span class="k">**</span> 2<span class="o">)</span> / 512 + <span class="o">(</span>3 <span class="k">*</span> memory_size_word<span class="o">)</span>
+</code></pre></div></div>
 
   </div><!-- from https://github.com/utterance/utterances -->
 <script src="https://utteranc.es/client.js"
