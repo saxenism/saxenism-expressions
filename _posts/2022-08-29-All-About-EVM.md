@@ -338,14 +338,14 @@ Basically you cannot call the functions of the contract that you are deploying i
 
 pragma solidity 0.8.17;
 
-contract Sourabh {
+contract TransactionTests {
     uint public constructor_value;
     uint public constructor_value2;
     uint public constructor_value3;
 
     constructor() {
         constructor_value = generateRandomNumber();
-        constructor_value2 = Sourabh.generateRandomNumber();
+        constructor_value2 = TransactionTests.generateRandomNumber();
         // constructor_value3 = address(this).generateRandomNumber();
     }
 
@@ -356,3 +356,46 @@ contract Sourabh {
 
 ```
 
+### Memory
+
+1. Memory is linear, while storage is not. 
+
+2. Memory can also be addressed at byte level.
+
+3. In the GETH (Go implementation of EVM), the memory is represented as an array of bytes.
+
+4. Consider memory as a consecutive (linear) stack where each entry is 1 byte (not 1 word ~ 32 bytes). So, when you will do *MSTORE8(offset, value)*, this will use up one memory slot at the offset mentioned.
+
+5. However, if you did something like *MSTORE(offset, value)*, then this would take up 32 entries in the stack in the following format:
+
+        B32
+
+        B31
+
+        B30
+
+        .
+
+        .
+
+        .
+
+        .
+
+        B3
+
+        B2
+
+        B1
+
+Where Bn is the nth Byte of the value that you used in  *MSTORE*.
+
+6. During an execution, the whole memory is accessible, but not for free. When an offset(location) is accessed for the first time (either read or write), it may trigger a memory expansion, which will cost gas. A memory expansion may be triggered when the offset used is bigger than any used before. When that happens, the cost of accessing that higher offset is computed and removed from the total gas available in the current context.
+
+7. The cost grows quadratically with the size, making higher offsets more costly and discouraging to use too much memory. Any opcode accessing memory may trigger an expansion (including, for example, MLOAD, RETURN or CALLDATACOPY).
+
+The exact formula used is:
+```shell
+memory_size_word = (memory_byte_size + 31) / 32
+memory_cost = (memory_size_word ** 2) / 512 + (3 * memory_size_word)
+```
