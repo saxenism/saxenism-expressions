@@ -37,7 +37,6 @@ So, let's get a bit of a deeper understanding of the EVM
 + [Block Gas Limit](https://saxenism.github.io/EVM-Varta/#block-gas-limit)
 + [Decisions regarding block gas Limit](https://saxenism.github.io/EVM-Varta/#decisions-regarding-block-gas-limit)
 + [Femboy Capital](https://saxenism.github.io/EVM-Varta/#femboy-capital-definitely-not-as-detailed-as-the-ethereum-book)
-+ [WIP](https://saxenism.github.io/EVM-Varta/#wip)
 
 ## What is an EVM
 
@@ -309,13 +308,51 @@ End of Ethereuem Book
 
 + SSTORE cost a whopping 22100 gas! SLOAD cost 100. Reading and writing to storage is very expensive.
 
-# WIP
-## About Yul (picked from documentation itself)
+## Uncategorised / Scratch Space
 
-1. Yul provides for loops, if and switch statements
-2. No explicit statements for SWAP, DUP, JUMPDEST, JUMP and JUMPI are provided (as they obfuscate data flow and control flow)
-3. Statements such as mul(add(x, y),z) are preferred over 7 y x add mul, because it becomes easier to see which opcode is being used for which operand
-4. Yul is desigend for a stack based machine (EVM) but it does not expose the programmer to the complexity of the stack itself
-5. Yul is statically typed, but also there is a default type (integer word of the target machine) that can be omitted.
-6. Yul does not have any built-in operations, functions or types in its pure form.
-  6.1 There exists only one specified dialect of Yul (EVM dialect) and that uses the EVM opcodes as builtin functions and defines only the type u256 (native 256-bit type of EVM)
+### Transactions
+
+1. A transaction is a message that is sent from one account to another account.
+
+That account can be the sender itself or it could be an empty field too.
+
+The transaction can include binary data (called *payload*) and Ether.
+
+2. If the target contains code, then that code is executed with the payload being used as the input.
+
+3. If the target account is not set, the transaction creates a *new contract*. The address of the new contract is derived from the *address of the deployer* + *their nonce(number of transactions done by deployer)*.
+
+4. The output data of this execution is permanently stored as the code of the contract.
+
+4. The payload of such a contract creation is taken to be the EVM bytecode and executed. This means that in order to create a contract, we do not send the code of the contract, but that code which returns the code of the contract upon execution.
+
+> Note: While a contract is being created, its code is still empty. Because of that we should call back into the contract under construction until its constructor has finished executing. 
+
+Basically you cannot call the functions of the contract that you are deploying inside of the constructor, externally.
+
+> This is assuming that you know that you can call a function internally and externally.
+
+```solidity
+
+//SPDX-License-Idenitifier: MIT
+
+pragma solidity 0.8.17;
+
+contract Sourabh {
+    uint public constructor_value;
+    uint public constructor_value2;
+    uint public constructor_value3;
+
+    constructor() {
+        constructor_value = generateRandomNumber();
+        constructor_value2 = Sourabh.generateRandomNumber();
+        // constructor_value3 = address(this).generateRandomNumber();
+    }
+
+    function generateRandomNumber() public view returns (uint) {
+        return uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty, block.number)));
+    }
+}
+
+```
+
