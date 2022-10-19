@@ -144,6 +144,7 @@ window.onload = wrap_img;
 <ul>
 <li class="toc-entry toc-h3"><a href="#transactions">Transactions</a></li>
 <li class="toc-entry toc-h3"><a href="#memory">Memory</a></li>
+<li class="toc-entry toc-h3"><a href="#stack">Stack</a></li>
 </ul>
 </li>
 </ul>
@@ -647,6 +648,97 @@ End of Ethereuem Book
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>memory_size_word <span class="o">=</span> <span class="o">(</span>memory_byte_size + 31<span class="o">)</span> / 32
 memory_cost <span class="o">=</span> <span class="o">(</span>memory_size_word <span class="k">**</span> 2<span class="o">)</span> / 512 + <span class="o">(</span>3 <span class="k">*</span> memory_size_word<span class="o">)</span>
 </code></pre></div></div>
+
+<h3 id="stack">
+<a class="anchor" href="#stack" aria-hidden="true"><span class="octicon octicon-link"></span></a>Stack</h3>
+
+<ol>
+  <li>
+    <p>Stack has a width of 32 bytes (1 word) and a depth of 1024 entries.</p>
+  </li>
+  <li>
+    <p>Technically only the topmost stack item is accessible but we do have the option to copy any of the top 16 entries and put it on top of the stack or swap the top element with any of the top 16 entries.</p>
+  </li>
+  <li>
+    <p>Example. This is what happens when you use the <em>SWAP16</em> opcode:</p>
+
+    <div class="language-plaintext highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code> **Stack input**
+ --------
+
+ a: value to swap.
+
+ ignored value.
+
+ ignored value.
+
+ ignored value.
+
+ ignored value.
+
+ ignored value.
+
+ ignored value.
+
+ ignored value.
+
+ ignored value.
+
+ ignored value.
+
+ ignored value.
+
+ ignored value.
+
+ ignored value.
+
+ ignored value.
+
+ ignored value.
+
+ ignored value.
+
+ b: value to swap.
+
+ **Stack output**
+ ------
+
+ b: swapped value.
+
+ ignored value.
+
+ ignored value.
+
+ ignored value.
+
+ ignored value.
+
+ ignored value.
+
+ ignored value.
+
+ ignored value.
+
+ ignored value.
+
+ ignored value.
+
+ ignored value.
+
+ ignored value.
+
+ ignored value.
+
+ ignored value.
+
+ ignored value.
+
+ ignored value.
+
+ a: swapped value.
+</code></pre></div>    </div>
+  </li>
+</ol>
 
   </div><!-- from https://github.com/utterance/utterances -->
 <script src="https://utteranc.es/client.js"
