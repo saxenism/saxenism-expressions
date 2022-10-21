@@ -31,6 +31,7 @@ A curious tinkerer, madly in love with the decentralised universe
 A few things about me:
 
 + Currently I work as an EVM auditoooor and developooor.
++ I consult with teams for designing (and implementing) their smart contract testing suite.
 + (Ex) Full-Stack Blockchain engineer @ [sublime.finance](https://sublime.finance/)
 + Consulted with a decentralised freelancing platform. Took the project from idea to contract deployment :P
 + Winner @ NFTHack2022 under Best use of Harmony NFT bridge
