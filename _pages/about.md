@@ -28,10 +28,6 @@ A curious tinkerer, madly in love with the decentralised universe
 </style>
 <a class="libutton" href="https://www.linkedin.com/comm/mynetwork/discovery-see-all?usecase=PEOPLE_FOLLOWS&followMember=saxena-rahul" target="_blank">Follow on LinkedIn</a>
 
-## Few of my videos
-
-> youtube: https://youtu.be/BsDWR2lCk-E
-
 A few things about me:
 
 + Currently I work as an EVM auditoooor and developooor.
