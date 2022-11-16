@@ -30,7 +30,7 @@ A curious tinkerer, madly in love with the decentralised universe
 
 ## Few of my videos
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/BsDWR2lCk-E" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+> youtube: https://youtu.be/BsDWR2lCk-E
 
 A few things about me:
 
