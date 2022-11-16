@@ -1,7 +1,7 @@
 ---
 layout: page
-title: About Me
-permalink: /about/
+title: Video Presentations
+permalink: /videos/
 ---
 
 <h1> Blockchain Engineer & Consultant </h1>
