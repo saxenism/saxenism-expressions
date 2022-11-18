@@ -39,7 +39,7 @@ baseurl: "" # the subpath of your site, e.g. "/blog".
 # Github and twitter are optional:
 minima:
   social_links:
-    - { platform: rss, user_url: "/feed.xml" }
+    - { platform: rss, user_url: "https://feedrabbit.com/subscriptions/new?url=https%3A%2F%2Fsaxenism.com%2F" }
     - { platform: github, user_url: "https://github.com/saxenism" }
     - { platform: twitter, user_url: "https://twitter.com/saxenism" }
     - { platform: linkedin, user_url: "https://www.linkedin.com/in/saxena-rahul/" }
