@@ -303,6 +303,14 @@
   
 
   
+      ,"page7": {
+          "title": "Videso",
+          "content": "Some Videos from Me .",
+          "url": "https://saxenism.com/videos/",
+          "relUrl": "/videos/",
+          "date": ""
+      }
+      
   
 
   
@@ -312,6 +320,9 @@
   
 
   
+  
+
+  
 
   
 
@@ -319,7 +330,7 @@
   
 
   
-      ,"page13": {
+      ,"page14": {
           "title": "",
           "content": "Sitemap: {{ “sitemap.xml” | absolute_url }} | .",
           "url": "https://saxenism.com/robots.txt",
