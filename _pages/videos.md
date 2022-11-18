@@ -6,4 +6,5 @@ permalink: /videos/
 
 <h1> Some Videos from Me </h1>
 
-[![Watch the video](https://img.youtube.com/vi/nTQUwghvy5Q/default.jpg)](https://youtu.be/nTQUwghvy5Q)
+1. [Create, deploy and test an on-chain DAO using Foundry](https://youtu.be/BsDWR2lCk-E)
+2. [Create and deploy an ERC20 Token](https://youtu.be/BC71jg8OJx0)
