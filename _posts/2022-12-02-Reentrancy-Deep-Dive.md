@@ -40,8 +40,8 @@ Also, all the information in this section is being taken off the internet as of 
 2. It is backed 1:1 with Bitcoin and holders can mint, exchange and redeem their imBTC for equivalent amount of BTC
 3. imBTC can be bought with BTC(from the imBTC DApp) or ERC20 tokens such as USDC or ETH.
 4. You get interest by holding imBTC (generated from Tokenlon's imBTC exchange fee).
-5. (The actual unwrapped) BTC will be stored in Tokenlon's cold wallet, and the ==cold wallet will ensure the security of BTC== assets.
-6. Anyone who has imBTC ==can trigger the function of distributing imBTC revenue==. All income will be allocated to users wallet in the proportion to imBTC. 
+5. (The actual unwrapped) BTC will be stored in Tokenlon's cold wallet, and the <mark>cold wallet will ensure the security of BTC</mark> assets.
+6. Anyone who has imBTC <mark >can trigger the function of distributing imBTC revenue</mark>. All income will be allocated to users wallet in the proportion to imBTC. 
 
 Hmm, with point 6 they are following the pull mechanism instead of push for fund distribution which is good, security wise.
 
