@@ -5,7 +5,7 @@ comments: true
 description: Let's understand how we can yet again shave off some gas by using bit magic to pack more data into a word than can be usually done.
 categories: [web3, solidity, language-tricks, bit-magic, bit-packing, intermediate]
 title: Solidity - Bit Packing
-sticky_rank: 3
+sticky_rank: 2
 ---
 
 # Introduction and Motivation
