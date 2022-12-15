@@ -14,3 +14,7 @@ This post includes the resources and learning materials I've personally used and
 # Resources
 
 1. [Smart Contract Security Verification Standard](https://github.com/ComposableSecurity/SCSVS)
+
+## Looks good, haven't studied yet
+
+1. [Exploit recap of 2022](https://ventral.digital/posts/2022/12/15/ethereum-smart-contract-auditors-2022-rewind)
