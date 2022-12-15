@@ -4,7 +4,7 @@ layout: post
 comments: true
 description: With credits to the excellent re-entrancy repository by pcaversaccio, this article is an attempt to provide a summary of the attacks.
 categories: [web3, solidity, exploits, advanced, intermediate]
-title: [WIP] Everything about Reentrancy Attacks
+title: WIP -> Everything about Reentrancy Attacks
 ---
 
 # WIP
