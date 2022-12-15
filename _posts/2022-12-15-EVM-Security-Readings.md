@@ -15,6 +15,9 @@ This post includes the resources and learning materials I've personally used and
 
 1. [Smart Contract Security Verification Standard](https://github.com/ComposableSecurity/SCSVS)
 
-## Looks good, haven't studied yet
+# Resources: To-Do
 
 1. [Exploit recap of 2022](https://ventral.digital/posts/2022/12/15/ethereum-smart-contract-auditors-2022-rewind)
+2. [Defi Vuln Labs](https://github.com/SunWeb3Sec/DeFiVulnLabs)
+3. [Auditing Heuristics](https://github.com/OpenCoreCH/smart-contract-auditing-heuristics)
+4. [Learn EVM attacks](https://github.com/coinspect/learn-evm-attacks)
