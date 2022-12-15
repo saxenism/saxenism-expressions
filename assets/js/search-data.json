@@ -3,7 +3,7 @@
     
         "post0": {
             "title": "Resources for EVM Security",
-            "content": "Note . This post includes the resources and learning materials I’ve personally used and found useful and therefore will not be containing everything that is super good and also will be a work-in-progress as long as I keep on studying EVM. . Resources . Smart Contract Security Verification Standard |",
+            "content": "Note . This post includes the resources and learning materials I’ve personally used and found useful and therefore will not be containing everything that is super good and also will be a work-in-progress as long as I keep on studying EVM. . Resources . Smart Contract Security Verification Standard | Looks good, haven’t studied yet . Exploit recap of 2022 |",
             "url": "https://saxenism.com/web3/solidity/exploits/advanced/intermediate/security/2022/12/15/EVM-Security-Readings.html",
             "relUrl": "/web3/solidity/exploits/advanced/intermediate/security/2022/12/15/EVM-Security-Readings.html",
             "date": " • Dec 15, 2022"
