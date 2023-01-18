@@ -64,7 +64,22 @@ function getLastNBits(uint x, uint n) external pure returns(uint256) {
     return x & mask;
 }
 
+/****
+// In general, a modulo can be easily converted into a bitwise & if the divisor is power of 2 ((1 << anything) would always be a power of 2).
+// All you gotta do is to translate that modulo into a bitwise & of `divisor - 1`.
+
+// In terms of gas consumption:
+// getLastNBits(22313) == getLastNBitsUsingMod(22309)
+*****/
+
+function getLastNBitsUsingMod(uint x, uint N) pure external returns (uint result) {
+        result = x % (1 << N);
+}
 ```
+
+
+
+    
 
 ## Most significant bit position
 
