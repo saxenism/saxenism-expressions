@@ -166,7 +166,7 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h2"><a href="#exponentiation">Exponentiation</a></li>
 </ul>
 </li>
-</ul><p>Last Edited: 7th October 2022</p>
+</ul><p>Last Edited: 18th January 2022</p>
 
 <h1 id="bit-magic">
 <a class="anchor" href="#bit-magic" aria-hidden="true"><span class="octicon octicon-link"></span></a>Bit Magic</h1>
@@ -225,6 +225,7 @@ window.onload = wrap_img;
 <span class="cm">/****
 // In general, a modulo can be easily converted into a bitwise &amp; if the divisor is power of 2 ((1 &lt;&lt; anything) would always be a power of 2).
 // All you gotta do is to translate that modulo into a bitwise &amp; of `divisor - 1`.
+// By reverse-engineering this piece of information, we can write another function called getLastNBitsUsingMod
 
 // In terms of gas consumption:
 // getLastNBits(22313) == getLastNBitsUsingMod(22309)
