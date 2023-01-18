@@ -8,7 +8,7 @@ title: Solidity - Bit Magic (Hot Dev Alpha!!)
 sticky_rank: 1
 ---
 
-Last Edited: 7th October 2022
+Last Edited: 18th January 2022
 
 # Bit Magic
 
@@ -67,6 +67,7 @@ function getLastNBits(uint x, uint n) external pure returns(uint256) {
 /****
 // In general, a modulo can be easily converted into a bitwise & if the divisor is power of 2 ((1 << anything) would always be a power of 2).
 // All you gotta do is to translate that modulo into a bitwise & of `divisor - 1`.
+// By reverse-engineering this piece of information, we can write another function called getLastNBitsUsingMod
 
 // In terms of gas consumption:
 // getLastNBits(22313) == getLastNBitsUsingMod(22309)
