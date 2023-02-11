@@ -336,9 +336,7 @@
   
 
   
-
-  
-      ,"page8": {
+      ,"page7": {
           "title": "Videos",
           "content": "Some Videos from Me . Create, deploy and test an on-chain DAO using Foundry | Create and deploy an ERC20 Token | Hackathon Project: Solana Roads | Hackathon Project: RunETH | Post GSoC Selection Interview |",
           "url": "https://saxenism.com/videos/",
@@ -365,7 +363,7 @@
   
 
   
-      ,"page15": {
+      ,"page14": {
           "title": "",
           "content": "Sitemap: {{ “sitemap.xml” | absolute_url }} | .",
           "url": "https://saxenism.com/robots.txt",
