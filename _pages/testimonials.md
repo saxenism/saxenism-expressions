@@ -1,7 +1,7 @@
 ---
 layout: default
 permalink: /testimonials/
-title: Word on the Street
+title: Testimonials
 search_exclude: true
 ---
 
@@ -10,6 +10,8 @@ search_exclude: true
 ### 1. Dev Team, [Brahma Finance](https://www.brahma.fi/)
 
 > One of the best audit experience we have been a part of. Rahul (and Parth) were great to work with. Their attention to details on contract design and adversarial thinking helped us along the audit process. The have delivered a well structured and comprehensive audit report.
+
+![](https://user-images.githubusercontent.com/32522659/218296401-63ad05ca-bf05-4ea8-a540-444c65906496.png)
 
 ### 2. Zodomo.eth 🦇🔊, [Canto Name Service](https://twitter.com/DNSFORCANTO?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor)
 
