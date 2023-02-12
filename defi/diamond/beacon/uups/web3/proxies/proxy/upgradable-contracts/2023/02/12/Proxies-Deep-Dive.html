@@ -158,6 +158,8 @@ window.onload = wrap_img;
 
 <p>For a primer on all things you <strong>MUST</strong> understand before going ahead with learning about proxies in depth, please navigate to the end of this article, find the section named <strong>Pre-Requisites</strong> and make sure you understand all concepts listed there.</p>
 
+<p>I did a short article on proxies sometime back, but it was really basic and surface-level. If you want, you can read that <a href="https://saxenism.com/web3/solidity/security/proxy/upgradation/2022/04/30/All-About-Proxies.html">here</a>.</p>
+
 <p>All proxy patterns are linked together by a distinct feature. It is the combination of <strong><code class="language-plaintext highlighter-rouge">delegatecall</code> along with the <code class="language-plaintext highlighter-rouge">fallback</code> function</strong>.</p>
 
 <h1 id="types-of-proxies">
@@ -181,7 +183,7 @@ window.onload = wrap_img;
 <h4 id="sequence-for-this-pattern">
 <a class="anchor" href="#sequence-for-this-pattern" aria-hidden="true"><span class="octicon octicon-link"></span></a>Sequence for this pattern</h4>
 
-<p>(user) <code class="language-plaintext highlighter-rouge">call</code> —&gt; (in the minimal contract) fallback —&gt; (from minimal contract to implementation contract) delegatecall —&gt; (implementation contract invocation of) target Function()</p>
+<p>(user) <code class="language-plaintext highlighter-rouge">call</code> —&gt; (in the minimal contract) <code class="language-plaintext highlighter-rouge">fallback</code> —&gt; (from minimal contract to implementation contract) <code class="language-plaintext highlighter-rouge">delegatecall</code> —&gt; (implementation contract invocation of) target Function()</p>
 
 <blockquote>
   <p>Official reading material: <a href="https://eips.ethereum.org/EIPS/eip-1167">EIP 1167</a>.</p>
