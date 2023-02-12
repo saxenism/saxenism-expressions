@@ -10,6 +10,8 @@ title: A Deep Dive on Solidity Smart Contract Proxies
 
 For a primer on all things you **MUST** understand before going ahead with learning about proxies in depth, please navigate to the end of this article, find the section named **Pre-Requisites** and make sure you understand all concepts listed there.
 
+I did a short article on proxies sometime back, but it was really basic and surface-level. If you want, you can read that [here](https://saxenism.com/web3/solidity/security/proxy/upgradation/2022/04/30/All-About-Proxies.html).
+
 All proxy patterns are linked together by a distinct feature. It is the combination of **`delegatecall` along with the `fallback` function**.
 
 # Types of Proxies
@@ -28,7 +30,7 @@ Instead of sending the bytecode for the (repeated) contract over and over again 
 
 #### Sequence for this pattern
 
-(user) `call` ---> (in the minimal contract) fallback ---> (from minimal contract to implementation contract) delegatecall ---> (implementation contract invocation of) target Function() 
+(user) `call` ---> (in the minimal contract) `fallback` ---> (from minimal contract to implementation contract) `delegatecall` ---> (implementation contract invocation of) target Function() 
 
 > Official reading material: [EIP 1167](https://eips.ethereum.org/EIPS/eip-1167).
 
@@ -37,6 +39,8 @@ Instead of sending the bytecode for the (repeated) contract over and over again 
 This section contains all concepts you must be aware of, to gain a comprehensive understanding of different proxy patterns.
 
 ### 1. `delegatecall`
+
+
 
 ## Resources Consulted
 
