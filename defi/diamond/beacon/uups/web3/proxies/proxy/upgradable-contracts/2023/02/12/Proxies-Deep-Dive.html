@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>A Deep Dive on Solidity Smart Contract Proxies | EVM Expressions</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="A Deep Dive on Solidity Smart Contract Proxies" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="The only resource you will ever need for all your proxy related queries." />
+<meta property="og:description" content="The only resource you will ever need for all your proxy related queries." />
+<link rel="canonical" href="https://saxenism.com/defi/diamond/beacon/uups/web3/proxies/proxy/upgradable-contracts/2023/02/12/Proxies-Deep-Dive.html" />
+<meta property="og:url" content="https://saxenism.com/defi/diamond/beacon/uups/web3/proxies/proxy/upgradable-contracts/2023/02/12/Proxies-Deep-Dive.html" />
+<meta property="og:site_name" content="EVM Expressions" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-02-12T00:00:00-06:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="A Deep Dive on Solidity Smart Contract Proxies" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2023-02-12T00:00:00-06:00","datePublished":"2023-02-12T00:00:00-06:00","description":"The only resource you will ever need for all your proxy related queries.","headline":"A Deep Dive on Solidity Smart Contract Proxies","mainEntityOfPage":{"@type":"WebPage","@id":"https://saxenism.com/defi/diamond/beacon/uups/web3/proxies/proxy/upgradable-contracts/2023/02/12/Proxies-Deep-Dive.html"},"url":"https://saxenism.com/defi/diamond/beacon/uups/web3/proxies/proxy/upgradable-contracts/2023/02/12/Proxies-Deep-Dive.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://saxenism.com/feed.xml" title="EVM Expressions" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NCLWFTBNXB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NCLWFTBNXB');
+</script>
+
+
+<link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">EVM Expressions</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About Me</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/testimonials/">Word on the Street</a><a class="page-link" href="/videos/">Videos</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">A Deep Dive on Solidity Smart Contract Proxies</h1><p class="page-description">The only resource you will ever need for all your proxy related queries.</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2023-02-12T00:00:00-06:00" itemprop="datePublished">
+        Feb 12, 2023
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      1 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/categories/#defi">defi</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#diamond">diamond</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#beacon">beacon</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#UUPS">UUPS</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#web3">web3</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#proxies">proxies</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#proxy">proxy</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#upgradable-contracts">upgradable-contracts</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h1"><a href="#introduction">Introduction</a></li>
+<li class="toc-entry toc-h1"><a href="#types-of-proxies">Types of Proxies</a>
+<ul>
+<li class="toc-entry toc-h2"><a href="#minimal-proxy-pattern">Minimal Proxy Pattern</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#problem-statement">Problem Statement</a></li>
+<li class="toc-entry toc-h3"><a href="#solution">Solution</a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#sequence-for-this-pattern">Sequence for this pattern</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#pre-requisites">Pre-Requisites</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#1-delegatecall">1. delegatecall</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#resources-consulted">Resources Consulted</a></li>
+</ul>
+</li>
+</ul><h1 id="introduction">
+<a class="anchor" href="#introduction" aria-hidden="true"><span class="octicon octicon-link"></span></a>Introduction</h1>
+
+<p>For a primer on all things you <strong>MUST</strong> understand before going ahead with learning about proxies in depth, please navigate to the end of this article, find the section named <strong>Pre-Requisites</strong> and make sure you understand all concepts listed there.</p>
+
+<p>All proxy patterns are linked together by a distinct feature. It is the combination of <strong><code class="language-plaintext highlighter-rouge">delegatecall</code> along with the <code class="language-plaintext highlighter-rouge">fallback</code> function</strong>.</p>
+
+<h1 id="types-of-proxies">
+<a class="anchor" href="#types-of-proxies" aria-hidden="true"><span class="octicon octicon-link"></span></a>Types of Proxies</h1>
+
+<p>Different proxy patterns came up to solve different(or incremental) problems related to gas cost efficiency, security and upgradability. Let’s have a look at the different kinds of proxies out there.</p>
+
+<h2 id="minimal-proxy-pattern">
+<a class="anchor" href="#minimal-proxy-pattern" aria-hidden="true"><span class="octicon octicon-link"></span></a>Minimal Proxy Pattern</h2>
+
+<h3 id="problem-statement">
+<a class="anchor" href="#problem-statement" aria-hidden="true"><span class="octicon octicon-link"></span></a>Problem Statement</h3>
+
+<p>How to repeatedly deploy the same contract with minimum gas cost? For example, if I have a wallet contract and for every user I want to deploy a new smart contract representing that particular user’s wallet (with the same logic implementation), how do I do that in the most gas-efficient manner?</p>
+
+<h3 id="solution">
+<a class="anchor" href="#solution" aria-hidden="true"><span class="octicon octicon-link"></span></a>Solution</h3>
+
+<p>Instead of sending the bytecode for the (repeated) contract over and over again to the blockchain for deployment, we create a <code class="language-plaintext highlighter-rouge">minimal contract</code> which simply references a <code class="language-plaintext highlighter-rouge">boilerplate</code> contract (the logic implementation contract) and redirects <code class="language-plaintext highlighter-rouge">calls</code> from the users to the <code class="language-plaintext highlighter-rouge">boilerplate</code> contract via <code class="language-plaintext highlighter-rouge">delegatecalls</code>.</p>
+
+<h4 id="sequence-for-this-pattern">
+<a class="anchor" href="#sequence-for-this-pattern" aria-hidden="true"><span class="octicon octicon-link"></span></a>Sequence for this pattern</h4>
+
+<p>(user) <code class="language-plaintext highlighter-rouge">call</code> —&gt; (in the minimal contract) fallback —&gt; (from minimal contract to implementation contract) delegatecall —&gt; (implementation contract invocation of) target Function()</p>
+
+<blockquote>
+  <p>Official reading material: <a href="https://eips.ethereum.org/EIPS/eip-1167">EIP 1167</a>.</p>
+</blockquote>
+
+<h2 id="pre-requisites">
+<a class="anchor" href="#pre-requisites" aria-hidden="true"><span class="octicon octicon-link"></span></a>Pre-Requisites</h2>
+
+<p>This section contains all concepts you must be aware of, to gain a comprehensive understanding of different proxy patterns.</p>
+
+<h3 id="1-delegatecall">
+<a class="anchor" href="#1-delegatecall" aria-hidden="true"><span class="octicon octicon-link"></span></a>1. <code class="language-plaintext highlighter-rouge">delegatecall</code>
+</h3>
+
+<h2 id="resources-consulted">
+<a class="anchor" href="#resources-consulted" aria-hidden="true"><span class="octicon octicon-link"></span></a>Resources Consulted</h2>
+
+<ol>
+  <li><a href="https://www.youtube.com/watch?v=iXLoSVcVhUg">Felix’s EVM Expedition: Proxies, Beacons and Diamond Pattern</a></li>
+</ol>
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="saxenism/saxenism-expressions"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-dark"
+        crossorigin="anonymous"
+        async>
+</script><div id="disqus_thread"></div>
+  <script>
+    var disqus_config = function () {
+      this.page.url = 'https://saxenism.com/defi/diamond/beacon/uups/web3/proxies/proxy/upgradable-contracts/2023/02/12/Proxies-Deep-Dive.html';
+      this.page.identifier = 'https://saxenism.com/defi/diamond/beacon/uups/web3/proxies/proxy/upgradable-contracts/2023/02/12/Proxies-Deep-Dive.html';
+    };
+
+    (function() {
+      var d = document, s = d.createElement('script');
+
+      s.src = 'https://.disqus.com/embed.js';
+
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript><a class="u-url" href="/defi/diamond/beacon/uups/web3/proxies/proxy/upgradable-contracts/2023/02/12/Proxies-Deep-Dive.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="https://saxenism.com/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Personal website of Rahul Saxena, containing his thoughts about web3, EVM and a decentralised world.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li>
+  <a href="https://feedrabbit.com/subscriptions/new?url=https%3A%2F%2Fsaxenism.com%2F" target="_blank" title="rss">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+    </svg>
+  </a>
+</li>
+<li>
+  <a rel="me" href="https://github.com/saxenism" target="_blank" title="github">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#github"></use>
+    </svg>
+  </a>
+</li>
+<li>
+  <a rel="me" href="https://twitter.com/saxenism" target="_blank" title="twitter">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#twitter"></use>
+    </svg>
+  </a>
+</li>
+<li>
+  <a rel="me" href="https://www.linkedin.com/in/saxena-rahul/" target="_blank" title="linkedin">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#linkedin"></use>
+    </svg>
+  </a>
+</li>
+</ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
