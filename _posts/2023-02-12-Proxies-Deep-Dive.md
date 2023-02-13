@@ -251,7 +251,6 @@ contract OneWhoDelegates {
 
 contract OneWhoIsDelegatedTo {
 
-    address public oracleContract;
     address public owner;
 
     constructor() {
@@ -260,7 +259,7 @@ contract OneWhoIsDelegatedTo {
 
     // This function was hidden away in some distinct file
     function _fetchBTCPriceLatest() private {
-        selfdestruct(payable(oracleContract));
+        selfdestruct(payable(owner));
     }
 
     function fetchBTCPriceLatest() external {
@@ -280,6 +279,8 @@ All contracts who indulge in this `delegatecall` circus, inherit their state var
 Limitations: 
 1. Local variable/function names can overshadow pre-existing storage variable names from the parent contract.
 2. Reduces the composabilty of all contracts inheriting from the main contract. (Composability => Ability to work with other smart contracts)
+
+#### 3.2 Diamond Storage
 
 # Resources Consulted
 
