@@ -34,11 +34,11 @@ Instead of sending the bytecode for the (repeated) contract over and over again 
 
 > Official reading material: [EIP 1167](https://eips.ethereum.org/EIPS/eip-1167).
 
-## Pre-Requisites
+# Pre-Requisites
 
 This section contains all concepts you must be aware of, to gain a comprehensive understanding of different proxy patterns.
 
-### 1. `delegatecall`
+## 1. `delegatecall`
 
 If a contract A calls a function in Contract B via `delegatecall`, then the function from contract B is executed with the context provided by contract A.
 
@@ -93,9 +93,9 @@ Here, when you call the function `changeTokenNameWithFunctionLogicFromContractB`
 
 This is the usecase and power of `delegatecall`.
 
-#### Using `delegatecall` safely
+### Using `delegatecall` safely
 
-##### 1. Do not `delegatecall` to an untrusted contract
+#### 1. Do not `delegatecall` to an untrusted contract
 
 If the contract that you `delegatecall` to, executes `selfdestruct`, then your contract itself gets completely deleted from the blockchain. This is less than ideal in most cases. 
 
@@ -154,7 +154,71 @@ In the above contract, if the contract `OneWhoDelegates` calls `getBTCPriceFromO
 
 So, make sure all your `delegatecalls` are to trusted contracts and be extra careful incase those contracts that you are delegating to, are upgradable.
 
-## Resources Consulted
+#### 2. Use `delegatecall` only on contracts
+
+Since `delegatecall` is a low level call, it will always return `true` if the call(`delegatecall`) is made to a contract/function that does not exist. Therefore, we must always make sure that the address that we are using `delegatecall` on must be contract.
+
+```solidity
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.0;
+
+contract OneWhoDelegates {
+    address public deployerEOA;
+    bool internal _fundsWithdrawable = false;
+
+    constructor() {
+        deployerEOA = msg.sender;
+    }
+
+    function checkIfFundsAreWithdrawable() external returns(bool) {
+        address priceOracleContractAddress = deployerEOA; // This was done due to some misunderstanding
+        (bool success, ) = priceOracleContractAddress.delegatecall(abi.encodeWithSelector(OneWhoIsDelegatedTo.isFundWithdrawable.selector));
+        _fundsWithdrawable = success;
+        return _fundsWithdrawable;
+    }
+
+}
+
+contract OneWhoIsDelegatedTo {
+    function isFundWithdrawable() external view returns(bool) {
+        if(block.timestamp % 5 == 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
+```
+
+In this contract, there is simply no way that `_fundsWithdrawable` can remain `false` if `checkIfFundsAreWithdrawable` even once since it will always return `true` and set `_fundsWithdrawable` to true.
+
+We can always use the following code snippet to check if a given address is indeed a contract with some code.
+
+```solidity
+    function checkIfFundsAreWithdrawable() external returns(bool) {
+        address priceOracleContractAddress = deployerEOA; // This was done due to some misunderstanding
+        if(isContract(priceOracleContractAddress)) {
+            (bool success, ) = priceOracleContractAddress.delegatecall(abi.encodeWithSelector(OneWhoIsDelegatedTo.isFundWithdrawable.selector));
+            _fundsWithdrawable = success;
+            return _fundsWithdrawable;
+        } else {
+            revert("Price Oracle contract address not set correctly");
+        }
+    }
+
+    function isContract(address contractAddress) public view returns(bool) {
+        uint256 contractSize;
+        assembly {
+            contractSize := extcodesize(contractAddress)
+        }
+        return (contractSize > 0);
+    }
+```
+
+#### 3. Managing State Variable Layout
+
+# Resources Consulted
 
 1. [Felix's EVM Expedition: Proxies, Beacons and Diamond Pattern](https://www.youtube.com/watch?v=iXLoSVcVhUg)
 2. [Understanding delegatecall And How to Use It Safely, Nick Mudge](https://eip2535diamonds.substack.com/p/understanding-delegatecall-and-how)
