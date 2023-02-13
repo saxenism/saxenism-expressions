@@ -94,7 +94,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      5 min read
+      7 min read
     
 </span></p>
 
@@ -151,11 +151,11 @@ window.onload = wrap_img;
 <ul>
 <li class="toc-entry toc-h2"><a href="#1-delegatecall">1. delegatecall</a>
 <ul>
-<li class="toc-entry toc-h3"><a href="#using-delegatecall-safely">Using delegatecall safely</a>
+<li class="toc-entry toc-h3"><a href="#1-do-not-delegatecall-to-an-untrusted-contract">1. Do not delegatecall to an untrusted contract</a></li>
+<li class="toc-entry toc-h3"><a href="#2-use-delegatecall-only-on-contracts">2. Use delegatecall only on contracts</a></li>
+<li class="toc-entry toc-h3"><a href="#3-managing-state-variable-layout">3. Managing State Variable Layout</a>
 <ul>
-<li class="toc-entry toc-h4"><a href="#1-do-not-delegatecall-to-an-untrusted-contract">1. Do not delegatecall to an untrusted contract</a></li>
-<li class="toc-entry toc-h4"><a href="#2-use-delegatecall-only-on-contracts">2. Use delegatecall only on contracts</a></li>
-<li class="toc-entry toc-h4"><a href="#3-managing-state-variable-layout">3. Managing State Variable Layout</a></li>
+<li class="toc-entry toc-h4"><a href="#31-inherited-storage">3.1 Inherited Storage</a></li>
 </ul>
 </li>
 </ul>
@@ -260,11 +260,8 @@ window.onload = wrap_img;
 
 <p>This is the usecase and power of <code class="language-plaintext highlighter-rouge">delegatecall</code>.</p>
 
-<h3 id="using-delegatecall-safely">
-<a class="anchor" href="#using-delegatecall-safely" aria-hidden="true"><span class="octicon octicon-link"></span></a>Using <code class="language-plaintext highlighter-rouge">delegatecall</code> safely</h3>
-
-<h4 id="1-do-not-delegatecall-to-an-untrusted-contract">
-<a class="anchor" href="#1-do-not-delegatecall-to-an-untrusted-contract" aria-hidden="true"><span class="octicon octicon-link"></span></a>1. Do not <code class="language-plaintext highlighter-rouge">delegatecall</code> to an untrusted contract</h4>
+<h3 id="1-do-not-delegatecall-to-an-untrusted-contract">
+<a class="anchor" href="#1-do-not-delegatecall-to-an-untrusted-contract" aria-hidden="true"><span class="octicon octicon-link"></span></a>1. Do not <code class="language-plaintext highlighter-rouge">delegatecall</code> to an untrusted contract</h3>
 
 <p>If the contract that you <code class="language-plaintext highlighter-rouge">delegatecall</code> to, executes <code class="language-plaintext highlighter-rouge">selfdestruct</code>, then your contract itself gets completely deleted from the blockchain. This is less than ideal in most cases.</p>
 
@@ -322,8 +319,8 @@ window.onload = wrap_img;
 
 <p>So, make sure all your <code class="language-plaintext highlighter-rouge">delegatecalls</code> are to trusted contracts and be extra careful incase those contracts that you are delegating to, are upgradable.</p>
 
-<h4 id="2-use-delegatecall-only-on-contracts">
-<a class="anchor" href="#2-use-delegatecall-only-on-contracts" aria-hidden="true"><span class="octicon octicon-link"></span></a>2. Use <code class="language-plaintext highlighter-rouge">delegatecall</code> only on contracts</h4>
+<h3 id="2-use-delegatecall-only-on-contracts">
+<a class="anchor" href="#2-use-delegatecall-only-on-contracts" aria-hidden="true"><span class="octicon octicon-link"></span></a>2. Use <code class="language-plaintext highlighter-rouge">delegatecall</code> only on contracts</h3>
 
 <p>Since <code class="language-plaintext highlighter-rouge">delegatecall</code> is a low level call, it will always return <code class="language-plaintext highlighter-rouge">true</code> if the call(<code class="language-plaintext highlighter-rouge">delegatecall</code>) is made to a contract/function that does not exist. Therefore, we must always make sure that the address that we are using <code class="language-plaintext highlighter-rouge">delegatecall</code> on must be contract.</p>
 
@@ -383,8 +380,75 @@ window.onload = wrap_img;
     <span class="p">}</span>
 </code></pre></div></div>
 
-<h4 id="3-managing-state-variable-layout">
-<a class="anchor" href="#3-managing-state-variable-layout" aria-hidden="true"><span class="octicon octicon-link"></span></a>3. Managing State Variable Layout</h4>
+<h3 id="3-managing-state-variable-layout">
+<a class="anchor" href="#3-managing-state-variable-layout" aria-hidden="true"><span class="octicon octicon-link"></span></a>3. Managing State Variable Layout</h3>
+
+<p>Since contractB is called in the context of contractA, therefore both of these contracts must have the same state variable layout, implying, that the same state variables are declared in the same order in both contracts.</p>
+
+<p>For example, consider the following code snippet:</p>
+
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// SPDX-License-Identifier: MIT
+</span>
+<span class="k">pragma</span> <span class="n">solidity</span> <span class="o">^</span><span class="mf">0.8</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="k">contract</span> <span class="n">OneWhoDelegates</span> <span class="p">{</span>
+
+    <span class="kt">address</span> <span class="k">public</span> <span class="n">oneWhoIsDelegatedTo</span><span class="p">;</span>
+
+    <span class="k">constructor</span><span class="p">(</span><span class="kt">address</span> <span class="n">_attacker</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">oneWhoIsDelegatedTo</span> <span class="o">=</span> <span class="n">_attacker</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">function</span> <span class="n">getBTCPriceFromOracle</span><span class="p">()</span> <span class="k">external</span> <span class="k">returns</span><span class="p">(</span><span class="kt">bytes</span> <span class="k">memory</span><span class="p">)</span> <span class="p">{</span>
+        <span class="p">(</span><span class="kt">bool</span> <span class="n">success</span><span class="p">,</span> <span class="kt">bytes</span> <span class="k">memory</span> <span class="n">returnData</span><span class="p">)</span> <span class="o">=</span> <span class="n">oneWhoIsDelegatedTo</span><span class="p">.</span><span class="nb">delegatecall</span><span class="p">(</span>
+            <span class="n">abi</span><span class="p">.</span><span class="n">encodeWithSelector</span><span class="p">(</span><span class="n">OneWhoIsDelegatedTo</span><span class="p">.</span><span class="n">fetchBTCPriceLatest</span><span class="p">.</span><span class="nb">selector</span><span class="p">)</span>
+        <span class="p">);</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="n">success</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">returnData</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="kt">bytes</span><span class="p">(</span><span class="s">""</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">function</span> <span class="n">giveMeSomeEther</span><span class="p">()</span> <span class="k">external</span> <span class="k">payable</span> <span class="p">{}</span> <span class="c1">// This function is used to make 
+</span>                        <span class="c1">// sure that this contract has some Ether in the first place
+</span><span class="p">}</span>
+
+<span class="k">contract</span> <span class="n">OneWhoIsDelegatedTo</span> <span class="p">{</span>
+
+    <span class="kt">address</span> <span class="k">public</span> <span class="n">oracleContract</span><span class="p">;</span>
+    <span class="kt">address</span> <span class="k">public</span> <span class="n">owner</span><span class="p">;</span>
+
+    <span class="k">constructor</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">owner</span> <span class="o">=</span> <span class="n">msg</span><span class="p">.</span><span class="n">sender</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// This function was hidden away in some distinct file
+</span>    <span class="k">function</span> <span class="n">_fetchBTCPriceLatest</span><span class="p">()</span> <span class="k">private</span> <span class="p">{</span>
+        <span class="nb">selfdestruct</span><span class="p">(</span><span class="k">payable</span><span class="p">(</span><span class="n">oracleContract</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="k">function</span> <span class="n">fetchBTCPriceLatest</span><span class="p">()</span> <span class="k">external</span> <span class="p">{</span>
+        <span class="n">_fetchBTCPriceLatest</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Here in this code snippet, once <code class="language-plaintext highlighter-rouge">selfdestruct</code> is called via <code class="language-plaintext highlighter-rouge">fetchBTCPriceLatest()</code>, the stored ether in contract <code class="language-plaintext highlighter-rouge">OneWhoDelegates</code> should have gone to the address <code class="language-plaintext highlighter-rouge">_owner</code> as mentioned in the parameter of <code class="language-plaintext highlighter-rouge">selfdestruct</code>. However, if you run this code, you will notice that the Ether from contract <code class="language-plaintext highlighter-rouge">OneWhoDelegates</code> is transferred to the contract <code class="language-plaintext highlighter-rouge">OneWhoIsDelegatedTo</code>. This is because, at the place the <code class="language-plaintext highlighter-rouge">_owner</code> address is declared in contract <code class="language-plaintext highlighter-rouge">OneWhoIsDelegatedTo</code>, in the contract <code class="language-plaintext highlighter-rouge">OneWhoDelegates</code> at the same place the contract address of <code class="language-plaintext highlighter-rouge">OneWhoIsDelegatedTo</code> is stored and since <code class="language-plaintext highlighter-rouge">deleagatecall</code> ran <code class="language-plaintext highlighter-rouge">selfdestruct</code> in the context of <code class="language-plaintext highlighter-rouge">OneWhoDelegates</code>, the Ether was transferred to the address <code class="language-plaintext highlighter-rouge">oneWhoIsDelegatedTo</code> instead of address <code class="language-plaintext highlighter-rouge">_owner</code>.</p>
+
+<p>Now, let’s see a few ways in which we manage the <strong>State Variable Layout</strong> :</p>
+
+<h4 id="31-inherited-storage">
+<a class="anchor" href="#31-inherited-storage" aria-hidden="true"><span class="octicon octicon-link"></span></a>3.1 Inherited Storage</h4>
+
+<p>All contracts who indulge in this <code class="language-plaintext highlighter-rouge">delegatecall</code> circus, inherit their state variables from a central <code class="language-plaintext highlighter-rouge">storage</code> contract which declares all the state variables used in all the contracts.</p>
+
+<p>Limitations:</p>
+<ol>
+  <li>Local variable/function names can overshadow pre-existing storage variable names from the parent contract.</li>
+  <li>Reduces the composabilty of all contracts inheriting from the main contract. (Composability =&gt; Ability to work with other smart contracts)</li>
+</ol>
 
 <h1 id="resources-consulted">
 <a class="anchor" href="#resources-consulted" aria-hidden="true"><span class="octicon octicon-link"></span></a>Resources Consulted</h1>
