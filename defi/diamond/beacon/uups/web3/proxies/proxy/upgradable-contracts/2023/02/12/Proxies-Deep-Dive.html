@@ -94,7 +94,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      1 min read
+      4 min read
     
 </span></p>
 
@@ -147,7 +147,15 @@ window.onload = wrap_img;
 </li>
 <li class="toc-entry toc-h2"><a href="#pre-requisites">Pre-Requisites</a>
 <ul>
-<li class="toc-entry toc-h3"><a href="#1-delegatecall">1. delegatecall</a></li>
+<li class="toc-entry toc-h3"><a href="#1-delegatecall">1. delegatecall</a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#using-delegatecall-safely">Using delegatecall safely</a>
+<ul>
+<li class="toc-entry toc-h5"><a href="#1-do-not-delegatecall-to-an-untrusted-contract">1. Do not delegatecall to an untrusted contract</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toc-entry toc-h2"><a href="#resources-consulted">Resources Consulted</a></li>
@@ -198,11 +206,126 @@ window.onload = wrap_img;
 <a class="anchor" href="#1-delegatecall" aria-hidden="true"><span class="octicon octicon-link"></span></a>1. <code class="language-plaintext highlighter-rouge">delegatecall</code>
 </h3>
 
+<p>If a contract A calls a function in Contract B via <code class="language-plaintext highlighter-rouge">delegatecall</code>, then the function from contract B is executed with the context provided by contract A.</p>
+
+<p>That means, only the function logic is borrowed from contract B, other things such as <code class="language-plaintext highlighter-rouge">address(this)</code>, <code class="language-plaintext highlighter-rouge">msg.sender</code> and <code class="language-plaintext highlighter-rouge">msg.value</code> do not change.</p>
+
+<p>No change in the state variables of contract B is noticed. For example, let’s consider the following code snippet.</p>
+
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">contract</span> <span class="n">A</span> <span class="p">{</span>
+
+    <span class="kt">string</span> <span class="k">internal</span> <span class="n">tokenName</span> <span class="o">=</span> <span class="s">"FunToken"</span><span class="p">;</span>
+
+    <span class="k">function</span> <span class="n">changeTokenNameWithFunctionLogicFromContractB</span><span class="p">()</span> <span class="k">external</span> <span class="p">{</span>
+        <span class="kt">address</span> <span class="n">contractBAddress</span> <span class="o">=</span> <span class="mh">0xb27A31f1b0AF2946B7F582768f03239b1eC07c2c</span><span class="p">;</span> <span class="c1">// Assume this is the address of the deployed contract B.
+</span>        <span class="p">(</span><span class="kt">bool</span> <span class="n">success</span><span class="p">,</span> <span class="kt">bytes</span> <span class="k">memory</span> <span class="n">returnData</span><span class="p">)</span> <span class="o">=</span> <span class="n">contractBAddress</span><span class="p">.</span><span class="nb">delegatecall</span><span class="p">(</span><span class="n">abi</span><span class="p">.</span><span class="n">encodeWithSelector</span><span class="p">(</span><span class="n">contractB</span><span class="p">.</span><span class="n">setTokenName</span><span class="p">.</span><span class="nb">selector</span><span class="p">,</span> <span class="s">"BoringToken"</span><span class="p">));</span>
+
+        <span class="c1">// This is one big logic block to get the reason of revert of the `delegatecall` since, the reason is not returned by default.
+</span>        <span class="k">if</span><span class="p">(</span><span class="n">success</span> <span class="o">==</span> <span class="nb">false</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">returnData</span><span class="p">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">assembly</span> <span class="p">{</span>
+                    <span class="kr">let</span> <span class="n">returndata_size</span> <span class="o">:=</span> <span class="n">mload</span><span class="p">(</span><span class="n">returndata</span><span class="p">)</span>
+                    <span class="nb">revert</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="n">returndata</span><span class="p">),</span> <span class="n">returndata_size</span><span class="p">)</span>
+                <span class="p">}</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="nb">revert</span><span class="p">(</span><span class="s">"delegatecall reverted"</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">function</span> <span class="n">getContractATokenName</span><span class="p">()</span> <span class="k">external</span> <span class="k">view</span> <span class="k">returns</span><span class="p">(</span><span class="kt">string</span> <span class="k">memory</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">tokenName</span><span class="p">;</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+
+<span class="k">contract</span> <span class="n">B</span> <span class="p">{</span>
+    <span class="kt">string</span> <span class="k">internal</span> <span class="n">tokenName</span> <span class="o">=</span> <span class="s">"TokenB"</span><span class="p">;</span>
+
+    <span class="k">function</span> <span class="n">setTokenName</span><span class="p">(</span><span class="kt">string</span> <span class="k">calldata</span> <span class="n">_newName</span><span class="p">)</span> <span class="k">external</span> <span class="p">{</span>
+        <span class="n">tokenName</span> <span class="o">=</span> <span class="n">_newName</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">function</span> <span class="n">getContractBTokenName</span><span class="p">()</span> <span class="k">external</span> <span class="k">view</span> <span class="k">returns</span><span class="p">(</span><span class="kt">string</span> <span class="k">memory</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">tokenName</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<p>Here, when you call the function <code class="language-plaintext highlighter-rouge">changeTokenNameWithFunctionLogicFromContractB</code>, the value of the <code class="language-plaintext highlighter-rouge">tokenName</code> variable in contract A changes to <code class="language-plaintext highlighter-rouge">BoringToken</code> while the <code class="language-plaintext highlighter-rouge">tokenName</code> variable of contract B remains <code class="language-plaintext highlighter-rouge">TokenB</code>.</p>
+
+<p>This is the usecase and power of <code class="language-plaintext highlighter-rouge">delegatecall</code>.</p>
+
+<h4 id="using-delegatecall-safely">
+<a class="anchor" href="#using-delegatecall-safely" aria-hidden="true"><span class="octicon octicon-link"></span></a>Using <code class="language-plaintext highlighter-rouge">delegatecall</code> safely</h4>
+
+<h5 id="1-do-not-delegatecall-to-an-untrusted-contract">
+<a class="anchor" href="#1-do-not-delegatecall-to-an-untrusted-contract" aria-hidden="true"><span class="octicon octicon-link"></span></a>1. Do not <code class="language-plaintext highlighter-rouge">delegatecall</code> to an untrusted contract</h5>
+
+<p>If the contract that you <code class="language-plaintext highlighter-rouge">delegatecall</code> to, executes <code class="language-plaintext highlighter-rouge">selfdestruct</code>, then your contract itself gets completely deleted from the blockchain. This is less than ideal in most cases.</p>
+
+<p>Here’s an example:</p>
+
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// SPDX-License-Identifier: MIT
+</span>
+<span class="k">pragma</span> <span class="n">solidity</span> <span class="o">^</span><span class="mf">0.8</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="k">contract</span> <span class="n">OneWhoDelegates</span> <span class="p">{</span>
+
+    <span class="kt">address</span> <span class="k">public</span> <span class="n">oneWhoIsDelegatedTo</span><span class="p">;</span>
+
+    <span class="k">constructor</span><span class="p">(</span><span class="kt">address</span> <span class="n">_attacker</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">oneWhoIsDelegatedTo</span> <span class="o">=</span> <span class="n">_attacker</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">function</span> <span class="n">getBTCPriceFromOracle</span><span class="p">()</span> <span class="k">external</span> <span class="k">returns</span><span class="p">(</span><span class="kt">bytes</span> <span class="k">memory</span><span class="p">)</span> <span class="p">{</span>
+        <span class="p">(</span><span class="kt">bool</span> <span class="n">success</span><span class="p">,</span> <span class="kt">bytes</span> <span class="k">memory</span> <span class="n">returnData</span><span class="p">)</span> <span class="o">=</span> <span class="n">oneWhoIsDelegatedTo</span><span class="p">.</span><span class="nb">delegatecall</span><span class="p">(</span>
+            <span class="n">abi</span><span class="p">.</span><span class="n">encodeWithSelector</span><span class="p">(</span><span class="n">OneWhoIsDelegatedTo</span><span class="p">.</span><span class="n">fetchBTCPriceLatest</span><span class="p">.</span><span class="nb">selector</span><span class="p">)</span>
+        <span class="p">);</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="n">success</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">returnData</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="kt">bytes</span><span class="p">(</span><span class="s">""</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">function</span> <span class="n">giveMeSomeEther</span><span class="p">()</span> <span class="k">external</span> <span class="k">payable</span> <span class="p">{}</span> <span class="c1">// This function is used to make 
+</span>                        <span class="c1">// sure that this contract has some Ether in the first place
+</span><span class="p">}</span>
+
+<span class="k">contract</span> <span class="n">OneWhoIsDelegatedTo</span> <span class="p">{</span>
+
+    <span class="kt">address</span> <span class="k">public</span> <span class="n">oracleContract</span><span class="p">;</span>
+    <span class="kt">address</span> <span class="k">public</span> <span class="n">owner</span><span class="p">;</span>
+
+    <span class="k">constructor</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">owner</span> <span class="o">=</span> <span class="n">msg</span><span class="p">.</span><span class="n">sender</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// This function was hidden away in some distinct file
+</span>    <span class="k">function</span> <span class="n">_fetchBTCPriceLatest</span><span class="p">()</span> <span class="k">private</span> <span class="p">{</span>
+        <span class="nb">selfdestruct</span><span class="p">(</span><span class="k">payable</span><span class="p">(</span><span class="n">oracleContract</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="k">function</span> <span class="n">fetchBTCPriceLatest</span><span class="p">()</span> <span class="k">external</span> <span class="p">{</span>
+        <span class="n">_fetchBTCPriceLatest</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>In the above contract, if the contract <code class="language-plaintext highlighter-rouge">OneWhoDelegates</code> calls <code class="language-plaintext highlighter-rouge">getBTCPriceFromOracle</code>, then the contract <code class="language-plaintext highlighter-rouge">OneWhoDelegates</code> would be deleted from the blockchain and the ether inside of that contract would be transferred to the contract <code class="language-plaintext highlighter-rouge">OneWhoIsDelegatedTo</code>.</p>
+
+<p>So, make sure all your <code class="language-plaintext highlighter-rouge">delegatecalls</code> are to trusted contracts and be extra careful incase those contracts that you are delegating to, are upgradable.</p>
+
 <h2 id="resources-consulted">
 <a class="anchor" href="#resources-consulted" aria-hidden="true"><span class="octicon octicon-link"></span></a>Resources Consulted</h2>
 
 <ol>
   <li><a href="https://www.youtube.com/watch?v=iXLoSVcVhUg">Felix’s EVM Expedition: Proxies, Beacons and Diamond Pattern</a></li>
+  <li><a href="https://eip2535diamonds.substack.com/p/understanding-delegatecall-and-how">Understanding delegatecall And How to Use It Safely, Nick Mudge</a></li>
 </ol>
 
   </div><!-- from https://github.com/utterance/utterances -->
