@@ -94,7 +94,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      7 min read
+      8 min read
     
 </span></p>
 
@@ -452,6 +452,94 @@ window.onload = wrap_img;
 
 <h4 id="32-diamond-storage">
 <a class="anchor" href="#32-diamond-storage" aria-hidden="true"><span class="octicon octicon-link"></span></a>3.2 Diamond Storage</h4>
+
+<p>If we stop relying on Solidity’s default storage memory allocation, then there is no need to have the same storage layout structure. We can specify where to start storing data in the address space. For different contracts we can specify different locations to start storing data, therefore preventing different contracts with different state variables from clashing storage locations. This is what Diamond Storage does.</p>
+
+<p>Let’s understand this <code class="language-plaintext highlighter-rouge">diamond storage</code> concept with an example:</p>
+
+<p><strong>THIS EXAMPLE NEEDS MORE WORK. DO NOT FOLLOW THIS RIGHT NOW</strong></p>
+
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// SPDX-License-Identifier: MIT
+</span>
+<span class="k">pragma</span> <span class="n">solidity</span> <span class="o">^</span><span class="mf">0.8</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="k">library</span> <span class="n">DiamondStorage</span> <span class="p">{</span>
+  <span class="kt">bytes32</span> <span class="k">constant</span> <span class="n">ONE_WHO_DELEGATES_STRUCT_POSITION</span> <span class="o">=</span> 
+    <span class="nb">keccak256</span><span class="p">(</span><span class="s">"saxenism.delegatecall_diamond_storage_article.one_who_delegates_struct"</span><span class="p">);</span>
+
+  <span class="kt">bytes32</span> <span class="k">constant</span> <span class="n">ONE_WHO_IS_DELEGATED_TO_STRUCT_POSITION</span> <span class="o">=</span> 
+    <span class="nb">keccak256</span><span class="p">(</span><span class="s">"saxenism.delegatecall_diamond_storage_article.one_who_is_delegated_to_struct"</span><span class="p">);</span>
+
+  <span class="k">struct</span> <span class="n">OneWhoDelegatesStruct</span> <span class="p">{</span>
+      <span class="kt">address</span> <span class="n">oneWhoIsDelegatedTo</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">struct</span> <span class="n">OneWhoIsDelegatedToStruct</span> <span class="p">{</span>
+      <span class="kt">address</span> <span class="n">owner</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">function</span> <span class="n">oneWhoDelegatesStructStorage</span><span class="p">()</span>
+    <span class="k">internal</span> 
+    <span class="k">pure</span> 
+    <span class="k">returns</span> <span class="p">(</span><span class="n">OneWhoDelegatesStruct</span> <span class="k">storage</span> <span class="n">oneWhoDelegatesStruct</span><span class="p">)</span> 
+  <span class="p">{</span>
+    <span class="kt">bytes32</span> <span class="n">position</span> <span class="o">=</span> <span class="n">ONE_WHO_DELEGATES_STRUCT_POSITION</span><span class="p">;</span>
+    <span class="k">assembly</span> <span class="p">{</span>
+      <span class="n">oneWhoDelegatesStruct</span><span class="p">.</span><span class="n">slot</span> <span class="o">:=</span> <span class="n">position</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+    <span class="k">function</span> <span class="n">oneWhoIsDelegatedToStructStorage</span><span class="p">()</span> <span class="k">internal</span> <span class="k">pure</span> <span class="k">returns</span><span class="p">(</span><span class="n">OneWhoIsDelegatedToStruct</span> <span class="k">storage</span> <span class="n">oneWhoIsDelegatedToStruct</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">bytes32</span> <span class="n">position</span> <span class="o">=</span> <span class="n">ONE_WHO_IS_DELEGATED_TO_STRUCT_POSITION</span><span class="p">;</span>
+        <span class="k">assembly</span> <span class="p">{</span>
+            <span class="n">oneWhoIsDelegatedToStruct</span><span class="p">.</span><span class="n">slot</span> <span class="o">:=</span> <span class="n">position</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+
+<span class="k">contract</span> <span class="n">OneWhoDelegates</span> <span class="p">{</span>
+
+    <span class="kt">address</span> <span class="k">public</span> <span class="n">oneWhoIsDelegatedTo</span><span class="p">;</span>
+
+    <span class="k">constructor</span><span class="p">(</span><span class="kt">address</span> <span class="n">_attacker</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">oneWhoIsDelegatedTo</span> <span class="o">=</span> <span class="n">_attacker</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">function</span> <span class="n">getBTCPriceFromOracle</span><span class="p">()</span> <span class="k">external</span> <span class="k">returns</span><span class="p">(</span><span class="kt">bytes</span> <span class="k">memory</span><span class="p">)</span> <span class="p">{</span>
+        <span class="p">(</span><span class="kt">bool</span> <span class="n">success</span><span class="p">,</span> <span class="kt">bytes</span> <span class="k">memory</span> <span class="n">returnData</span><span class="p">)</span> <span class="o">=</span> <span class="n">oneWhoIsDelegatedTo</span><span class="p">.</span><span class="nb">delegatecall</span><span class="p">(</span>
+            <span class="n">abi</span><span class="p">.</span><span class="n">encodeWithSelector</span><span class="p">(</span><span class="n">OneWhoIsDelegatedTo</span><span class="p">.</span><span class="n">fetchBTCPriceLatest</span><span class="p">.</span><span class="nb">selector</span><span class="p">)</span>
+        <span class="p">);</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="n">success</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">returnData</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="kt">bytes</span><span class="p">(</span><span class="s">""</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">function</span> <span class="n">giveMeSomeEther</span><span class="p">()</span> <span class="k">external</span> <span class="k">payable</span> <span class="p">{}</span> <span class="c1">// This function is used to make 
+</span>                        <span class="c1">// sure that this contract has some Ether in the first place
+</span><span class="p">}</span>
+
+<span class="k">contract</span> <span class="n">OneWhoIsDelegatedTo</span> <span class="p">{</span>
+
+    <span class="n">DiamondStorage</span><span class="p">.</span><span class="n">OneWhoIsDelegatedToStruct</span> <span class="n">delegateeStruct</span> <span class="o">=</span> <span class="n">DiamondStorage</span><span class="p">.</span><span class="n">oneWhoIsDelegatedToStructStorage</span><span class="p">();</span>
+
+    <span class="k">constructor</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">delegateeStruct</span><span class="p">.</span><span class="n">owner</span> <span class="o">=</span> <span class="n">msg</span><span class="p">.</span><span class="n">sender</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// This function was hidden away in some distinct file
+</span>    <span class="k">function</span> <span class="n">_fetchBTCPriceLatest</span><span class="p">()</span> <span class="k">private</span> <span class="p">{</span>
+        <span class="nb">selfdestruct</span><span class="p">(</span><span class="k">payable</span><span class="p">(</span><span class="n">delegateeStruct</span><span class="p">.</span><span class="n">owner</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="k">function</span> <span class="n">fetchBTCPriceLatest</span><span class="p">()</span> <span class="k">external</span> <span class="p">{</span>
+        <span class="n">_fetchBTCPriceLatest</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
 
 <h1 id="resources-consulted">
 <a class="anchor" href="#resources-consulted" aria-hidden="true"><span class="octicon octicon-link"></span></a>Resources Consulted</h1>
