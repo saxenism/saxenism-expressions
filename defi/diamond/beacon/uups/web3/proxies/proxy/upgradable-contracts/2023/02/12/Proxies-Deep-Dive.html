@@ -94,7 +94,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      4 min read
+      5 min read
     
 </span></p>
 
@@ -145,22 +145,24 @@ window.onload = wrap_img;
 </li>
 </ul>
 </li>
-<li class="toc-entry toc-h2"><a href="#pre-requisites">Pre-Requisites</a>
+</ul>
+</li>
+<li class="toc-entry toc-h1"><a href="#pre-requisites">Pre-Requisites</a>
 <ul>
-<li class="toc-entry toc-h3"><a href="#1-delegatecall">1. delegatecall</a>
+<li class="toc-entry toc-h2"><a href="#1-delegatecall">1. delegatecall</a>
 <ul>
-<li class="toc-entry toc-h4"><a href="#using-delegatecall-safely">Using delegatecall safely</a>
+<li class="toc-entry toc-h3"><a href="#using-delegatecall-safely">Using delegatecall safely</a>
 <ul>
-<li class="toc-entry toc-h5"><a href="#1-do-not-delegatecall-to-an-untrusted-contract">1. Do not delegatecall to an untrusted contract</a></li>
+<li class="toc-entry toc-h4"><a href="#1-do-not-delegatecall-to-an-untrusted-contract">1. Do not delegatecall to an untrusted contract</a></li>
+<li class="toc-entry toc-h4"><a href="#2-use-delegatecall-only-on-contracts">2. Use delegatecall only on contracts</a></li>
+<li class="toc-entry toc-h4"><a href="#3-managing-state-variable-layout">3. Managing State Variable Layout</a></li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toc-entry toc-h2"><a href="#resources-consulted">Resources Consulted</a></li>
-</ul>
-</li>
+<li class="toc-entry toc-h1"><a href="#resources-consulted">Resources Consulted</a></li>
 </ul><h1 id="introduction">
 <a class="anchor" href="#introduction" aria-hidden="true"><span class="octicon octicon-link"></span></a>Introduction</h1>
 
@@ -197,14 +199,14 @@ window.onload = wrap_img;
   <p>Official reading material: <a href="https://eips.ethereum.org/EIPS/eip-1167">EIP 1167</a>.</p>
 </blockquote>
 
-<h2 id="pre-requisites">
-<a class="anchor" href="#pre-requisites" aria-hidden="true"><span class="octicon octicon-link"></span></a>Pre-Requisites</h2>
+<h1 id="pre-requisites">
+<a class="anchor" href="#pre-requisites" aria-hidden="true"><span class="octicon octicon-link"></span></a>Pre-Requisites</h1>
 
 <p>This section contains all concepts you must be aware of, to gain a comprehensive understanding of different proxy patterns.</p>
 
-<h3 id="1-delegatecall">
+<h2 id="1-delegatecall">
 <a class="anchor" href="#1-delegatecall" aria-hidden="true"><span class="octicon octicon-link"></span></a>1. <code class="language-plaintext highlighter-rouge">delegatecall</code>
-</h3>
+</h2>
 
 <p>If a contract A calls a function in Contract B via <code class="language-plaintext highlighter-rouge">delegatecall</code>, then the function from contract B is executed with the context provided by contract A.</p>
 
@@ -258,11 +260,11 @@ window.onload = wrap_img;
 
 <p>This is the usecase and power of <code class="language-plaintext highlighter-rouge">delegatecall</code>.</p>
 
-<h4 id="using-delegatecall-safely">
-<a class="anchor" href="#using-delegatecall-safely" aria-hidden="true"><span class="octicon octicon-link"></span></a>Using <code class="language-plaintext highlighter-rouge">delegatecall</code> safely</h4>
+<h3 id="using-delegatecall-safely">
+<a class="anchor" href="#using-delegatecall-safely" aria-hidden="true"><span class="octicon octicon-link"></span></a>Using <code class="language-plaintext highlighter-rouge">delegatecall</code> safely</h3>
 
-<h5 id="1-do-not-delegatecall-to-an-untrusted-contract">
-<a class="anchor" href="#1-do-not-delegatecall-to-an-untrusted-contract" aria-hidden="true"><span class="octicon octicon-link"></span></a>1. Do not <code class="language-plaintext highlighter-rouge">delegatecall</code> to an untrusted contract</h5>
+<h4 id="1-do-not-delegatecall-to-an-untrusted-contract">
+<a class="anchor" href="#1-do-not-delegatecall-to-an-untrusted-contract" aria-hidden="true"><span class="octicon octicon-link"></span></a>1. Do not <code class="language-plaintext highlighter-rouge">delegatecall</code> to an untrusted contract</h4>
 
 <p>If the contract that you <code class="language-plaintext highlighter-rouge">delegatecall</code> to, executes <code class="language-plaintext highlighter-rouge">selfdestruct</code>, then your contract itself gets completely deleted from the blockchain. This is less than ideal in most cases.</p>
 
@@ -320,8 +322,72 @@ window.onload = wrap_img;
 
 <p>So, make sure all your <code class="language-plaintext highlighter-rouge">delegatecalls</code> are to trusted contracts and be extra careful incase those contracts that you are delegating to, are upgradable.</p>
 
-<h2 id="resources-consulted">
-<a class="anchor" href="#resources-consulted" aria-hidden="true"><span class="octicon octicon-link"></span></a>Resources Consulted</h2>
+<h4 id="2-use-delegatecall-only-on-contracts">
+<a class="anchor" href="#2-use-delegatecall-only-on-contracts" aria-hidden="true"><span class="octicon octicon-link"></span></a>2. Use <code class="language-plaintext highlighter-rouge">delegatecall</code> only on contracts</h4>
+
+<p>Since <code class="language-plaintext highlighter-rouge">delegatecall</code> is a low level call, it will always return <code class="language-plaintext highlighter-rouge">true</code> if the call(<code class="language-plaintext highlighter-rouge">delegatecall</code>) is made to a contract/function that does not exist. Therefore, we must always make sure that the address that we are using <code class="language-plaintext highlighter-rouge">delegatecall</code> on must be contract.</p>
+
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// SPDX-License-Identifier: MIT
+</span>
+<span class="k">pragma</span> <span class="n">solidity</span> <span class="o">^</span><span class="mf">0.8</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="k">contract</span> <span class="n">OneWhoDelegates</span> <span class="p">{</span>
+    <span class="kt">address</span> <span class="k">public</span> <span class="n">deployerEOA</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="k">internal</span> <span class="n">_fundsWithdrawable</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+
+    <span class="k">constructor</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">deployerEOA</span> <span class="o">=</span> <span class="n">msg</span><span class="p">.</span><span class="n">sender</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">function</span> <span class="n">checkIfFundsAreWithdrawable</span><span class="p">()</span> <span class="k">external</span> <span class="k">returns</span><span class="p">(</span><span class="kt">bool</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">address</span> <span class="n">priceOracleContractAddress</span> <span class="o">=</span> <span class="n">deployerEOA</span><span class="p">;</span> <span class="c1">// This was done due to some misunderstanding
+</span>        <span class="p">(</span><span class="kt">bool</span> <span class="n">success</span><span class="p">,</span> <span class="p">)</span> <span class="o">=</span> <span class="n">priceOracleContractAddress</span><span class="p">.</span><span class="nb">delegatecall</span><span class="p">(</span><span class="n">abi</span><span class="p">.</span><span class="n">encodeWithSelector</span><span class="p">(</span><span class="n">OneWhoIsDelegatedTo</span><span class="p">.</span><span class="n">isFundWithdrawable</span><span class="p">.</span><span class="nb">selector</span><span class="p">));</span>
+        <span class="n">_fundsWithdrawable</span> <span class="o">=</span> <span class="n">success</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">_fundsWithdrawable</span><span class="p">;</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+
+<span class="k">contract</span> <span class="n">OneWhoIsDelegatedTo</span> <span class="p">{</span>
+    <span class="k">function</span> <span class="n">isFundWithdrawable</span><span class="p">()</span> <span class="k">external</span> <span class="k">view</span> <span class="k">returns</span><span class="p">(</span><span class="kt">bool</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">block</span><span class="p">.</span><span class="n">timestamp</span> <span class="o">%</span> <span class="mi">5</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>In this contract, there is simply no way that <code class="language-plaintext highlighter-rouge">_fundsWithdrawable</code> can remain <code class="language-plaintext highlighter-rouge">false</code> if <code class="language-plaintext highlighter-rouge">checkIfFundsAreWithdrawable</code> even once since it will always return <code class="language-plaintext highlighter-rouge">true</code> and set <code class="language-plaintext highlighter-rouge">_fundsWithdrawable</code> to true.</p>
+
+<p>We can always use the following code snippet to check if a given address is indeed a contract with some code.</p>
+
+<div class="language-solidity highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">function</span> <span class="n">checkIfFundsAreWithdrawable</span><span class="p">()</span> <span class="k">external</span> <span class="k">returns</span><span class="p">(</span><span class="kt">bool</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">address</span> <span class="n">priceOracleContractAddress</span> <span class="o">=</span> <span class="n">deployerEOA</span><span class="p">;</span> <span class="c1">// This was done due to some misunderstanding
+</span>        <span class="k">if</span><span class="p">(</span><span class="n">isContract</span><span class="p">(</span><span class="n">priceOracleContractAddress</span><span class="p">))</span> <span class="p">{</span>
+            <span class="p">(</span><span class="kt">bool</span> <span class="n">success</span><span class="p">,</span> <span class="p">)</span> <span class="o">=</span> <span class="n">priceOracleContractAddress</span><span class="p">.</span><span class="nb">delegatecall</span><span class="p">(</span><span class="n">abi</span><span class="p">.</span><span class="n">encodeWithSelector</span><span class="p">(</span><span class="n">OneWhoIsDelegatedTo</span><span class="p">.</span><span class="n">isFundWithdrawable</span><span class="p">.</span><span class="nb">selector</span><span class="p">));</span>
+            <span class="n">_fundsWithdrawable</span> <span class="o">=</span> <span class="n">success</span><span class="p">;</span>
+            <span class="k">return</span> <span class="n">_fundsWithdrawable</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nb">revert</span><span class="p">(</span><span class="s">"Price Oracle contract address not set correctly"</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">function</span> <span class="n">isContract</span><span class="p">(</span><span class="kt">address</span> <span class="n">contractAddress</span><span class="p">)</span> <span class="k">public</span> <span class="k">view</span> <span class="k">returns</span><span class="p">(</span><span class="kt">bool</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">uint256</span> <span class="n">contractSize</span><span class="p">;</span>
+        <span class="k">assembly</span> <span class="p">{</span>
+            <span class="n">contractSize</span> <span class="o">:=</span> <span class="n">extcodesize</span><span class="p">(</span><span class="n">contractAddress</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">contractSize</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="3-managing-state-variable-layout">
+<a class="anchor" href="#3-managing-state-variable-layout" aria-hidden="true"><span class="octicon octicon-link"></span></a>3. Managing State Variable Layout</h4>
+
+<h1 id="resources-consulted">
+<a class="anchor" href="#resources-consulted" aria-hidden="true"><span class="octicon octicon-link"></span></a>Resources Consulted</h1>
 
 <ol>
   <li><a href="https://www.youtube.com/watch?v=iXLoSVcVhUg">Felix’s EVM Expedition: Proxies, Beacons and Diamond Pattern</a></li>
