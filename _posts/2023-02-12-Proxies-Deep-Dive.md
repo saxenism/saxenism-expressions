@@ -3,7 +3,7 @@ toc: true
 layout: post
 description: The only resource you will ever need for all your proxy related queries.
 categories: [defi, diamond, beacon, UUPS, web3, proxies, proxy, upgradable-contracts]
-title: A Deep Dive on Solidity Smart Contract Proxies
+title: Smart Contract Proxies - A Deep Dive
 ---
 
 # Introduction
@@ -284,4 +284,4 @@ Limitations:
 # Resources Consulted
 
 1. [Felix's EVM Expedition: Proxies, Beacons and Diamond Pattern](https://www.youtube.com/watch?v=iXLoSVcVhUg)
-2. [Understanding delegatecall And How to Use It Safely, Nick Mudge](https://eip2535diamonds.substack.com/p/understanding-delegatecall-and-how)
+2. [Nick Mudge's Substack: Understanding delegatecall And How to Use It Safely](https://eip2535diamonds.substack.com/p/understanding-delegatecall-and-how)
