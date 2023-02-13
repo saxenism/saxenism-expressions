@@ -156,6 +156,7 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h3"><a href="#3-managing-state-variable-layout">3. Managing State Variable Layout</a>
 <ul>
 <li class="toc-entry toc-h4"><a href="#31-inherited-storage">3.1 Inherited Storage</a></li>
+<li class="toc-entry toc-h4"><a href="#32-diamond-storage">3.2 Diamond Storage</a></li>
 </ul>
 </li>
 </ul>
@@ -417,7 +418,6 @@ window.onload = wrap_img;
 
 <span class="k">contract</span> <span class="n">OneWhoIsDelegatedTo</span> <span class="p">{</span>
 
-    <span class="kt">address</span> <span class="k">public</span> <span class="n">oracleContract</span><span class="p">;</span>
     <span class="kt">address</span> <span class="k">public</span> <span class="n">owner</span><span class="p">;</span>
 
     <span class="k">constructor</span><span class="p">()</span> <span class="p">{</span>
@@ -426,7 +426,7 @@ window.onload = wrap_img;
 
     <span class="c1">// This function was hidden away in some distinct file
 </span>    <span class="k">function</span> <span class="n">_fetchBTCPriceLatest</span><span class="p">()</span> <span class="k">private</span> <span class="p">{</span>
-        <span class="nb">selfdestruct</span><span class="p">(</span><span class="k">payable</span><span class="p">(</span><span class="n">oracleContract</span><span class="p">));</span>
+        <span class="nb">selfdestruct</span><span class="p">(</span><span class="k">payable</span><span class="p">(</span><span class="n">owner</span><span class="p">));</span>
     <span class="p">}</span>
 
     <span class="k">function</span> <span class="n">fetchBTCPriceLatest</span><span class="p">()</span> <span class="k">external</span> <span class="p">{</span>
@@ -449,6 +449,9 @@ window.onload = wrap_img;
   <li>Local variable/function names can overshadow pre-existing storage variable names from the parent contract.</li>
   <li>Reduces the composabilty of all contracts inheriting from the main contract. (Composability =&gt; Ability to work with other smart contracts)</li>
 </ol>
+
+<h4 id="32-diamond-storage">
+<a class="anchor" href="#32-diamond-storage" aria-hidden="true"><span class="octicon octicon-link"></span></a>3.2 Diamond Storage</h4>
 
 <h1 id="resources-consulted">
 <a class="anchor" href="#resources-consulted" aria-hidden="true"><span class="octicon octicon-link"></span></a>Resources Consulted</h1>
