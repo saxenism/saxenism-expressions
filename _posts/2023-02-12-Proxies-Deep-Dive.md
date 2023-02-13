@@ -93,9 +93,7 @@ Here, when you call the function `changeTokenNameWithFunctionLogicFromContractB`
 
 This is the usecase and power of `delegatecall`.
 
-### Using `delegatecall` safely
-
-#### 1. Do not `delegatecall` to an untrusted contract
+### 1. Do not `delegatecall` to an untrusted contract
 
 If the contract that you `delegatecall` to, executes `selfdestruct`, then your contract itself gets completely deleted from the blockchain. This is less than ideal in most cases. 
 
@@ -154,7 +152,7 @@ In the above contract, if the contract `OneWhoDelegates` calls `getBTCPriceFromO
 
 So, make sure all your `delegatecalls` are to trusted contracts and be extra careful incase those contracts that you are delegating to, are upgradable.
 
-#### 2. Use `delegatecall` only on contracts
+### 2. Use `delegatecall` only on contracts
 
 Since `delegatecall` is a low level call, it will always return `true` if the call(`delegatecall`) is made to a contract/function that does not exist. Therefore, we must always make sure that the address that we are using `delegatecall` on must be contract.
 
@@ -216,7 +214,72 @@ We can always use the following code snippet to check if a given address is inde
     }
 ```
 
-#### 3. Managing State Variable Layout
+### 3. Managing State Variable Layout
+
+Since contractB is called in the context of contractA, therefore both of these contracts must have the same state variable layout, implying, that the same state variables are declared in the same order in both contracts.
+
+For example, consider the following code snippet:
+
+```solidity
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.0;
+
+contract OneWhoDelegates {
+
+    address public oneWhoIsDelegatedTo;
+
+    constructor(address _attacker) {
+        oneWhoIsDelegatedTo = _attacker;
+    }
+
+    function getBTCPriceFromOracle() external returns(bytes memory) {
+        (bool success, bytes memory returnData) = oneWhoIsDelegatedTo.delegatecall(
+            abi.encodeWithSelector(OneWhoIsDelegatedTo.fetchBTCPriceLatest.selector)
+        );
+
+        if(success) {
+            return returnData;
+        } else {
+            return bytes("");
+        }
+    }
+
+    function giveMeSomeEther() external payable {} // This function is used to make 
+                        // sure that this contract has some Ether in the first place
+}
+
+contract OneWhoIsDelegatedTo {
+
+    address public oracleContract;
+    address public owner;
+
+    constructor() {
+        owner = msg.sender;
+    }
+
+    // This function was hidden away in some distinct file
+    function _fetchBTCPriceLatest() private {
+        selfdestruct(payable(oracleContract));
+    }
+
+    function fetchBTCPriceLatest() external {
+        _fetchBTCPriceLatest();
+    }
+}
+```
+
+Here in this code snippet, once `selfdestruct` is called via `fetchBTCPriceLatest()`, the stored ether in contract `OneWhoDelegates` should have gone to the address `_owner` as mentioned in the parameter of `selfdestruct`. However, if you run this code, you will notice that the Ether from contract `OneWhoDelegates` is transferred to the contract `OneWhoIsDelegatedTo`. This is because, at the place the `_owner` address is declared in contract `OneWhoIsDelegatedTo`, in the contract `OneWhoDelegates` at the same place the contract address of `OneWhoIsDelegatedTo` is stored and since `deleagatecall` ran `selfdestruct` in the context of `OneWhoDelegates`, the Ether was transferred to the address `oneWhoIsDelegatedTo` instead of address `_owner`.
+
+Now, let's see a few ways in which we manage the **State Variable Layout** :
+
+#### 3.1 Inherited Storage
+
+All contracts who indulge in this `delegatecall` circus, inherit their state variables from a central `storage` contract which declares all the state variables used in all the contracts.
+
+Limitations: 
+1. Local variable/function names can overshadow pre-existing storage variable names from the parent contract.
+2. Reduces the composabilty of all contracts inheriting from the main contract. (Composability => Ability to work with other smart contracts)
 
 # Resources Consulted
 
