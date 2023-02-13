@@ -282,6 +282,95 @@ Limitations:
 
 #### 3.2 Diamond Storage
 
+If we stop relying on Solidity's default storage memory allocation, then there is no need to have the same storage layout structure. We can specify where to start storing data in the address space. For different contracts we can specify different locations to start storing data, therefore preventing different contracts with different state variables from clashing storage locations. This is what Diamond Storage does.
+
+Let's understand this `diamond storage` concept with an example:
+
+**THIS EXAMPLE NEEDS MORE WORK. DO NOT FOLLOW THIS RIGHT NOW**
+
+```solidity
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.0;
+
+library DiamondStorage {
+  bytes32 constant ONE_WHO_DELEGATES_STRUCT_POSITION = 
+    keccak256("saxenism.delegatecall_diamond_storage_article.one_who_delegates_struct");
+
+  bytes32 constant ONE_WHO_IS_DELEGATED_TO_STRUCT_POSITION = 
+    keccak256("saxenism.delegatecall_diamond_storage_article.one_who_is_delegated_to_struct");
+
+  struct OneWhoDelegatesStruct {
+      address oneWhoIsDelegatedTo;
+  }
+
+  struct OneWhoIsDelegatedToStruct {
+      address owner;
+  }
+
+  function oneWhoDelegatesStructStorage()
+    internal 
+    pure 
+    returns (OneWhoDelegatesStruct storage oneWhoDelegatesStruct) 
+  {
+    bytes32 position = ONE_WHO_DELEGATES_STRUCT_POSITION;
+    assembly {
+      oneWhoDelegatesStruct.slot := position
+    }
+  }
+
+    function oneWhoIsDelegatedToStructStorage() internal pure returns(OneWhoIsDelegatedToStruct storage oneWhoIsDelegatedToStruct) {
+        bytes32 position = ONE_WHO_IS_DELEGATED_TO_STRUCT_POSITION;
+        assembly {
+            oneWhoIsDelegatedToStruct.slot := position
+        }
+    }
+
+}
+
+contract OneWhoDelegates {
+
+    address public oneWhoIsDelegatedTo;
+
+    constructor(address _attacker) {
+        oneWhoIsDelegatedTo = _attacker;
+    }
+
+    function getBTCPriceFromOracle() external returns(bytes memory) {
+        (bool success, bytes memory returnData) = oneWhoIsDelegatedTo.delegatecall(
+            abi.encodeWithSelector(OneWhoIsDelegatedTo.fetchBTCPriceLatest.selector)
+        );
+
+        if(success) {
+            return returnData;
+        } else {
+            return bytes("");
+        }
+    }
+
+    function giveMeSomeEther() external payable {} // This function is used to make 
+                        // sure that this contract has some Ether in the first place
+}
+
+contract OneWhoIsDelegatedTo {
+
+    DiamondStorage.OneWhoIsDelegatedToStruct delegateeStruct = DiamondStorage.oneWhoIsDelegatedToStructStorage();
+
+    constructor() {
+        delegateeStruct.owner = msg.sender;
+    }
+
+    // This function was hidden away in some distinct file
+    function _fetchBTCPriceLatest() private {
+        selfdestruct(payable(delegateeStruct.owner));
+    }
+
+    function fetchBTCPriceLatest() external {
+        _fetchBTCPriceLatest();
+    }
+}
+```
+
 # Resources Consulted
 
 1. [Felix's EVM Expedition: Proxies, Beacons and Diamond Pattern](https://www.youtube.com/watch?v=iXLoSVcVhUg)
