@@ -40,8 +40,121 @@ This section contains all concepts you must be aware of, to gain a comprehensive
 
 ### 1. `delegatecall`
 
+If a contract A calls a function in Contract B via `delegatecall`, then the function from contract B is executed with the context provided by contract A.
 
+That means, only the function logic is borrowed from contract B, other things such as `address(this)`, `msg.sender` and `msg.value` do not change.
+
+No change in the state variables of contract B is noticed. For example, let's consider the following code snippet.
+
+```solidity
+
+contract A {
+
+    string internal tokenName = "FunToken";
+
+    function changeTokenNameWithFunctionLogicFromContractB() external {
+        address contractBAddress = 0xb27A31f1b0AF2946B7F582768f03239b1eC07c2c; // Assume this is the address of the deployed contract B.
+        (bool success, bytes memory returnData) = contractBAddress.delegatecall(abi.encodeWithSelector(contractB.setTokenName.selector, "BoringToken"));
+
+        // This is one big logic block to get the reason of revert of the `delegatecall` since, the reason is not returned by default.
+        if(success == false) {
+            if(returnData.size > 0) {
+                assembly {
+                    let returndata_size := mload(returndata)
+                    revert(add(32, returndata), returndata_size)
+                }
+            } else {
+                revert("delegatecall reverted");
+            }
+        }
+    }
+
+    function getContractATokenName() external view returns(string memory) {
+        return tokenName;
+    }
+
+}
+
+contract B {
+    string internal tokenName = "TokenB";
+
+    function setTokenName(string calldata _newName) external {
+        tokenName = _newName;
+    }
+
+    function getContractBTokenName() external view returns(string memory) {
+        return tokenName;
+    }
+}
+
+```
+
+Here, when you call the function `changeTokenNameWithFunctionLogicFromContractB`, the value of the `tokenName` variable in contract A changes to `BoringToken` while the `tokenName` variable of contract B remains `TokenB`.
+
+This is the usecase and power of `delegatecall`.
+
+#### Using `delegatecall` safely
+
+##### 1. Do not `delegatecall` to an untrusted contract
+
+If the contract that you `delegatecall` to, executes `selfdestruct`, then your contract itself gets completely deleted from the blockchain. This is less than ideal in most cases. 
+
+Here's an example:
+
+```solidity
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.0;
+
+contract OneWhoDelegates {
+
+    address public oneWhoIsDelegatedTo;
+
+    constructor(address _attacker) {
+        oneWhoIsDelegatedTo = _attacker;
+    }
+
+    function getBTCPriceFromOracle() external returns(bytes memory) {
+        (bool success, bytes memory returnData) = oneWhoIsDelegatedTo.delegatecall(
+            abi.encodeWithSelector(OneWhoIsDelegatedTo.fetchBTCPriceLatest.selector)
+        );
+
+        if(success) {
+            return returnData;
+        } else {
+            return bytes("");
+        }
+    }
+
+    function giveMeSomeEther() external payable {} // This function is used to make 
+                        // sure that this contract has some Ether in the first place
+}
+
+contract OneWhoIsDelegatedTo {
+
+    address public oracleContract;
+    address public owner;
+
+    constructor() {
+        owner = msg.sender;
+    }
+
+    // This function was hidden away in some distinct file
+    function _fetchBTCPriceLatest() private {
+        selfdestruct(payable(oracleContract));
+    }
+
+    function fetchBTCPriceLatest() external {
+        _fetchBTCPriceLatest();
+    }
+}
+```
+
+In the above contract, if the contract `OneWhoDelegates` calls `getBTCPriceFromOracle`, then the contract `OneWhoDelegates` would be deleted from the blockchain and the ether inside of that contract would be transferred to the contract `OneWhoIsDelegatedTo`.
+
+So, make sure all your `delegatecalls` are to trusted contracts and be extra careful incase those contracts that you are delegating to, are upgradable.
 
 ## Resources Consulted
 
 1. [Felix's EVM Expedition: Proxies, Beacons and Diamond Pattern](https://www.youtube.com/watch?v=iXLoSVcVhUg)
+2. [Understanding delegatecall And How to Use It Safely, Nick Mudge](https://eip2535diamonds.substack.com/p/understanding-delegatecall-and-how)
