@@ -284,6 +284,8 @@ Limitations:
 
 If we stop relying on Solidity's default storage memory allocation, then there is no need to have the same storage layout structure. We can specify where to start storing data in the address space. For different contracts we can specify different locations to start storing data, therefore preventing different contracts with different state variables from clashing storage locations. This is what Diamond Storage does.
 
+We can hash a unique string to get a random storage position and store a struct there. The struct can contain all the state variables that we want. The unique string can act like a namespace for particular functionality.
+
 Let's understand this `diamond storage` concept with an example:
 
 **THIS EXAMPLE NEEDS MORE WORK. DO NOT FOLLOW THIS RIGHT NOW**
