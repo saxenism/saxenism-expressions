@@ -11,7 +11,7 @@ search_exclude: true
 
 > One of the best audit experience we have been a part of. Rahul (and Parth) were great to work with. Their attention to details on contract design and adversarial thinking helped us along the audit process. They have delivered a well structured and comprehensive audit report.
 
-Since a picture is worth 1000 words, here's one, along with a [short story](https://www.linkedin.com/feed/update/urn:li:activity:7028630466794586112/) of what went down.
+<h3> Since a picture is worth more than a 1000 words, here's one, along with a [short story](https://www.linkedin.com/feed/update/urn:li:activity:7028630466794586112/) of what went down. </h3>
 
 ![](https://user-images.githubusercontent.com/32522659/218296401-63ad05ca-bf05-4ea8-a540-444c65906496.png)
 
