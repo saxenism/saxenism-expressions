@@ -10,6 +10,10 @@ title: Smart Contract Proxies - A Deep Dive
 
 For a primer on all things you **MUST** understand before going ahead with learning about proxies in depth, please navigate to the end of this article, find the section named **Pre-Requisites** and make sure you understand all concepts listed there.
 
+Proxy pattern is an upgradeable system of contracts which includes a proxy contract and logic implementation. The proxy contract handles user interaction and data storage (contract state). Upgradability is important for patching a bug, stopping a live attack, upgrading contract functionalities etc without changing the contract address which users interact with.
+
+User calls made to the proxy contract execute a delegatecall() to the logic implementation which changes the proxy contract state. Upgrades are made by updating the logic implementation contract address stored in the proxy contract at a predefined storage slot.
+
 I did a short article on proxies sometime back, but it was really basic and surface-level. If you want, you can read that [here](https://saxenism.com/web3/solidity/security/proxy/upgradation/2022/04/30/All-About-Proxies.html).
 
 All proxy patterns are linked together by a distinct feature. It is the combination of **`delegatecall` along with the `fallback` function**.
