@@ -7,7 +7,7 @@
        • <span class="read-time" title="Estimated read time">
     
     
-      8 min read
+      9 min read
     
 </span></p>
 
@@ -81,6 +81,10 @@
 <a class="anchor" href="#introduction" aria-hidden="true"><span class="octicon octicon-link"></span></a>Introduction</h1>
 
 <p>For a primer on all things you <strong>MUST</strong> understand before going ahead with learning about proxies in depth, please navigate to the end of this article, find the section named <strong>Pre-Requisites</strong> and make sure you understand all concepts listed there.</p>
+
+<p>Proxy pattern is an upgradeable system of contracts which includes a proxy contract and logic implementation. The proxy contract handles user interaction and data storage (contract state). Upgradability is important for patching a bug, stopping a live attack, upgrading contract functionalities etc without changing the contract address which users interact with.</p>
+
+<p>User calls made to the proxy contract execute a delegatecall() to the logic implementation which changes the proxy contract state. Upgrades are made by updating the logic implementation contract address stored in the proxy contract at a predefined storage slot.</p>
 
 <p>I did a short article on proxies sometime back, but it was really basic and surface-level. If you want, you can read that <a href="https://saxenism.com/web3/solidity/security/proxy/upgradation/2022/04/30/All-About-Proxies.html">here</a>.</p>
 
