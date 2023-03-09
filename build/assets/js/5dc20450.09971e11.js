@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunksaxenism_personal_website=self.webpackChunksaxenism_personal_website||[]).push([[5557],{63:s=>{s.exports=JSON.parse('{"label":"solidity","permalink":"/blog/tags/solidity","allTagsPath":"/blog/tags","count":2}')}}]);

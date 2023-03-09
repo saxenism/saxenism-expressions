@@ -1,14 +1,41 @@
-# EVM Expressions
+# Website
 
-Visit my blogging website where I pen down my learnings, understandings and opinions about everything related to blockchain and EVM engineering:
+This website is built using [Docusaurus 2](https://docusaurus.io/), a modern static website generator.
 
-https://saxenism.com/
+### Installation
 
-# Ideas for future articles:
+```
+$ yarn
+```
 
-1. Complete the Consensys Best Practices Guide
-    1.1 Write down the Rock Paper Scissors game with commit-reveal-distribute scheme
-2. VRGDAs
-3. In depth study of `delegatecalls`
-4. All about proxies and upgradability (reference from devtooligan's yAcademy article)
-5. Optimizoor's Solady black magic
+### Local Development
+
+```
+$ yarn start
+```
+
+This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
+
+### Build
+
+```
+$ yarn build
+```
+
+This command generates static content into the `build` directory and can be served using any static contents hosting service.
+
+### Deployment
+
+Using SSH:
+
+```
+$ USE_SSH=true yarn deploy
+```
+
+Not using SSH:
+
+```
+$ GIT_USER=<Your GitHub username> yarn deploy
+```
+
+If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.

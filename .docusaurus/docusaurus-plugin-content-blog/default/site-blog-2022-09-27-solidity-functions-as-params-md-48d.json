@@ -1,0 +1,63 @@
+{
+  "permalink": "/blog/functions-as-params",
+  "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/blog/2022-09-27-Solidity-Functions-As-Params.md",
+  "source": "@site/blog/2022-09-27-Solidity-Functions-As-Params.md",
+  "title": "Solidity - Passing functions as parameters",
+  "description": "Function Types",
+  "date": "2022-09-27T00:00:00.000Z",
+  "formattedDate": "September 27, 2022",
+  "tags": [
+    {
+      "label": "web3",
+      "permalink": "/blog/tags/web-3"
+    },
+    {
+      "label": "language-tricks",
+      "permalink": "/blog/tags/language-tricks"
+    },
+    {
+      "label": "intermediate",
+      "permalink": "/blog/tags/intermediate"
+    },
+    {
+      "label": "solidity",
+      "permalink": "/blog/tags/solidity"
+    }
+  ],
+  "readingTime": 1.985,
+  "hasTruncateMarker": true,
+  "authors": [
+    {
+      "name": "Rahul Saxena",
+      "title": "EVM Enjoyoor",
+      "url": "https://twitter.com/saxenism",
+      "image_url": "https://pbs.twimg.com/profile_images/1554486619914117126/7QV7CHum_400x400.jpg",
+      "imageURL": "https://pbs.twimg.com/profile_images/1554486619914117126/7QV7CHum_400x400.jpg"
+    }
+  ],
+  "frontMatter": {
+    "slug": "functions-as-params",
+    "title": "Solidity - Passing functions as parameters",
+    "authors": {
+      "name": "Rahul Saxena",
+      "title": "EVM Enjoyoor",
+      "url": "https://twitter.com/saxenism",
+      "image_url": "https://pbs.twimg.com/profile_images/1554486619914117126/7QV7CHum_400x400.jpg",
+      "imageURL": "https://pbs.twimg.com/profile_images/1554486619914117126/7QV7CHum_400x400.jpg"
+    },
+    "tags": [
+      "web3",
+      "language-tricks",
+      "intermediate",
+      "solidity"
+    ]
+  },
+  "prevItem": {
+    "title": "Solidity - Bit Packing",
+    "permalink": "/blog/bit-packing"
+  },
+  "nextItem": {
+    "title": "Welcome",
+    "permalink": "/blog/welcome"
+  }
+}

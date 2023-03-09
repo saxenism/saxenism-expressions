@@ -1,0 +1,32 @@
+.video-responsive {
+    overflow: hidden;
+    padding-bottom: 40%;
+    position: relative;
+    height: 20%;
+  }
+  
+  .video-responsive iframe {
+    justify-content: center;
+    left: 25%;
+    top: 0;
+    height: 75%;
+    width: 50%;
+    position: absolute;
+  }
+
+  .App {
+    justify-content: center;
+  }
+
+  .heroBanner {
+    padding: 4rem 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  @media screen and (max-width: 996px) {
+    .heroBanner {
+      padding: 2rem;
+    }
+  }

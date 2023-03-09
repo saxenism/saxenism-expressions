@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunksaxenism_personal_website=self.webpackChunksaxenism_personal_website||[]).push([[8658],{9996:s=>{s.exports=JSON.parse('{"label":"language-tricks","permalink":"/blog/tags/language-tricks","allTagsPath":"/blog/tags","count":2}')}}]);

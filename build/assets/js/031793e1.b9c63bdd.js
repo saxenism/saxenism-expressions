@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunksaxenism_personal_website=self.webpackChunksaxenism_personal_website||[]).push([[1633],{2511:e=>{e.exports=JSON.parse('{"label":"facebook","permalink":"/blog/tags/facebook","allTagsPath":"/blog/tags","count":1}')}}]);

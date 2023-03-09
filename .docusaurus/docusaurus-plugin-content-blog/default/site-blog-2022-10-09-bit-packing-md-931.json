@@ -1,0 +1,69 @@
+{
+  "permalink": "/blog/bit-packing",
+  "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/blog/2022-10-09-Bit-Packing.md",
+  "source": "@site/blog/2022-10-09-Bit-Packing.md",
+  "title": "Solidity - Bit Packing",
+  "description": "My last blog post about Bit Magic generated some buzz amongst fellow EVM developers and some of them reached out to me to include additional things in my blog related to using bits effectively in Solidity and the EVM in general.",
+  "date": "2022-10-09T00:00:00.000Z",
+  "formattedDate": "October 9, 2022",
+  "tags": [
+    {
+      "label": "web3",
+      "permalink": "/blog/tags/web-3"
+    },
+    {
+      "label": "solidity",
+      "permalink": "/blog/tags/solidity"
+    },
+    {
+      "label": "language-tricks",
+      "permalink": "/blog/tags/language-tricks"
+    },
+    {
+      "label": "bit-magic",
+      "permalink": "/blog/tags/bit-magic"
+    },
+    {
+      "label": "bit-packing",
+      "permalink": "/blog/tags/bit-packing"
+    },
+    {
+      "label": "intermediate",
+      "permalink": "/blog/tags/intermediate"
+    }
+  ],
+  "readingTime": 6.59,
+  "hasTruncateMarker": true,
+  "authors": [
+    {
+      "name": "Rahul Saxena",
+      "title": "EVM Enjoyoor",
+      "url": "https://twitter.com/saxenism",
+      "image_url": "https://pbs.twimg.com/profile_images/1554486619914117126/7QV7CHum_400x400.jpg",
+      "imageURL": "https://pbs.twimg.com/profile_images/1554486619914117126/7QV7CHum_400x400.jpg"
+    }
+  ],
+  "frontMatter": {
+    "slug": "bit-packing",
+    "title": "Solidity - Bit Packing",
+    "authors": {
+      "name": "Rahul Saxena",
+      "title": "EVM Enjoyoor",
+      "url": "https://twitter.com/saxenism",
+      "image_url": "https://pbs.twimg.com/profile_images/1554486619914117126/7QV7CHum_400x400.jpg",
+      "imageURL": "https://pbs.twimg.com/profile_images/1554486619914117126/7QV7CHum_400x400.jpg"
+    },
+    "tags": [
+      "web3",
+      "solidity",
+      "language-tricks",
+      "bit-magic",
+      "bit-packing",
+      "intermediate"
+    ]
+  },
+  "nextItem": {
+    "title": "Solidity - Passing functions as parameters",
+    "permalink": "/blog/functions-as-params"
+  }
+}

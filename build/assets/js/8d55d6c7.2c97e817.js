@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunksaxenism_personal_website=self.webpackChunksaxenism_personal_website||[]).push([[1835],{8057:s=>{s.exports=JSON.parse('{"label":"bit-magic","permalink":"/blog/tags/bit-magic","allTagsPath":"/blog/tags","count":1}')}}]);
