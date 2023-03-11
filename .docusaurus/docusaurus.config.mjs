@@ -4,8 +4,8 @@
  * Modify the docusaurus.config.js file at your site's root instead.
  */
 export default {
-  "title": "Gm!! I am Rahul Saxena",
-  "tagline": "I love the EVM and believe in a (progressively) decentralised world. Doing my bit towards it.",
+  "title": "EVM Expressions",
+  "tagline": "OnChain Wizardry",
   "favicon": "img/favicon.ico",
   "url": "https://saxenism.com",
   "baseUrl": "/",
@@ -26,7 +26,7 @@ export default {
       "classic",
       {
         "docs": {
-          "sidebarPath": "/Users/saxenism/Desktop/saxenism-expressions/sidebars.js",
+          "sidebarPath": "/Users/saxenism/Desktop/Bluethroat/official-website/sidebars.js",
           "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/"
         },
         "blog": {
@@ -34,7 +34,7 @@ export default {
           "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/"
         },
         "theme": {
-          "customCss": "/Users/saxenism/Desktop/saxenism-expressions/src/css/custom.css"
+          "customCss": "/Users/saxenism/Desktop/Bluethroat/official-website/src/css/custom.css"
         }
       }
     ]
@@ -60,14 +60,14 @@ export default {
           "position": "left"
         },
         {
-          "to": "/videos",
-          "label": "Videos",
-          "position": "left"
-        },
-        {
           "to": "/testimonials",
           "label": "Testimonials",
           "position": "left"
+        },
+        {
+          "href": "https://github.com/facebook/docusaurus",
+          "label": "GitHub",
+          "position": "right"
         }
       ],
       "hideOnScroll": false

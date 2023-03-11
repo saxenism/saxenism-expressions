@@ -2,14 +2,6 @@
   "title": "Recent posts",
   "items": [
     {
-      "title": "Solidity - Bit Packing",
-      "permalink": "/blog/bit-packing"
-    },
-    {
-      "title": "Solidity - Passing functions as parameters",
-      "permalink": "/blog/functions-as-params"
-    },
-    {
       "title": "Welcome",
       "permalink": "/blog/welcome"
     },
@@ -20,6 +12,10 @@
     {
       "title": "Long Blog Post",
       "permalink": "/blog/long-blog-post"
+    },
+    {
+      "title": "First Blog Post",
+      "permalink": "/blog/first-blog-post"
     }
   ]
 }

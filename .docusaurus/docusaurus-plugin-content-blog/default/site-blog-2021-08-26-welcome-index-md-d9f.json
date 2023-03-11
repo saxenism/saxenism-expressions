@@ -51,10 +51,6 @@
       "docusaurus"
     ]
   },
-  "prevItem": {
-    "title": "Solidity - Passing functions as parameters",
-    "permalink": "/blog/functions-as-params"
-  },
   "nextItem": {
     "title": "MDX Blog Post",
     "permalink": "/blog/mdx-blog-post"

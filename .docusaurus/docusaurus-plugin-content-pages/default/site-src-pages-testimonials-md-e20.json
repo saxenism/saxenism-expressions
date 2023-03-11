@@ -2,12 +2,6 @@
   "type": "mdx",
   "permalink": "/testimonials",
   "source": "@site/src/pages/testimonials.md",
-  "title": "Testimonials",
   "description": "Word on the Street",
-  "frontMatter": {
-    "layout": "default",
-    "permalink": "/testimonials/",
-    "title": "Testimonials",
-    "search_exclude": true
-  }
+  "frontMatter": {}
 }
