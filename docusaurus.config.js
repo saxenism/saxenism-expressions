@@ -6,8 +6,8 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'EVM Expressions',
-  tagline: 'OnChain Wizardry',
+  title: 'GM!! I am Rahul Saxena',
+  tagline: 'I love the EVM and believe in a (progressively) decentralised world. Doing my bit towards it.',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
@@ -64,18 +64,18 @@ const config = {
       // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
       navbar: {
-        title: 'My Site',
+        title: 'EVM Expressions',
         logo: {
           alt: 'My Site Logo',
           src: 'img/logo.svg',
         },
         items: [
-          {
-            type: 'doc',
-            docId: 'intro',
-            position: 'left',
-            label: 'Tutorial',
-          },
+          // {
+          //   type: 'doc',
+          //   docId: 'intro',
+          //   position: 'left',
+          //   label: 'Tutorial',
+          // },
           {to: '/blog', label: 'Blog', position: 'left'},
           {to: '/videos', label: 'Videos', position: 'left'},
           {to: '/testimonials', label: 'Testimonials', position: 'left'},
@@ -103,7 +103,7 @@ const config = {
             items: [
               {
                 label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+                href: 'https://stackoverflow.com/users/11924484/rahul-saxena',
               },
               {
                 label: 'Discord',
@@ -111,7 +111,7 @@ const config = {
               },
               {
                 label: 'Twitter',
-                href: 'https://twitter.com/docusaurus',
+                href: 'https://twitter.com/saxenism',
               },
             ],
           },
@@ -124,12 +124,12 @@ const config = {
               },
               {
                 label: 'GitHub',
-                href: 'https://github.com/facebook/docusaurus',
+                href: 'https://github.com/saxenism',
               },
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} Bluethroat Labs, Private Ltd. Built with Docusaurus.`,
       },
       prism: {
         theme: lightCodeTheme,

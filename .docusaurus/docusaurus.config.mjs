@@ -4,8 +4,8 @@
  * Modify the docusaurus.config.js file at your site's root instead.
  */
 export default {
-  "title": "EVM Expressions",
-  "tagline": "OnChain Wizardry",
+  "title": "GM!! I am Rahul Saxena",
+  "tagline": "I love the EVM and believe in a (progressively) decentralised world. Doing my bit towards it.",
   "favicon": "img/favicon.ico",
   "url": "https://saxenism.com",
   "baseUrl": "/",
@@ -42,18 +42,12 @@ export default {
   "themeConfig": {
     "image": "img/docusaurus-social-card.jpg",
     "navbar": {
-      "title": "My Site",
+      "title": "EVM Expressions",
       "logo": {
         "alt": "My Site Logo",
         "src": "img/logo.svg"
       },
       "items": [
-        {
-          "type": "doc",
-          "docId": "intro",
-          "position": "left",
-          "label": "Tutorial"
-        },
         {
           "to": "/blog",
           "label": "Blog",
@@ -94,7 +88,7 @@ export default {
           "items": [
             {
               "label": "Stack Overflow",
-              "href": "https://stackoverflow.com/questions/tagged/docusaurus"
+              "href": "https://stackoverflow.com/users/11924484/rahul-saxena"
             },
             {
               "label": "Discord",
@@ -102,7 +96,7 @@ export default {
             },
             {
               "label": "Twitter",
-              "href": "https://twitter.com/docusaurus"
+              "href": "https://twitter.com/saxenism"
             }
           ]
         },
@@ -115,12 +109,12 @@ export default {
             },
             {
               "label": "GitHub",
-              "href": "https://github.com/facebook/docusaurus"
+              "href": "https://github.com/saxenism"
             }
           ]
         }
       ],
-      "copyright": "Copyright © 2023 My Project, Inc. Built with Docusaurus."
+      "copyright": "Copyright © 2023 Bluethroat Labs, Private Ltd. Built with Docusaurus."
     },
     "prism": {
       "theme": {
