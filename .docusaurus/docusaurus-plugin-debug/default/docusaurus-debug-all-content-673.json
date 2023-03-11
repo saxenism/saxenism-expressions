@@ -607,75 +607,9 @@
             "prevItem": {
               "title": "Solidity - Bit Magic (Hot Dev Alpha!!)",
               "permalink": "/blog/bit-magic"
-            },
-            "nextItem": {
-              "title": "Welcome",
-              "permalink": "/blog/welcome"
             }
           },
           "content": "Let us see today when and why do we use `abi.encode` vs `abi.encodePacked`.\n\n## What is a hash function?\n\nA hash function has the following characterisitics:\n\n+ A function that takes in arbitrary size input and outputs a data of fixed size\n+ Properties:\n    + Deterministic\n        + hash(x) = h, every time without fail\n    + quick to compute the hash\n    + irreversible\n        + given h, (really)hard to find x such that hash(x) = h\n    + small change in input changes the output significantly\n        + hard to find x, y such that hash(x) = hash(y)\n\n<!--truncate-->\n\n## String Encoding\n\nThe solidity built-in function `abi.encode` enables to encode any Solidity types into raw bytes, that can be interpreted directly by the EVM.\n\nNote that multiple arguments can be given to this function.\n\nSo, if we do something like:\n`abi.encode(\"Solidity\");`\n\nWe get the result in the following format:\n\n+ 1st (32 bytes) word = offset → indicates at which bytes index the string starts. Here 0x20 (in hex) = 32 (in decimals). If you count 32 from the beginning (= index 32), you will reach the starting point of where the actual encoded string starts.\n\n+ 2nd (32 bytes) word = string length → in the case of the string, this indicates how many characters (including whitespaces) are included in the string. So simply the “string.length “\n\n+ 3rd (32 bytes) word = the actual utf8 encoded string → each individual bytes corresponds to hex notation of a letter / character encoded in utf8. If you search each individual bytes from 536f6c6964697479 inside an utf8 table, you will be able to decode the string. For instance, 53 corresponds to uppercase S , 6f corresponds to lowercase o , 6c corresponds to lowercase l , etc…\n\nThe actual encoded bytes would look something like this:\n\n```\n{\n\t\"0\": \"bytes: 0x00000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000008536f6c6964697479000000000000000000000000000000000000000000000000\"\n}\n```\n\nThe contract code was as straightforward as it gets:\n\n```\n// SPDX-License-Identifier: GPL-3.0\n\npragma solidity 0.8.7;\n\ncontract StringEncoding {\n    bytes public encodedString = abi.encode(\"Solidity\");\n}\n```\n\n## Few other ABI Encodings\n\n+ address payable -> address\n+ contract -> address\n+ enum -> uint8\n+ struct -> tuple of elementry types\n\n## Few points on abi.encode, abi.encodePacked, abi.encodeWithSelector, abi.encodeWithSignature\n\n+ When using `abi.encode`, all elementary types are padded to 32 bytes and dynamic arrays include their length.\n    + Therefore, it is also possible to decode the resulting hash using `abi.decode` if the data type is known.\n    + This encoding is done using the ABI specs.\n+ When using `abi.encodePacked` only the minimum possible memory is utilised. \n    + Therefore, if you were hashing an address with this function, it will only take up 20 bytes and the rest of the word remains unpadded.\n    + For dynamic types, the offset and the length is not stored. \n    ```\n    abi.encodePacked(\"Solidity\");\n    // returns -> 0x536f6c6964697479\n    ```\n\n+ Since `abi.encodePacked` is non-standard hashing and uses the least amount of memory, it is usually gas-efficient\n\n+ If you are making calls to an (external) contract, you'll more likely be using `abi.encode` (because it uses the ABI specs) and when you simply want to save some space and *not* call a contract, you'll be using `abi.encodePacked`.\n\n+ If you are dealing with more than one dynamic data types, use `abi.encode` as it prevents collision.\n\n+ Whereas, in multiple dynamic data types there is a good chance of collision happening if used with `abi.encodePacked`\n\n+ `abi.encodeWithSignature` is the same as `abi.encode` but the function selector is used as the first parameter. Use when the signature is known and don't want to calculate the selector.\n\n+ `abi.encodeWithSelector`, almost same as `abi.encodeWithSignature` but first param is selector.\n\nCode Examples of the above encode options:\n\n```solidity\n\n// Case 1\n(success, ) = address(c).call(abi.encodeWithSignature(\"myfunction(uint256,uint256)\", 400,500));\n\n// Case 2\n(success, ) = address(c).call(abi.encodeWithSelector(bytes4(keccak256(\"myfunction(uint256,uint256)\")), 400,500));\n\n// Case 3\ncontract_instance.myfunction(400,500);\n\n```\n\n+ Case 3 is more expensive but safer than the other cases.\n> This is because, the EVM considers a call to a non-existing contract to always succeed. Therefore, Solidity includes an extra check using the `extcodesize` opcode when performing external calls.\nThis ensures that the contract that is about to be called either actually exists (contains code) or an exception is raised.\n\n> Low level calls (which operate on address rather than a contract instance) ignore this check and therefore become gas efficient but less safe. Eg. `call`, `transfer`, `delegatecall`, `staticcall`, `send`.\n\n+ A very important point to note is:\nIf a function exists such that:\n```\nfunction foo(uint256 _a, address _b) {\n    // do something\n}\n```\n\nThen, the function selector for this particular function would be:\n\n```\nbytes4(keccak256(bytes('foo(uint256,address)'))); // This is correct\n\nbytes4(keccak256(bytes('foo(uint256, address)'))); // This would be incorrect, because of the space between the two param types\n\nbytes4(keccak256(bytes('foo(uint,address)'))); // Again incorrect, because we cannot use the alias of uint, we have to use the entire uint256\n```\n\n+ A more comprehensive example from *solidity-by-example*\n\n```solidity\n// SPDX-License-Identifier: MIT\npragma solidity ^0.8.13;\n\ncontract Receiver {\n    event Received(address caller, uint amount, string message);\n\n    fallback() external payable {\n        emit Received(msg.sender, msg.value, \"Fallback was called\");\n    }\n\n    function foo(string memory _message, uint _x) public payable returns (uint) {\n        emit Received(msg.sender, msg.value, _message);\n\n        return _x + 1;\n    }\n}\n\ncontract Caller {\n    event Response(bool success, bytes data);\n\n    // Let's imagine that contract B does not have the source code for\n    // contract A, but we do know the address of A and the function to call.\n    function testCallFoo(address payable _addr) public payable {\n        // You can send ether and specify a custom gas amount\n        (bool success, bytes memory data) = _addr.call{value: msg.value, gas: 5000}(\n            abi.encodeWithSignature(\"foo(string,uint256)\", \"call foo\", 123)\n        );\n\n        emit Response(success, data);\n    }\n\n    // Calling a function that does not exist triggers the fallback function.\n    function testCallDoesNotExist(address _addr) public {\n        (bool success, bytes memory data) = _addr.call(\n            abi.encodeWithSignature(\"doesNotExist()\")\n        );\n\n        emit Response(success, data);\n    }\n}\n\n```"
-        },
-        {
-          "id": "welcome",
-          "metadata": {
-            "permalink": "/blog/welcome",
-            "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/blog/2021-08-26-welcome/index.md",
-            "source": "@site/blog/2021-08-26-welcome/index.md",
-            "title": "Welcome",
-            "description": "Docusaurus blogging features are powered by the blog plugin.",
-            "date": "2021-08-26T00:00:00.000Z",
-            "formattedDate": "August 26, 2021",
-            "tags": [
-              {
-                "label": "facebook",
-                "permalink": "/blog/tags/facebook"
-              },
-              {
-                "label": "hello",
-                "permalink": "/blog/tags/hello"
-              },
-              {
-                "label": "docusaurus",
-                "permalink": "/blog/tags/docusaurus"
-              }
-            ],
-            "readingTime": 0.405,
-            "hasTruncateMarker": false,
-            "authors": [
-              {
-                "name": "Sébastien Lorber",
-                "title": "Docusaurus maintainer",
-                "url": "https://sebastienlorber.com",
-                "imageURL": "https://github.com/slorber.png",
-                "key": "slorber"
-              },
-              {
-                "name": "Yangshun Tay",
-                "title": "Front End Engineer @ Facebook",
-                "url": "https://github.com/yangshun",
-                "imageURL": "https://github.com/yangshun.png",
-                "key": "yangshun"
-              }
-            ],
-            "frontMatter": {
-              "slug": "welcome",
-              "title": "Welcome",
-              "authors": [
-                "slorber",
-                "yangshun"
-              ],
-              "tags": [
-                "facebook",
-                "hello",
-                "docusaurus"
-              ]
-            },
-            "prevItem": {
-              "title": "ABI Encode - Solidity",
-              "permalink": "/blog/solidity-encodings"
-            }
-          },
-          "content": "[Docusaurus blogging features](https://docusaurus.io/docs/blog) are powered by the [blog plugin](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-blog).\n\nSimply add Markdown files (or folders) to the `blog` directory.\n\nRegular blog authors can be added to `authors.yml`.\n\nThe blog post date can be extracted from filenames, such as:\n\n- `2019-05-30-welcome.md`\n- `2019-05-30-welcome/index.md`\n\nA blog post folder can be convenient to co-locate blog post images:\n\n![Docusaurus Plushie](https://raw.githubusercontent.com/saxenism/saxenism-expressions/master/blog/2021-08-26-welcome/docusaurus-plushie-banner.jpeg)\n\nThe blog supports tags as well!\n\n**And if you don't want a blog**: just delete this directory, and use `blog: false` in your Docusaurus config."
         }
       ],
       "blogListPaginated": [
@@ -684,15 +618,14 @@
             "bit-packing",
             "address-to-uint",
             "bit-magic",
-            "solidity-encodings",
-            "welcome"
+            "solidity-encodings"
           ],
           "metadata": {
             "permalink": "/blog",
             "page": 1,
             "postsPerPage": 10,
             "totalPages": 1,
-            "totalCount": 5,
+            "totalCount": 4,
             "blogDescription": "Blog",
             "blogTitle": "Blog"
           }
@@ -939,75 +872,6 @@
               ],
               "metadata": {
                 "permalink": "/blog/tags/abi",
-                "page": 1,
-                "postsPerPage": 10,
-                "totalPages": 1,
-                "totalCount": 1,
-                "blogDescription": "Blog",
-                "blogTitle": "Blog"
-              }
-            }
-          ]
-        },
-        "/blog/tags/facebook": {
-          "label": "facebook",
-          "items": [
-            "welcome"
-          ],
-          "permalink": "/blog/tags/facebook",
-          "pages": [
-            {
-              "items": [
-                "welcome"
-              ],
-              "metadata": {
-                "permalink": "/blog/tags/facebook",
-                "page": 1,
-                "postsPerPage": 10,
-                "totalPages": 1,
-                "totalCount": 1,
-                "blogDescription": "Blog",
-                "blogTitle": "Blog"
-              }
-            }
-          ]
-        },
-        "/blog/tags/hello": {
-          "label": "hello",
-          "items": [
-            "welcome"
-          ],
-          "permalink": "/blog/tags/hello",
-          "pages": [
-            {
-              "items": [
-                "welcome"
-              ],
-              "metadata": {
-                "permalink": "/blog/tags/hello",
-                "page": 1,
-                "postsPerPage": 10,
-                "totalPages": 1,
-                "totalCount": 1,
-                "blogDescription": "Blog",
-                "blogTitle": "Blog"
-              }
-            }
-          ]
-        },
-        "/blog/tags/docusaurus": {
-          "label": "docusaurus",
-          "items": [
-            "welcome"
-          ],
-          "permalink": "/blog/tags/docusaurus",
-          "pages": [
-            {
-              "items": [
-                "welcome"
-              ],
-              "metadata": {
-                "permalink": "/blog/tags/docusaurus",
                 "page": 1,
                 "postsPerPage": 10,
                 "totalPages": 1,
