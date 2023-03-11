@@ -51,6 +51,10 @@
       "docusaurus"
     ]
   },
+  "prevItem": {
+    "title": "Solidity - Bit Magic (Hot Dev Alpha!!)",
+    "permalink": "/blog/bit-magic"
+  },
   "nextItem": {
     "title": "MDX Blog Post",
     "permalink": "/blog/mdx-blog-post"
