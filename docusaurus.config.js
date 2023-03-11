@@ -78,7 +78,7 @@ const config = {
           // },
           {to: '/blog', label: 'Blog', position: 'left'},
           {to: '/videos', label: 'Videos', position: 'left'},
-          {to: '/testimonials', label: 'Testimonials', position: 'left'},
+          {to: '/testimonials', label: 'Chatters', position: 'left'}
         ],
       },
       footer: {
@@ -94,7 +94,7 @@ const config = {
             ],
           },
           {
-            title: 'Community',
+            title: 'Socials',
             items: [
               {
                 label: 'Stack Overflow',

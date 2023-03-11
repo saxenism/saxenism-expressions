@@ -3,8 +3,48 @@ import ComponentCreator from '@docusaurus/ComponentCreator';
 
 export default [
   {
+    path: '/__docusaurus/debug',
+    component: ComponentCreator('/__docusaurus/debug', '0c7'),
+    exact: true
+  },
+  {
+    path: '/__docusaurus/debug/config',
+    component: ComponentCreator('/__docusaurus/debug/config', '089'),
+    exact: true
+  },
+  {
+    path: '/__docusaurus/debug/content',
+    component: ComponentCreator('/__docusaurus/debug/content', 'ee8'),
+    exact: true
+  },
+  {
+    path: '/__docusaurus/debug/globalData',
+    component: ComponentCreator('/__docusaurus/debug/globalData', '103'),
+    exact: true
+  },
+  {
+    path: '/__docusaurus/debug/metadata',
+    component: ComponentCreator('/__docusaurus/debug/metadata', '6e1'),
+    exact: true
+  },
+  {
+    path: '/__docusaurus/debug/registry',
+    component: ComponentCreator('/__docusaurus/debug/registry', '0c9'),
+    exact: true
+  },
+  {
+    path: '/__docusaurus/debug/routes',
+    component: ComponentCreator('/__docusaurus/debug/routes', '064'),
+    exact: true
+  },
+  {
     path: '/blog',
-    component: ComponentCreator('/blog', 'e9d'),
+    component: ComponentCreator('/blog', '22a'),
+    exact: true
+  },
+  {
+    path: '/blog/address-to-uint',
+    component: ComponentCreator('/blog/address-to-uint', 'cb2'),
     exact: true
   },
   {
@@ -35,6 +75,11 @@ export default [
   {
     path: '/blog/tags/abi',
     component: ComponentCreator('/blog/tags/abi', '550'),
+    exact: true
+  },
+  {
+    path: '/blog/tags/beginner',
+    component: ComponentCreator('/blog/tags/beginner', 'b36'),
     exact: true
   },
   {
@@ -79,17 +124,17 @@ export default [
   },
   {
     path: '/blog/tags/language-tricks',
-    component: ComponentCreator('/blog/tags/language-tricks', 'c62'),
+    component: ComponentCreator('/blog/tags/language-tricks', '8bf'),
     exact: true
   },
   {
     path: '/blog/tags/solidity',
-    component: ComponentCreator('/blog/tags/solidity', 'd72'),
+    component: ComponentCreator('/blog/tags/solidity', 'f57'),
     exact: true
   },
   {
     path: '/blog/tags/web-3',
-    component: ComponentCreator('/blog/tags/web-3', '323'),
+    component: ComponentCreator('/blog/tags/web-3', '22d'),
     exact: true
   },
   {

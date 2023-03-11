@@ -11,6 +11,8 @@ tags: [web3, language-tricks, beginner, solidity]
 
 ## Convert address to uint and back
 
+This conversion exploits the fact that addresses take up 20 bytes and so does a uint160 (20 * 8). 
+
 
 ```solidity
 
@@ -43,3 +45,5 @@ contract AddressToUint {
 // 980877587572537262620952019491558306941665029781
 
 ```
+
+<!--truncate-->

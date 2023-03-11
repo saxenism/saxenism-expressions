@@ -6,6 +6,10 @@
       "permalink": "/blog/bit-packing"
     },
     {
+      "title": "Solidity - Typecasting Addresses to Uint",
+      "permalink": "/blog/address-to-uint"
+    },
+    {
       "title": "Solidity - Bit Magic (Hot Dev Alpha!!)",
       "permalink": "/blog/bit-magic"
     },
