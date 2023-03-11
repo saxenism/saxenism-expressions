@@ -6,8 +6,8 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'GM!! I am Rahul Saxena',
-  tagline: 'I love the EVM and believe in a (progressively) decentralised world. Doing my bit towards it.',
+  title: 'EVM Expressions',
+  tagline: 'Hey, I am Rahul and I love the EVM and believe in a (progressively) decentralised world. Doing my bit towards it.',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here

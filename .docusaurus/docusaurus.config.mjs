@@ -4,8 +4,8 @@
  * Modify the docusaurus.config.js file at your site's root instead.
  */
 export default {
-  "title": "GM!! I am Rahul Saxena",
-  "tagline": "I love the EVM and believe in a (progressively) decentralised world. Doing my bit towards it.",
+  "title": "EVM Expressions",
+  "tagline": "Hey, I am Rahul and I love the EVM and believe in a (progressively) decentralised world. Doing my bit towards it.",
   "favicon": "img/favicon.ico",
   "url": "https://saxenism.com",
   "baseUrl": "/",
