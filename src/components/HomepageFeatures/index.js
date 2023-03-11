@@ -8,8 +8,8 @@ const FeatureList = [
     Svg: require('@site/static/img/hacker-svgrepo-com.svg').default,
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        I enjoy auditing EVM smart contracts as it is almost a direct expression of how my mind fundamentally works. I specialise in catching (some really extreme) edge-cases in your codebase.
+        Previous clients include Brahama.finance, YouDonate, CantoNameService, Sablier v2, among others.
       </>
     ),
   },

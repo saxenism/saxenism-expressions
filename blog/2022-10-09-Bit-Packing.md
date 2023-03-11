@@ -13,6 +13,8 @@ tags: [web3, solidity, language-tricks, bit-magic, bit-packing, intermediate]
 
 My last blog post about [Bit Magic](https://saxenism.com/web3/solidity/language-tricks/bit-magic/intermediate/2022/09/06/Bit-Magic-Solidity.html) generated some buzz amongst fellow EVM developers and some of them reached out to me to include additional things in my blog related to using bits effectively in Solidity and the EVM in general.
 
+<!--truncate-->
+
 One such dev was the giga-chad maintainer of ERC721A himself, [Vectorized.eth](https://twitter.com/optimizoor) and he shared [a tweet](https://twitter.com/optimizoor/status/1526015118479200256) with me where he showed a few code snippets where some really cool things were going on.
 
 Unfortunately, I could not make much sense out of it from the snippets and I had to head over to the [ERC721A pull request](https://github.com/chiru-labs/ERC721A/pull/272) that was behind the tweet and at that time my world turned upside down.
