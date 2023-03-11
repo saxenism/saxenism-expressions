@@ -79,11 +79,6 @@ const config = {
           {to: '/blog', label: 'Blog', position: 'left'},
           {to: '/videos', label: 'Videos', position: 'left'},
           {to: '/testimonials', label: 'Testimonials', position: 'left'},
-          {
-            href: 'https://github.com/facebook/docusaurus',
-            label: 'GitHub',
-            position: 'right',
-          },
         ],
       },
       footer: {
@@ -132,8 +127,8 @@ const config = {
         copyright: `Copyright © ${new Date().getFullYear()} Bluethroat Labs, Private Ltd. Built with Docusaurus.`,
       },
       prism: {
-        theme: lightCodeTheme,
-        darkTheme: darkCodeTheme,
+        theme: darkCodeTheme,
+        darkTheme: lightCodeTheme
       },
     }),
 };
