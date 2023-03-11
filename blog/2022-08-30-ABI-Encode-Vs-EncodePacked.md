@@ -27,6 +27,8 @@ A hash function has the following characterisitics:
     + small change in input changes the output significantly
         + hard to find x, y such that hash(x) = hash(y)
 
+<!--truncate-->
+
 ## String Encoding
 
 The solidity built-in function `abi.encode` enables to encode any Solidity types into raw bytes, that can be interpreted directly by the EVM.
