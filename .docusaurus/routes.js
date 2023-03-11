@@ -39,7 +39,7 @@ export default [
   },
   {
     path: '/blog',
-    component: ComponentCreator('/blog', '6fd'),
+    component: ComponentCreator('/blog', '858'),
     exact: true
   },
   {
@@ -50,6 +50,11 @@ export default [
   {
     path: '/blog/bit-magic',
     component: ComponentCreator('/blog/bit-magic', 'f14'),
+    exact: true
+  },
+  {
+    path: '/blog/bit-packing',
+    component: ComponentCreator('/blog/bit-packing', '318'),
     exact: true
   },
   {
@@ -74,7 +79,12 @@ export default [
   },
   {
     path: '/blog/tags/bit-magic',
-    component: ComponentCreator('/blog/tags/bit-magic', '923'),
+    component: ComponentCreator('/blog/tags/bit-magic', 'e52'),
+    exact: true
+  },
+  {
+    path: '/blog/tags/bit-packing',
+    component: ComponentCreator('/blog/tags/bit-packing', '4fb'),
     exact: true
   },
   {
@@ -99,22 +109,22 @@ export default [
   },
   {
     path: '/blog/tags/intermediate',
-    component: ComponentCreator('/blog/tags/intermediate', 'afc'),
+    component: ComponentCreator('/blog/tags/intermediate', '79c'),
     exact: true
   },
   {
     path: '/blog/tags/language-tricks',
-    component: ComponentCreator('/blog/tags/language-tricks', 'd34'),
+    component: ComponentCreator('/blog/tags/language-tricks', 'c62'),
     exact: true
   },
   {
     path: '/blog/tags/solidity',
-    component: ComponentCreator('/blog/tags/solidity', '844'),
+    component: ComponentCreator('/blog/tags/solidity', '8d5'),
     exact: true
   },
   {
     path: '/blog/tags/web-3',
-    component: ComponentCreator('/blog/tags/web-3', 'e06'),
+    component: ComponentCreator('/blog/tags/web-3', 'efe'),
     exact: true
   },
   {

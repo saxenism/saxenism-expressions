@@ -2,27 +2,32 @@
   {
     "label": "web3",
     "permalink": "/blog/tags/web-3",
-    "count": 1
+    "count": 2
   },
   {
     "label": "solidity",
     "permalink": "/blog/tags/solidity",
-    "count": 1
+    "count": 2
   },
   {
     "label": "language-tricks",
     "permalink": "/blog/tags/language-tricks",
-    "count": 1
+    "count": 2
   },
   {
     "label": "bit-magic",
     "permalink": "/blog/tags/bit-magic",
+    "count": 2
+  },
+  {
+    "label": "bit-packing",
+    "permalink": "/blog/tags/bit-packing",
     "count": 1
   },
   {
     "label": "intermediate",
     "permalink": "/blog/tags/intermediate",
-    "count": 1
+    "count": 2
   },
   {
     "label": "facebook",

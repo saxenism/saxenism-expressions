@@ -42,13 +42,16 @@
       "plugin": "plugin---docusaurus-debug-976-b9b"
     }
   },
-  "/blog-6fd": {
+  "/blog-858": {
     "__comp": "__comp---theme-blog-list-pagea-6-a-7ba",
     "__context": {
       "plugin": "plugin---blog-7-e-5-942"
     },
     "sidebar": "sidebar---blog-814-8ac",
     "items": [
+      {
+        "content": "content---blog-115-3dd"
+      },
       {
         "content": "content---blog-676-4d9"
       },
@@ -82,6 +85,14 @@
     "sidebar": "sidebar---blog-814-8ac",
     "content": "content---blog-2022-09-06-bit-magic-solidity-8-b-1-c41"
   },
+  "/blog/bit-packing-318": {
+    "__comp": "__comp---theme-blog-post-pageccc-cab",
+    "__context": {
+      "plugin": "plugin---blog-7-e-5-942"
+    },
+    "sidebar": "sidebar---blog-814-8ac",
+    "content": "content---blog-2022-10-09-bit-packing-931-7c8"
+  },
   "/blog/first-blog-post-bf9": {
     "__comp": "__comp---theme-blog-post-pageccc-cab",
     "__context": {
@@ -114,7 +125,7 @@
     "sidebar": "sidebar---blog-814-8ac",
     "tags": "tags---blog-tagsa-70-da2"
   },
-  "/blog/tags/bit-magic-923": {
+  "/blog/tags/bit-magic-e52": {
     "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
     "__context": {
       "plugin": "plugin---blog-7-e-5-942"
@@ -122,11 +133,28 @@
     "sidebar": "sidebar---blog-814-8ac",
     "items": [
       {
+        "content": "content---blog-115-3dd"
+      },
+      {
         "content": "content---blog-676-4d9"
       }
     ],
     "tag": "tag---blog-tags-bit-magic-8-d-5-4bb",
     "listMetadata": "listMetadata---blog-tags-bit-magic-63-c-97a"
+  },
+  "/blog/tags/bit-packing-4fb": {
+    "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
+    "__context": {
+      "plugin": "plugin---blog-7-e-5-942"
+    },
+    "sidebar": "sidebar---blog-814-8ac",
+    "items": [
+      {
+        "content": "content---blog-115-3dd"
+      }
+    ],
+    "tag": "tag---blog-tags-bit-packing-73-e-f3e",
+    "listMetadata": "listMetadata---blog-tags-bit-packing-6-ec-21d"
   },
   "/blog/tags/docusaurus-8fd": {
     "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
@@ -196,13 +224,16 @@
     "tag": "tag---blog-tags-holae-16-18a",
     "listMetadata": "listMetadata---blog-tags-hola-4-c-9-a24"
   },
-  "/blog/tags/intermediate-afc": {
+  "/blog/tags/intermediate-79c": {
     "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
     "__context": {
       "plugin": "plugin---blog-7-e-5-942"
     },
     "sidebar": "sidebar---blog-814-8ac",
     "items": [
+      {
+        "content": "content---blog-115-3dd"
+      },
       {
         "content": "content---blog-676-4d9"
       }
@@ -210,13 +241,16 @@
     "tag": "tag---blog-tags-intermediate-028-299",
     "listMetadata": "listMetadata---blog-tags-intermediate-878-c18"
   },
-  "/blog/tags/language-tricks-d34": {
+  "/blog/tags/language-tricks-c62": {
     "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
     "__context": {
       "plugin": "plugin---blog-7-e-5-942"
     },
     "sidebar": "sidebar---blog-814-8ac",
     "items": [
+      {
+        "content": "content---blog-115-3dd"
+      },
       {
         "content": "content---blog-676-4d9"
       }
@@ -224,7 +258,7 @@
     "tag": "tag---blog-tags-language-tricks-95-b-6a7",
     "listMetadata": "listMetadata---blog-tags-language-tricks-8-bb-be2"
   },
-  "/blog/tags/solidity-844": {
+  "/blog/tags/solidity-8d5": {
     "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
     "__context": {
       "plugin": "plugin---blog-7-e-5-942"
@@ -232,19 +266,25 @@
     "sidebar": "sidebar---blog-814-8ac",
     "items": [
       {
+        "content": "content---blog-115-3dd"
+      },
+      {
         "content": "content---blog-676-4d9"
       }
     ],
     "tag": "tag---blog-tags-solidity-5-dc-b5d",
     "listMetadata": "listMetadata---blog-tags-solidity-74-a-695"
   },
-  "/blog/tags/web-3-e06": {
+  "/blog/tags/web-3-efe": {
     "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
     "__context": {
       "plugin": "plugin---blog-7-e-5-942"
     },
     "sidebar": "sidebar---blog-814-8ac",
     "items": [
+      {
+        "content": "content---blog-115-3dd"
+      },
       {
         "content": "content---blog-676-4d9"
       }
