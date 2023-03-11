@@ -2,12 +2,12 @@
   {
     "label": "web3",
     "permalink": "/blog/tags/web-3",
-    "count": 2
+    "count": 3
   },
   {
     "label": "solidity",
     "permalink": "/blog/tags/solidity",
-    "count": 2
+    "count": 3
   },
   {
     "label": "language-tricks",
@@ -30,6 +30,21 @@
     "count": 2
   },
   {
+    "label": "hashing",
+    "permalink": "/blog/tags/hashing",
+    "count": 1
+  },
+  {
+    "label": "keccak256",
+    "permalink": "/blog/tags/keccak-256",
+    "count": 1
+  },
+  {
+    "label": "abi",
+    "permalink": "/blog/tags/abi",
+    "count": 1
+  },
+  {
     "label": "facebook",
     "permalink": "/blog/tags/facebook",
     "count": 1
@@ -42,6 +57,6 @@
   {
     "label": "docusaurus",
     "permalink": "/blog/tags/docusaurus",
-    "count": 2
+    "count": 1
   }
 ]

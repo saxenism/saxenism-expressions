@@ -39,7 +39,7 @@ export default [
   },
   {
     path: '/blog',
-    component: ComponentCreator('/blog', 'fa1'),
+    component: ComponentCreator('/blog', 'e9d'),
     exact: true
   },
   {
@@ -58,13 +58,18 @@ export default [
     exact: true
   },
   {
-    path: '/blog/mdx-blog-post',
-    component: ComponentCreator('/blog/mdx-blog-post', '747'),
+    path: '/blog/solidity-encodings',
+    component: ComponentCreator('/blog/solidity-encodings', '1ef'),
     exact: true
   },
   {
     path: '/blog/tags',
     component: ComponentCreator('/blog/tags', 'ced'),
+    exact: true
+  },
+  {
+    path: '/blog/tags/abi',
+    component: ComponentCreator('/blog/tags/abi', '550'),
     exact: true
   },
   {
@@ -79,12 +84,17 @@ export default [
   },
   {
     path: '/blog/tags/docusaurus',
-    component: ComponentCreator('/blog/tags/docusaurus', '4fd'),
+    component: ComponentCreator('/blog/tags/docusaurus', '822'),
     exact: true
   },
   {
     path: '/blog/tags/facebook',
     component: ComponentCreator('/blog/tags/facebook', '5f3'),
+    exact: true
+  },
+  {
+    path: '/blog/tags/hashing',
+    component: ComponentCreator('/blog/tags/hashing', 'f47'),
     exact: true
   },
   {
@@ -98,18 +108,23 @@ export default [
     exact: true
   },
   {
+    path: '/blog/tags/keccak-256',
+    component: ComponentCreator('/blog/tags/keccak-256', '076'),
+    exact: true
+  },
+  {
     path: '/blog/tags/language-tricks',
     component: ComponentCreator('/blog/tags/language-tricks', 'c62'),
     exact: true
   },
   {
     path: '/blog/tags/solidity',
-    component: ComponentCreator('/blog/tags/solidity', '8d5'),
+    component: ComponentCreator('/blog/tags/solidity', 'd72'),
     exact: true
   },
   {
     path: '/blog/tags/web-3',
-    component: ComponentCreator('/blog/tags/web-3', 'efe'),
+    component: ComponentCreator('/blog/tags/web-3', '323'),
     exact: true
   },
   {

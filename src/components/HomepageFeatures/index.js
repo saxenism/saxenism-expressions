@@ -28,8 +28,8 @@ const FeatureList = [
     Svg: require('@site/static/img/computers.svg').default,
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        Led the product development of a new-age lending product at Sublime along with another dev from the ground up. Led a team of devs for creating a decentralised Upwork-like platform
+        and wrote a lot of code here-and-there. Overall, I just love writing, super-safe yet gas-efficient code. Given my security background, the fundamentals of writing sound code are just hardwired into me :P 
       </>
     ),
   },

@@ -470,11 +470,83 @@
               "permalink": "/blog/bit-packing"
             },
             "nextItem": {
+              "title": "ABI Encode - Solidity",
+              "permalink": "/blog/solidity-encodings"
+            }
+          },
+          "content": "## Bitwise Operations\n\nIncludes all basic bitwise operations such as `and`, `or`, `xor`, `not`, `shiftLeft`, `shiftRight` etc.\n\n```solidity\n\nuint x;\nuint y;\n\nx & y // and\nx | y // or\nx ^ y // xor\n~x    // not\nx << y // shift x by y bits to the left\nx >> y // shift x by y bits to the right\n\n```\n\n<!--truncate-->\n\n## Get Last N bits\n\nBinary representation of (x-1) can be obtained by simply flipping all the bits to the right of the rightmost 1 in x and also including the rightmost 1.\n\nExample (Confirm using [this website](https://www.rapidtables.com/convert/number/decimal-to-binary.html) if you want)\n\n7 = 0111\n\n6 = 0110\n\n---\n\n70 = 1000110\n\n69 = 1000101\n\n---\n\n420 = 110100100\n\n419 = 110100011\n\n\n----\n\nSo, now if you created a number of N bits with all 1's, and did an & with the number x in question, you will get the value of the last N bits.\n\n```solidity \n\nfunction getLastNBits(uint x, uint n) external pure returns(uint256) {\n    uint mask = (1 << n) - 1;\n    return x & mask;\n}\n\n/****\n// In general, a modulo can be easily converted into a bitwise & if the divisor is power of 2 ((1 << anything) would always be a power of 2).\n// All you gotta do is to translate that modulo into a bitwise & of `divisor - 1`.\n// By reverse-engineering this piece of information, we can write another function called getLastNBitsUsingMod\n\n// In terms of gas consumption:\n// getLastNBits(22313) == getLastNBitsUsingMod(22309)\n*****/\n\nfunction getLastNBitsUsingMod(uint x, uint N) pure external returns (uint result) {\n        result = x % (1 << N);\n}\n```\n\n\n\n    \n\n## Most significant bit position\n\nKeep on right-shifting the number until it all becomes 0. Count the number of times, you had to do this operations. That's all.\n\n```solidity\n\nfunction mostSignificantBit(uint256 x) public pure returns(uint256) {\n    uint i;\n    while((x >>= 1) > 0) { \n        ++i;\n    }\n    return i;\n}\n\n```\n\n### NOTE\nAs pointed out by [devtooligan](https://twitter.com/devtooligan), the above approach would return 1 for both x = 0 and x = 1, which is somewhat of a problem. So, a safer implementation as suggested by him is:\n\n```solidity\n\nfunction mostSignificantBit(uint256 x) public pure returns(uint256) {\n    uint i;\n    while(x > 0) { \n        ++i;\n        x >>= 1;\n    }\n    return i;\n}\n\n```\n\nBtw this implementation would also change the answer from 0-indexed to 1-indexed.\n\nCheers.\n\n## Get first N bits\n\nSame concept as the function `getLastNBits` we discussed above.\n\nThe only change here would be in the mask where we shift n number of 1's to the beginning of the mask and keep the rest as 0's.\n\nAnother tip would be, if length is not available, then use the function `mostSignificantBit` we discussed before.\n\n```solidity\n\nfunction getFirstNBits(uint x, uint n, uint len) public pure returns(uint256) {\n    uint mask = ((1 << n) - 1) << (len - n);\n    return x & mask;\n}\n\n```\n\n## Is Power of 2\n\nIf x is a power of 2, then x will have only 1 set bit, rest all will be 0's. And then for (x-1) all bits will be set apart from the earlier leading 1. Therefore, if x would be a power of 2, then x&(x-1) will always give 0 as the result.\n\n```solidity\n\nfunction isPowerOfTwo(uint x) external pure returns(bool) {\n        return (x == 0 || x & (x-1) == 0);\n    }\n\n```\n\n## Count number of set bits\n\nAs explained in the previous algorithm, the relationship between the bits of x and x-1. So as in x-1, the rightmost 1 and bits right to it are flipped, then by performing x&(x-1), and storing it in x, will reduce x to a number containing number of ones(in its binary form) less than the previous state of x, thus increasing the value of count in each iteration.\n\n```solidity\n\nfunction countSetBits(uint x) public pure returns(uint) {\n    uint count;\n    while (x != 0) {\n        x = x & (x-1);\n        ++count;\n    }\n    return count;\n}\n\n```\n\n## Pack a number of bools into a single slot (inside uint256)\n\nAs you may know the most expensive operation in Ethereum is storing data (SSTORE). So you should always look for ways to reduce the storage requirements.\n\nDon't need to explain much. Code is enough.\n\n```solidity\n\n// SPDX-License-Identifier: MIT\n\npragma solidity ^0.8.7;\n\ncontract BitManipulations {\n    bool[33] public arr = [true, false, true, false,true, false,true, false,true, false,true, false,true, false,true, false,true, false,true, false,true, false,true, false,true, false,true, false,true, false,true, false, false];\n    /*\n    0: true     \n    1: false\n    2: true\n    3: false\n    4: true\n    5: false\n    6: true\n    7: false\n    8: true\n    9: false\n    10: true\n    11: false\n    12: true\n    13: false\n    14: true\n    .\n    .\n    .\n    */\n    uint256 public packedBool;\n\n    function findNthBool(uint256 position) public view returns(bool) {\n        return ((packedBool >> position) & 1 > 0);\n    }\n\n    function findNthBool2(uint256 position) public view returns(bool) {\n        return ((packedBool >> position) & 1 == 1);\n    }\n\n    function findNthBool3(uint256 position) public view returns(bool) {\n        return ((packedBool >> position) & 1 != 0);\n    }\n\n    function packBool() external {\n        uint256 length = arr.length;\n    \n        for(uint i; i < length; ) {\n            setNthBool(i, arr[i]);\n            unchecked {\n                ++i;\n            }\n        }\n    }\n\n    function setNthBool(uint256 _position, bool _value) internal {\n        if(_value) {\n            packedBool |= (1 << _position);\n        } else {\n            packedBool &=  ~ (1 << _position);\n        }\n    }\n}\n\n```\n\n# Extreme Basics - Part 1\n\nThe XOR operator (^) returns 0 for same bits and 1 for different bits.\n\n\nTruth Table:\n| x1 | x2 | x1 ^ x2 |\n| -- | -- | ------- |\n| 0  | 0  | 0       |\n| 0  | 1  | 1       |\n| 1  | 0  | 1       |\n| 1  | 1  | 0       |\n\n\n## Detect if two numbers have opposite signs\n\nSince we know that the leftmost bit for a positive integer is 0 and for negative is 1.\nTherefore, with the xor of the leftmost bits, if we get 1, the signs were different.\nAlso, if we get x^y as 1 for the leftmost bit, it would mean that it's a negative number and therefore less than 0\n\n```solidity\n\n    function oppositeSigns(int x, int y) external pure returns (bool) {\n        return (x ^ y < 0);\n    }\n\n```\n\n## Detect if number is even or odd\n\nFor a number to be even, the last bit (2^0) should not be set and similarly for odd numbers the last bit is set. So, simply check what's the last bit of the number.\n\n```solidity\n\n    function isEven(uint x) external pure returns(bool) {\n        return (x & 1 == 0);\n    }\n\n```\n\n## Add 1 to an integer\n\n```solidity\n\n    /*\n        Since we know that negative numbers are stored as 2's complement in Solidity (and other programming languages), we can use that fact to add 1 to a number (integer)\n        2's complement is 1's complement plus 1 and 1's complement is simply inverting all bits of the given number\n        Therefore, by reverse engineering, if we did -(~x) we should get x + 1, right?\n    */\n    function add1ToInt(int x) external pure returns(int) {\n        return -(~x);\n    }\n\n```\n\n## Swap Two Numbers\n\nAlright agreed that this is a bit of an overkill, since Solidity natively provides a cool way to swap values of two numbers, but I'm autistic and let's just go with the flow :P\n\nAlso, the native method to swap two values is ofc more gas efficient.\n\n```solidity\n\n    uint public a = 5;\n    uint public b = 10;\n\n    function swapTwoNumbers() external {\n        (a, b) = (b, a);\n    }\n\n    function swapTwoNumbersBitManipulation() external {\n        a = a ^ b;\n        b = b ^ a;\n        a = a ^ b;\n    }\n\n```\n\n## Turn off n'th bit in a number\n\n```solidity\n\n    /*\n        What we want to accomplish here is a bitwise & of the nth bit with 0 so that it becomes 0 and since we do not want to disturb the \n        other bits of the number x, we do a bitwise & of bits of number x with all 1's.\n    */\n\n    function turnOffNthBit(uint x, uint n) external pure returns(uint) {\n        return x & ~(1 << n);\n    }\n\n```\n\n## Turn on Nth bit in a number\n\n```solidity\n    \n    /*\n    Similar to the last function, here since we want to turn ON a bit, we will do a bitwise OR of the nth bit with 1 and for the rest of the bits, we'll do a bitwise OR with 0, so that they do not get disturbed.\n    */\n\n    function turnOnNthBit(uint x, uint n) external pure returns(uint) {\n        return x | (1 << n);\n    }\n\n```\n\n## Check if the nth bit is set for a number\n\n```solidity\n\n    function checkNthBit(uint x, uint n) external pure returns(bool) {\n        return x & (1 << n) != 0;\n    }\n\n```\n\n## Toggle nth bit\n\n```solidity\n\n    // We'll use the fact that: 0 ^ 1 = 1 and 1 ^ 1 = 0\n\n    function toggleNthBit(uint x, uint n) external pure returns (uint) {\n        return x ^ (1 << n);\n    }\n\n```\n\n## Unset the rightmost set bit in a number\n\n```solidity\n\n    // We'll use the property of n and n-1 here again.\n\n    function unsetRightmostBit(uint x) external pure returns(uint) {\n        return x & (x-1);\n    }\n\n```\n\n## Find position of rightmost set bit\n\nThe idea here would be to first do n & (n - 1) and then do a xor of the resultant with the original number n. After this the only set bit in the number would be the rightmost one.\n\nThe latter part of the logic can also be used to **determine the position of the only set bit** in a number.\n\n```solidity\n\n    function findPositionOfRightmostSetBit(uint n) external pure returns(uint count) {\n        uint num = n ^ (n & (n-1));\n        while (num != 0) {\n            num >>= 1;\n            ++count;\n        }\n    }\n\n    function findPositionOfRightmostSetBit_Negation (int n) external pure returns(uint count) {\n        if(n & 1 == 1) {\n            return 1; // Number is odd\n        }\n        int num = n & -n;\n        while(num != 0) {\n            num >>= 1;\n            ++count;\n        }\n    }\n\n```\n\n# Puzzles (Incorporating multiple tricks)\n\n## Find number of bits to be flipped to change one number to another\n\nThe idea here is to xor the two numbers. This will result in a number whose bit representation will only have set bits where the bits were different in the input numbers.\n\nAfter that the problem is reduced to simply counting the set bits.\n\n```solidity\n\n    function bitsToFlip(uint x, uint y) external pure returns (uint counter) {\n        uint xoredNumber = x ^ y;\n        while(xoredNumber != 0) {\n            xoredNumber = xoredNumber & (xoredNumber - 1);\n            ++counter;\n        }\n    }\n \n```\n\n## Calculate xor from 1 to N\n\nGiven a number N, calculate the value of xoring all number from 1 to N.\n\n```solidity\n\n    // This is the naive method to calculate the xor from 1 to N.\n\n    function calculateXorToN(uint N) external pure returns (uint result) {\n        for(uint i = 1; i <= N; ) {\n            result ^= i;\n            unchecked {\n                ++i;\n            }\n        }\n    }\n\n    /*\n    There isn't some big brain math happening behind (hopefully). This is just observed as a pattern that repeats and hence we use the deductions from observing that pattern while calculating xor from 1 to N. And ofc this function is also much more gas efficient\n    */\n    function calculateXorToNEfficient(uint N) external pure returns (uint result) {\n        uint moduloN = N%4;\n        if(moduloN == 0) {\n            result = N;\n        } else if(moduloN == 1) {\n            result = 1;\n        } else if(moduloN == 2) {\n            result = N + 1;\n        } else {\n            result = 0;\n        }\n    }\n\n```\n\n## Equal Sum and XOR\n\nGiven a positive integer N, find all `i` such that N+i == N^i, where 0 <= i <= N\n\n```solidity\n\n    function findSumEqualToXor(uint n) external pure returns (uint counter) {\n        for(uint i; i <= n; ) {\n            if((n^i) == (n+i)) {\n                unchecked {\n                    ++counter;\n                }\n            }\n            unchecked {\n                ++i;\n            }\n        }\n    }\n\n    // This function is made possible because of the formula:\n    // (n + i) = (n ^ i) + 2*(n & i)\n    // So, according to the requirement we only need to find all instances where n & i == 0\n    // To do that we find all unset bits of n and find number of possible combinations (which is 2 raised to the power no of unset bits)\n    function findSumEqualToXorEfficient(uint n) external pure returns (uint counter) {\n        uint unsetBits;\n        while(n != 0) {\n            if(n & 1 == 0) {\n                ++unsetBits;\n            }\n            n >>= 1;\n        }\n        counter = (1 << unsetBits);\n    }\n\n```\n\n> Takeaway: Remember this formula if you can -> (n+i) = (n^i) + 2*(n&i)\n\n## Get the most significant bit position in a given number\n\n```solidity\n\n    function findMSB(uint256 n) external pure returns (uint) {\n        // Since this is uint256, this will have 256 bits. So we will have to take appropriate number of steps.\n        // The number of ORs we do would be based on the bits present in number n.\n\n        n = n | (n >> 1); // Now starting 2 bits are set in n\n        n = n | (n >> 2); // Now starting 4 bits are set in n\n        n = n | (n >> 4); // Now starting 8 bits are set in n\n        n = n | (n >> 8); // Now starting 16 bits are set in n\n        n = n | (n >> 16); // Now starting 32 bits are set in n\n        n = n | (n >> 32); // Now starting 64 bits are set in n\n        n = n | (n >> 64); // Now starting 128 bits are set in n\n        n = n | (n >> 128); // Now starting 256 bits are set in n\n\n        n += 1; // Now it's 1 set bit (higher than the original MSB) and rest are 0s\n\n        return (n >> 1);\n    }\n\n```\n\n# Advanced problems solved via bit manipulations\n\n## Add Two Numbers (Important property)\n\nWell this question itself is trivial, but the property used here can prove to be quite useful when you want to relate bitwise operations to addition.\n\n```solidity\n\n    function addTwoNumbers(uint x, uint y) external pure returns(uint sum) {\n        sum = (x & y) + (x | y);\n    }\n\n    function addTwoNumbers2(uint x, uint y) public pure returns (uint sum) {\n        sum = (y == 0 ? x : addTwoNumbers2((x ^ y), (x & y) << 1));\n    }\n\n```\n\n## Exponentiation\n\nTo calculate x**y, we can obviously do `x**y` and that would also be a more gas efficient choice, but here's how you would do it if you were to exponentiate with using only bit manipulations:\n\n```solidity\n\n    // Calculate x**y\n    function fastExponentiation(uint x, uint y) external pure returns (uint ans) { // Execution Cost of 2**4 = 16 was 23373\n        // Stores final answer\n        ans = 1;\n        while (y > 0) {\n            uint last_bit = (y & 1);\n            \n            // Check if current LSB is set\n            if (last_bit == 1) {\n                ans *= x;\n            }\n    \n            x *= x;\n    \n            // Right shift\n            y >>= 1;\n        }\n    }\n\n    function normalExponentiation(uint x, uint y) external pure returns (uint) { // Execution Cost of 2**4 = 16 was 22561\n        return (x**y);\n    }\n\n```"
+        },
+        {
+          "id": "solidity-encodings",
+          "metadata": {
+            "permalink": "/blog/solidity-encodings",
+            "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/blog/2022-08-30-ABI-Encode-Vs-EncodePacked.md",
+            "source": "@site/blog/2022-08-30-ABI-Encode-Vs-EncodePacked.md",
+            "title": "ABI Encode - Solidity",
+            "description": "Let us see today when and why do we use abi.encode vs abi.encodePacked.",
+            "date": "2022-08-30T00:00:00.000Z",
+            "formattedDate": "August 30, 2022",
+            "tags": [
+              {
+                "label": "web3",
+                "permalink": "/blog/tags/web-3"
+              },
+              {
+                "label": "solidity",
+                "permalink": "/blog/tags/solidity"
+              },
+              {
+                "label": "hashing",
+                "permalink": "/blog/tags/hashing"
+              },
+              {
+                "label": "keccak256",
+                "permalink": "/blog/tags/keccak-256"
+              },
+              {
+                "label": "abi",
+                "permalink": "/blog/tags/abi"
+              }
+            ],
+            "readingTime": 4.825,
+            "hasTruncateMarker": false,
+            "authors": [
+              {
+                "name": "Rahul Saxena",
+                "title": "EVM Enjoyoor",
+                "url": "https://twitter.com/saxenism",
+                "image_url": "https://pbs.twimg.com/profile_images/1554486619914117126/7QV7CHum_400x400.jpg",
+                "imageURL": "https://pbs.twimg.com/profile_images/1554486619914117126/7QV7CHum_400x400.jpg"
+              }
+            ],
+            "frontMatter": {
+              "slug": "solidity-encodings",
+              "title": "ABI Encode - Solidity",
+              "authors": {
+                "name": "Rahul Saxena",
+                "title": "EVM Enjoyoor",
+                "url": "https://twitter.com/saxenism",
+                "image_url": "https://pbs.twimg.com/profile_images/1554486619914117126/7QV7CHum_400x400.jpg",
+                "imageURL": "https://pbs.twimg.com/profile_images/1554486619914117126/7QV7CHum_400x400.jpg"
+              },
+              "tags": [
+                "web3",
+                "solidity",
+                "hashing",
+                "keccak256",
+                "abi"
+              ]
+            },
+            "prevItem": {
+              "title": "Solidity - Bit Magic (Hot Dev Alpha!!)",
+              "permalink": "/blog/bit-magic"
+            },
+            "nextItem": {
               "title": "Welcome",
               "permalink": "/blog/welcome"
             }
           },
-          "content": "## Bitwise Operations\n\nIncludes all basic bitwise operations such as `and`, `or`, `xor`, `not`, `shiftLeft`, `shiftRight` etc.\n\n```solidity\n\nuint x;\nuint y;\n\nx & y // and\nx | y // or\nx ^ y // xor\n~x    // not\nx << y // shift x by y bits to the left\nx >> y // shift x by y bits to the right\n\n```\n\n<!--truncate-->\n\n## Get Last N bits\n\nBinary representation of (x-1) can be obtained by simply flipping all the bits to the right of the rightmost 1 in x and also including the rightmost 1.\n\nExample (Confirm using [this website](https://www.rapidtables.com/convert/number/decimal-to-binary.html) if you want)\n\n7 = 0111\n\n6 = 0110\n\n---\n\n70 = 1000110\n\n69 = 1000101\n\n---\n\n420 = 110100100\n\n419 = 110100011\n\n\n----\n\nSo, now if you created a number of N bits with all 1's, and did an & with the number x in question, you will get the value of the last N bits.\n\n```solidity \n\nfunction getLastNBits(uint x, uint n) external pure returns(uint256) {\n    uint mask = (1 << n) - 1;\n    return x & mask;\n}\n\n/****\n// In general, a modulo can be easily converted into a bitwise & if the divisor is power of 2 ((1 << anything) would always be a power of 2).\n// All you gotta do is to translate that modulo into a bitwise & of `divisor - 1`.\n// By reverse-engineering this piece of information, we can write another function called getLastNBitsUsingMod\n\n// In terms of gas consumption:\n// getLastNBits(22313) == getLastNBitsUsingMod(22309)\n*****/\n\nfunction getLastNBitsUsingMod(uint x, uint N) pure external returns (uint result) {\n        result = x % (1 << N);\n}\n```\n\n\n\n    \n\n## Most significant bit position\n\nKeep on right-shifting the number until it all becomes 0. Count the number of times, you had to do this operations. That's all.\n\n```solidity\n\nfunction mostSignificantBit(uint256 x) public pure returns(uint256) {\n    uint i;\n    while((x >>= 1) > 0) { \n        ++i;\n    }\n    return i;\n}\n\n```\n\n### NOTE\nAs pointed out by [devtooligan](https://twitter.com/devtooligan), the above approach would return 1 for both x = 0 and x = 1, which is somewhat of a problem. So, a safer implementation as suggested by him is:\n\n```solidity\n\nfunction mostSignificantBit(uint256 x) public pure returns(uint256) {\n    uint i;\n    while(x > 0) { \n        ++i;\n        x >>= 1;\n    }\n    return i;\n}\n\n```\n\nBtw this implementation would also change the answer from 0-indexed to 1-indexed.\n\nCheers.\n\n## Get first N bits\n\nSame concept as the function `getLastNBits` we discussed above.\n\nThe only change here would be in the mask where we shift n number of 1's to the beginning of the mask and keep the rest as 0's.\n\nAnother tip would be, if length is not available, then use the function `mostSignificantBit` we discussed before.\n\n```solidity\n\nfunction getFirstNBits(uint x, uint n, uint len) public pure returns(uint256) {\n    uint mask = ((1 << n) - 1) << (len - n);\n    return x & mask;\n}\n\n```\n\n## Is Power of 2\n\nIf x is a power of 2, then x will have only 1 set bit, rest all will be 0's. And then for (x-1) all bits will be set apart from the earlier leading 1. Therefore, if x would be a power of 2, then x&(x-1) will always give 0 as the result.\n\n```solidity\n\nfunction isPowerOfTwo(uint x) external pure returns(bool) {\n        return (x == 0 || x & (x-1) == 0);\n    }\n\n```\n\n## Count number of set bits\n\nAs explained in the previous algorithm, the relationship between the bits of x and x-1. So as in x-1, the rightmost 1 and bits right to it are flipped, then by performing x&(x-1), and storing it in x, will reduce x to a number containing number of ones(in its binary form) less than the previous state of x, thus increasing the value of count in each iteration.\n\n```solidity\n\nfunction countSetBits(uint x) public pure returns(uint) {\n    uint count;\n    while (x != 0) {\n        x = x & (x-1);\n        ++count;\n    }\n    return count;\n}\n\n```\n\n## Pack a number of bools into a single slot (inside uint256)\n\nAs you may know the most expensive operation in Ethereum is storing data (SSTORE). So you should always look for ways to reduce the storage requirements.\n\nDon't need to explain much. Code is enough.\n\n```solidity\n\n// SPDX-License-Identifier: MIT\n\npragma solidity ^0.8.7;\n\ncontract BitManipulations {\n    bool[33] public arr = [true, false, true, false,true, false,true, false,true, false,true, false,true, false,true, false,true, false,true, false,true, false,true, false,true, false,true, false,true, false,true, false, false];\n    /*\n    0: true     \n    1: false\n    2: true\n    3: false\n    4: true\n    5: false\n    6: true\n    7: false\n    8: true\n    9: false\n    10: true\n    11: false\n    12: true\n    13: false\n    14: true\n    .\n    .\n    .\n    */\n    uint256 public packedBool;\n\n    function findNthBool(uint256 position) public view returns(bool) {\n        return ((packedBool >> position) & 1 > 0);\n    }\n\n    function findNthBool2(uint256 position) public view returns(bool) {\n        return ((packedBool >> position) & 1 == 1);\n    }\n\n    function findNthBool3(uint256 position) public view returns(bool) {\n        return ((packedBool >> position) & 1 != 0);\n    }\n\n    function packBool() external {\n        uint256 length = arr.length;\n    \n        for(uint i; i < length; ) {\n            setNthBool(i, arr[i]);\n            unchecked {\n                ++i;\n            }\n        }\n    }\n\n    function setNthBool(uint256 _position, bool _value) internal {\n        if(_value) {\n            packedBool |= (1 << _position);\n        } else {\n            packedBool &=  ~ (1 << _position);\n        }\n    }\n}\n\n```\n\n# Extreme Basics - Part 1\n\nThe XOR operator (^) returns 0 for same bits and 1 for different bits.\n\n\nTruth Table:\n| x1 | x2 | x1 ^ x2 |\n| -- | -- | ------- |\n| 0  | 0  | 0       |\n| 0  | 1  | 1       |\n| 1  | 0  | 1       |\n| 1  | 1  | 0       |\n\n\n## Detect if two numbers have opposite signs\n\nSince we know that the leftmost bit for a positive integer is 0 and for negative is 1.\nTherefore, with the xor of the leftmost bits, if we get 1, the signs were different.\nAlso, if we get x^y as 1 for the leftmost bit, it would mean that it's a negative number and therefore less than 0\n\n```solidity\n\n    function oppositeSigns(int x, int y) external pure returns (bool) {\n        return (x ^ y < 0);\n    }\n\n```\n\n## Detect if number is even or odd\n\nFor a number to be even, the last bit (2^0) should not be set and similarly for odd numbers the last bit is set. So, simply check what's the last bit of the number.\n\n```solidity\n\n    function isEven(uint x) external pure returns(bool) {\n        return (x & 1 == 0);\n    }\n\n```\n\n## Add 1 to an integer\n\n```solidity\n\n    /*\n        Since we know that negative numbers are stored as 2's complement in Solidity (and other programming languages), we can use that fact to add 1 to a number (integer)\n        2's complement is 1's complement plus 1 and 1's complement is simply inverting all bits of the given number\n        Therefore, by reverse engineering, if we did -(~x) we should get x + 1, right?\n    */\n    function add1ToInt(int x) external pure returns(int) {\n        return -(~x);\n    }\n\n```\n\n## Swap Two Numbers\n\nAlright agreed that this is a bit of an overkill, since Solidity natively provides a cool way to swap values of two numbers, but I'm autistic and let's just go with the flow :P\n\nAlso, the native method to swap two values is ofc more gas efficient.\n\n```solidity\n\n    uint public a = 5;\n    uint public b = 10;\n\n    function swapTwoNumbers() external {\n        (a, b) = (b, a);\n    }\n\n    function swapTwoNumbersBitManipulation() external {\n        a = a ^ b;\n        b = b ^ a;\n        a = a ^ b;\n    }\n\n```\n\n## Turn off n'th bit in a number\n\n```solidity\n\n    /*\n        What we want to accomplish here is a bitwise & of the nth bit with 0 so that it becomes 0 and since we do not want to disturb the \n        other bits of the number x, we do a bitwise & of bits of number x with all 1's.\n    */\n\n    function turnOffNthBit(uint x, uint n) external pure returns(uint) {\n        return x & ~(1 << n);\n    }\n\n```\n\n## Turn on Nth bit in a number\n\n```solidity\n    \n    /*\n    Similar to the last function, here since we want to turn ON a bit, we will do a bitwise OR of the nth bit with 1 and for the rest of the bits, we'll do a bitwise OR with 0, so that they do not get disturbed.\n    */\n\n    function turnOnNthBit(uint x, uint n) external pure returns(uint) {\n        return x | (1 << n);\n    }\n\n```\n\n## Check if the nth bit is set for a number\n\n```solidity\n\n    function checkNthBit(uint x, uint n) external pure returns(bool) {\n        return x & (1 << n) != 0;\n    }\n\n```\n\n## Toggle nth bit\n\n```solidity\n\n    // We'll use the fact that: 0 ^ 1 = 1 and 1 ^ 1 = 0\n\n    function toggleNthBit(uint x, uint n) external pure returns (uint) {\n        return x ^ (1 << n);\n    }\n\n```\n\n## Unset the rightmost set bit in a number\n\n```solidity\n\n    // We'll use the property of n and n-1 here again.\n\n    function unsetRightmostBit(uint x) external pure returns(uint) {\n        return x & (x-1);\n    }\n\n```\n\n## Find position of rightmost set bit\n\nThe idea here would be to first do n & (n - 1) and then do a xor of the resultant with the original number n. After this the only set bit in the number would be the rightmost one.\n\nThe latter part of the logic can also be used to **determine the position of the only set bit** in a number.\n\n```solidity\n\n    function findPositionOfRightmostSetBit(uint n) external pure returns(uint count) {\n        uint num = n ^ (n & (n-1));\n        while (num != 0) {\n            num >>= 1;\n            ++count;\n        }\n    }\n\n    function findPositionOfRightmostSetBit_Negation (int n) external pure returns(uint count) {\n        if(n & 1 == 1) {\n            return 1; // Number is odd\n        }\n        int num = n & -n;\n        while(num != 0) {\n            num >>= 1;\n            ++count;\n        }\n    }\n\n```\n\n# Puzzles (Incorporating multiple tricks)\n\n## Find number of bits to be flipped to change one number to another\n\nThe idea here is to xor the two numbers. This will result in a number whose bit representation will only have set bits where the bits were different in the input numbers.\n\nAfter that the problem is reduced to simply counting the set bits.\n\n```solidity\n\n    function bitsToFlip(uint x, uint y) external pure returns (uint counter) {\n        uint xoredNumber = x ^ y;\n        while(xoredNumber != 0) {\n            xoredNumber = xoredNumber & (xoredNumber - 1);\n            ++counter;\n        }\n    }\n \n```\n\n## Calculate xor from 1 to N\n\nGiven a number N, calculate the value of xoring all number from 1 to N.\n\n```solidity\n\n    // This is the naive method to calculate the xor from 1 to N.\n\n    function calculateXorToN(uint N) external pure returns (uint result) {\n        for(uint i = 1; i <= N; ) {\n            result ^= i;\n            unchecked {\n                ++i;\n            }\n        }\n    }\n\n    /*\n    There isn't some big brain math happening behind (hopefully). This is just observed as a pattern that repeats and hence we use the deductions from observing that pattern while calculating xor from 1 to N. And ofc this function is also much more gas efficient\n    */\n    function calculateXorToNEfficient(uint N) external pure returns (uint result) {\n        uint moduloN = N%4;\n        if(moduloN == 0) {\n            result = N;\n        } else if(moduloN == 1) {\n            result = 1;\n        } else if(moduloN == 2) {\n            result = N + 1;\n        } else {\n            result = 0;\n        }\n    }\n\n```\n\n## Equal Sum and XOR\n\nGiven a positive integer N, find all `i` such that N+i == N^i, where 0 <= i <= N\n\n```solidity\n\n    function findSumEqualToXor(uint n) external pure returns (uint counter) {\n        for(uint i; i <= n; ) {\n            if((n^i) == (n+i)) {\n                unchecked {\n                    ++counter;\n                }\n            }\n            unchecked {\n                ++i;\n            }\n        }\n    }\n\n    // This function is made possible because of the formula:\n    // (n + i) = (n ^ i) + 2*(n & i)\n    // So, according to the requirement we only need to find all instances where n & i == 0\n    // To do that we find all unset bits of n and find number of possible combinations (which is 2 raised to the power no of unset bits)\n    function findSumEqualToXorEfficient(uint n) external pure returns (uint counter) {\n        uint unsetBits;\n        while(n != 0) {\n            if(n & 1 == 0) {\n                ++unsetBits;\n            }\n            n >>= 1;\n        }\n        counter = (1 << unsetBits);\n    }\n\n```\n\n> Takeaway: Remember this formula if you can -> (n+i) = (n^i) + 2*(n&i)\n\n## Get the most significant bit position in a given number\n\n```solidity\n\n    function findMSB(uint256 n) external pure returns (uint) {\n        // Since this is uint256, this will have 256 bits. So we will have to take appropriate number of steps.\n        // The number of ORs we do would be based on the bits present in number n.\n\n        n = n | (n >> 1); // Now starting 2 bits are set in n\n        n = n | (n >> 2); // Now starting 4 bits are set in n\n        n = n | (n >> 4); // Now starting 8 bits are set in n\n        n = n | (n >> 8); // Now starting 16 bits are set in n\n        n = n | (n >> 16); // Now starting 32 bits are set in n\n        n = n | (n >> 32); // Now starting 64 bits are set in n\n        n = n | (n >> 64); // Now starting 128 bits are set in n\n        n = n | (n >> 128); // Now starting 256 bits are set in n\n\n        n += 1; // Now it's 1 set bit (higher than the original MSB) and rest are 0s\n\n        return (n >> 1);\n    }\n\n```\n\n# Advanced problems solved via bit manipulations\n\n## Add Two Numbers (Important property)\n\nWell this question itself is trivial, but the property used here can prove to be quite useful when you want to relate bitwise operations to addition.\n\n```solidity\n\n    function addTwoNumbers(uint x, uint y) external pure returns(uint sum) {\n        sum = (x & y) + (x | y);\n    }\n\n    function addTwoNumbers2(uint x, uint y) public pure returns (uint sum) {\n        sum = (y == 0 ? x : addTwoNumbers2((x ^ y), (x & y) << 1));\n    }\n\n```\n\n## Exponentiation\n\nTo calculate x**y, we can obviously do `x**y` and that would also be a more gas efficient choice, but here's how you would do it if you were to exponentiate with using only bit manipulations:\n\n```solidity\n\n    // Calculate x**y\n    function fastExponentiation(uint x, uint y) external pure returns (uint ans) { // Execution Cost of 2**4 = 16 was 23373\n        // Stores final answer\n        ans = 1;\n        while (y > 0) {\n            uint last_bit = (y & 1);\n            \n            // Check if current LSB is set\n            if (last_bit == 1) {\n                ans *= x;\n            }\n    \n            x *= x;\n    \n            // Right shift\n            y >>= 1;\n        }\n    }\n\n    function normalExponentiation(uint x, uint y) external pure returns (uint) { // Execution Cost of 2**4 = 16 was 22561\n        return (x**y);\n    }\n\n```"
+          "content": "Let us see today when and why do we use `abi.encode` vs `abi.encodePacked`.\n\n## What is a hash function?\n\nA hash function has the following characterisitics:\n\n+ A function that takes in arbitrary size input and outputs a data of fixed size\n+ Properties:\n    + Deterministic\n        + hash(x) = h, every time without fail\n    + quick to compute the hash\n    + irreversible\n        + given h, (really)hard to find x such that hash(x) = h\n    + small change in input changes the output significantly\n        + hard to find x, y such that hash(x) = hash(y)\n\n## String Encoding\n\nThe solidity built-in function `abi.encode` enables to encode any Solidity types into raw bytes, that can be interpreted directly by the EVM.\n\nNote that multiple arguments can be given to this function.\n\nSo, if we do something like:\n`abi.encode(\"Solidity\");`\n\nWe get the result in the following format:\n\n+ 1st (32 bytes) word = offset → indicates at which bytes index the string starts. Here 0x20 (in hex) = 32 (in decimals). If you count 32 from the beginning (= index 32), you will reach the starting point of where the actual encoded string starts.\n\n+ 2nd (32 bytes) word = string length → in the case of the string, this indicates how many characters (including whitespaces) are included in the string. So simply the “string.length “\n\n+ 3rd (32 bytes) word = the actual utf8 encoded string → each individual bytes corresponds to hex notation of a letter / character encoded in utf8. If you search each individual bytes from 536f6c6964697479 inside an utf8 table, you will be able to decode the string. For instance, 53 corresponds to uppercase S , 6f corresponds to lowercase o , 6c corresponds to lowercase l , etc…\n\nThe actual encoded bytes would look something like this:\n\n```\n{\n\t\"0\": \"bytes: 0x00000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000008536f6c6964697479000000000000000000000000000000000000000000000000\"\n}\n```\n\nThe contract code was as straightforward as it gets:\n\n```\n// SPDX-License-Identifier: GPL-3.0\n\npragma solidity 0.8.7;\n\ncontract StringEncoding {\n    bytes public encodedString = abi.encode(\"Solidity\");\n}\n```\n\n## Few other ABI Encodings\n\n+ address payable -> address\n+ contract -> address\n+ enum -> uint8\n+ struct -> tuple of elementry types\n\n## Few points on abi.encode, abi.encodePacked, abi.encodeWithSelector, abi.encodeWithSignature\n\n+ When using `abi.encode`, all elementary types are padded to 32 bytes and dynamic arrays include their length.\n    + Therefore, it is also possible to decode the resulting hash using `abi.decode` if the data type is known.\n    + This encoding is done using the ABI specs.\n+ When using `abi.encodePacked` only the minimum possible memory is utilised. \n    + Therefore, if you were hashing an address with this function, it will only take up 20 bytes and the rest of the word remains unpadded.\n    + For dynamic types, the offset and the length is not stored. \n    ```\n    abi.encodePacked(\"Solidity\");\n    // returns -> 0x536f6c6964697479\n    ```\n\n+ Since `abi.encodePacked` is non-standard hashing and uses the least amount of memory, it is usually gas-efficient\n\n+ If you are making calls to an (external) contract, you'll more likely be using `abi.encode` (because it uses the ABI specs) and when you simply want to save some space and *not* call a contract, you'll be using `abi.encodePacked`.\n\n+ If you are dealing with more than one dynamic data types, use `abi.encode` as it prevents collision.\n\n+ Whereas, in multiple dynamic data types there is a good chance of collision happening if used with `abi.encodePacked`\n\n+ `abi.encodeWithSignature` is the same as `abi.encode` but the function selector is used as the first parameter. Use when the signature is known and don't want to calculate the selector.\n\n+ `abi.encodeWithSelector`, almost same as `abi.encodeWithSignature` but first param is selector.\n\nCode Examples of the above encode options:\n\n```solidity\n\n// Case 1\n(success, ) = address(c).call(abi.encodeWithSignature(\"myfunction(uint256,uint256)\", 400,500));\n\n// Case 2\n(success, ) = address(c).call(abi.encodeWithSelector(bytes4(keccak256(\"myfunction(uint256,uint256)\")), 400,500));\n\n// Case 3\ncontract_instance.myfunction(400,500);\n\n```\n\n+ Case 3 is more expensive but safer than the other cases.\n> This is because, the EVM considers a call to a non-existing contract to always succeed. Therefore, Solidity includes an extra check using the `extcodesize` opcode when performing external calls.\nThis ensures that the contract that is about to be called either actually exists (contains code) or an exception is raised.\n\n> Low level calls (which operate on address rather than a contract instance) ignore this check and therefore become gas efficient but less safe. Eg. `call`, `transfer`, `delegatecall`, `staticcall`, `send`.\n\n+ A very important point to note is:\nIf a function exists such that:\n```\nfunction foo(uint256 _a, address _b) {\n    // do something\n}\n```\n\nThen, the function selector for this particular function would be:\n\n```\nbytes4(keccak256(bytes('foo(uint256,address)'))); // This is correct\n\nbytes4(keccak256(bytes('foo(uint256, address)'))); // This would be incorrect, because of the space between the two param types\n\nbytes4(keccak256(bytes('foo(uint,address)'))); // Again incorrect, because we cannot use the alias of uint, we have to use the entire uint256\n```\n\n+ A more comprehensive example from *solidity-by-example*\n\n```solidity\n// SPDX-License-Identifier: MIT\npragma solidity ^0.8.13;\n\ncontract Receiver {\n    event Received(address caller, uint amount, string message);\n\n    fallback() external payable {\n        emit Received(msg.sender, msg.value, \"Fallback was called\");\n    }\n\n    function foo(string memory _message, uint _x) public payable returns (uint) {\n        emit Received(msg.sender, msg.value, _message);\n\n        return _x + 1;\n    }\n}\n\ncontract Caller {\n    event Response(bool success, bytes data);\n\n    // Let's imagine that contract B does not have the source code for\n    // contract A, but we do know the address of A and the function to call.\n    function testCallFoo(address payable _addr) public payable {\n        // You can send ether and specify a custom gas amount\n        (bool success, bytes memory data) = _addr.call{value: msg.value, gas: 5000}(\n            abi.encodeWithSignature(\"foo(string,uint256)\", \"call foo\", 123)\n        );\n\n        emit Response(success, data);\n    }\n\n    // Calling a function that does not exist triggers the fallback function.\n    function testCallDoesNotExist(address _addr) public {\n        (bool success, bytes memory data) = _addr.call(\n            abi.encodeWithSignature(\"doesNotExist()\")\n        );\n\n        emit Response(success, data);\n    }\n}\n\n```"
         },
         {
           "id": "welcome",
@@ -532,59 +604,11 @@
               ]
             },
             "prevItem": {
-              "title": "Solidity - Bit Magic (Hot Dev Alpha!!)",
-              "permalink": "/blog/bit-magic"
-            },
-            "nextItem": {
-              "title": "MDX Blog Post",
-              "permalink": "/blog/mdx-blog-post"
+              "title": "ABI Encode - Solidity",
+              "permalink": "/blog/solidity-encodings"
             }
           },
-          "content": "[Docusaurus blogging features](https://docusaurus.io/docs/blog) are powered by the [blog plugin](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-blog).\n\nSimply add Markdown files (or folders) to the `blog` directory.\n\nRegular blog authors can be added to `authors.yml`.\n\nThe blog post date can be extracted from filenames, such as:\n\n- `2019-05-30-welcome.md`\n- `2019-05-30-welcome/index.md`\n\nA blog post folder can be convenient to co-locate blog post images:\n\n![Docusaurus Plushie](./docusaurus-plushie-banner.jpeg)\n\nThe blog supports tags as well!\n\n**And if you don't want a blog**: just delete this directory, and use `blog: false` in your Docusaurus config."
-        },
-        {
-          "id": "mdx-blog-post",
-          "metadata": {
-            "permalink": "/blog/mdx-blog-post",
-            "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/blog/2021-08-01-mdx-blog-post.mdx",
-            "source": "@site/blog/2021-08-01-mdx-blog-post.mdx",
-            "title": "MDX Blog Post",
-            "description": "Blog posts support Docusaurus Markdown features, such as MDX.",
-            "date": "2021-08-01T00:00:00.000Z",
-            "formattedDate": "August 1, 2021",
-            "tags": [
-              {
-                "label": "docusaurus",
-                "permalink": "/blog/tags/docusaurus"
-              }
-            ],
-            "readingTime": 0.175,
-            "hasTruncateMarker": false,
-            "authors": [
-              {
-                "name": "Sébastien Lorber",
-                "title": "Docusaurus maintainer",
-                "url": "https://sebastienlorber.com",
-                "imageURL": "https://github.com/slorber.png",
-                "key": "slorber"
-              }
-            ],
-            "frontMatter": {
-              "slug": "mdx-blog-post",
-              "title": "MDX Blog Post",
-              "authors": [
-                "slorber"
-              ],
-              "tags": [
-                "docusaurus"
-              ]
-            },
-            "prevItem": {
-              "title": "Welcome",
-              "permalink": "/blog/welcome"
-            }
-          },
-          "content": "Blog posts support [Docusaurus Markdown features](https://docusaurus.io/docs/markdown-features), such as [MDX](https://mdxjs.com/).\n\n:::tip\n\nUse the power of React to create interactive blog posts.\n\n```js\n<button onClick={() => alert('button clicked!')}>Click me!</button>\n```\n\n<button onClick={() => alert('button clicked!')}>Click me!</button>\n\n:::"
+          "content": "[Docusaurus blogging features](https://docusaurus.io/docs/blog) are powered by the [blog plugin](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-blog).\n\nSimply add Markdown files (or folders) to the `blog` directory.\n\nRegular blog authors can be added to `authors.yml`.\n\nThe blog post date can be extracted from filenames, such as:\n\n- `2019-05-30-welcome.md`\n- `2019-05-30-welcome/index.md`\n\nA blog post folder can be convenient to co-locate blog post images:\n\n![Docusaurus Plushie](https://raw.githubusercontent.com/saxenism/saxenism-expressions/master/blog/2021-08-26-welcome/docusaurus-plushie-banner.jpeg)\n\nThe blog supports tags as well!\n\n**And if you don't want a blog**: just delete this directory, and use `blog: false` in your Docusaurus config."
         }
       ],
       "blogListPaginated": [
@@ -592,8 +616,8 @@
           "items": [
             "bit-packing",
             "bit-magic",
-            "welcome",
-            "mdx-blog-post"
+            "solidity-encodings",
+            "welcome"
           ],
           "metadata": {
             "permalink": "/blog",
@@ -611,21 +635,23 @@
           "label": "web3",
           "items": [
             "bit-packing",
-            "bit-magic"
+            "bit-magic",
+            "solidity-encodings"
           ],
           "permalink": "/blog/tags/web-3",
           "pages": [
             {
               "items": [
                 "bit-packing",
-                "bit-magic"
+                "bit-magic",
+                "solidity-encodings"
               ],
               "metadata": {
                 "permalink": "/blog/tags/web-3",
                 "page": 1,
                 "postsPerPage": 10,
                 "totalPages": 1,
-                "totalCount": 2,
+                "totalCount": 3,
                 "blogDescription": "Blog",
                 "blogTitle": "Blog"
               }
@@ -636,21 +662,23 @@
           "label": "solidity",
           "items": [
             "bit-packing",
-            "bit-magic"
+            "bit-magic",
+            "solidity-encodings"
           ],
           "permalink": "/blog/tags/solidity",
           "pages": [
             {
               "items": [
                 "bit-packing",
-                "bit-magic"
+                "bit-magic",
+                "solidity-encodings"
               ],
               "metadata": {
                 "permalink": "/blog/tags/solidity",
                 "page": 1,
                 "postsPerPage": 10,
                 "totalPages": 1,
-                "totalCount": 2,
+                "totalCount": 3,
                 "blogDescription": "Blog",
                 "blogTitle": "Blog"
               }
@@ -755,6 +783,75 @@
             }
           ]
         },
+        "/blog/tags/hashing": {
+          "label": "hashing",
+          "items": [
+            "solidity-encodings"
+          ],
+          "permalink": "/blog/tags/hashing",
+          "pages": [
+            {
+              "items": [
+                "solidity-encodings"
+              ],
+              "metadata": {
+                "permalink": "/blog/tags/hashing",
+                "page": 1,
+                "postsPerPage": 10,
+                "totalPages": 1,
+                "totalCount": 1,
+                "blogDescription": "Blog",
+                "blogTitle": "Blog"
+              }
+            }
+          ]
+        },
+        "/blog/tags/keccak-256": {
+          "label": "keccak256",
+          "items": [
+            "solidity-encodings"
+          ],
+          "permalink": "/blog/tags/keccak-256",
+          "pages": [
+            {
+              "items": [
+                "solidity-encodings"
+              ],
+              "metadata": {
+                "permalink": "/blog/tags/keccak-256",
+                "page": 1,
+                "postsPerPage": 10,
+                "totalPages": 1,
+                "totalCount": 1,
+                "blogDescription": "Blog",
+                "blogTitle": "Blog"
+              }
+            }
+          ]
+        },
+        "/blog/tags/abi": {
+          "label": "abi",
+          "items": [
+            "solidity-encodings"
+          ],
+          "permalink": "/blog/tags/abi",
+          "pages": [
+            {
+              "items": [
+                "solidity-encodings"
+              ],
+              "metadata": {
+                "permalink": "/blog/tags/abi",
+                "page": 1,
+                "postsPerPage": 10,
+                "totalPages": 1,
+                "totalCount": 1,
+                "blogDescription": "Blog",
+                "blogTitle": "Blog"
+              }
+            }
+          ]
+        },
         "/blog/tags/facebook": {
           "label": "facebook",
           "items": [
@@ -804,22 +901,20 @@
         "/blog/tags/docusaurus": {
           "label": "docusaurus",
           "items": [
-            "welcome",
-            "mdx-blog-post"
+            "welcome"
           ],
           "permalink": "/blog/tags/docusaurus",
           "pages": [
             {
               "items": [
-                "welcome",
-                "mdx-blog-post"
+                "welcome"
               ],
               "metadata": {
                 "permalink": "/blog/tags/docusaurus",
                 "page": 1,
                 "postsPerPage": 10,
                 "totalPages": 1,
-                "totalCount": 2,
+                "totalCount": 1,
                 "blogDescription": "Blog",
                 "blogTitle": "Blog"
               }

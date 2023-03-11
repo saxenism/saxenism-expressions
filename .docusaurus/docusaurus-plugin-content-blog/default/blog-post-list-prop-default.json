@@ -10,12 +10,12 @@
       "permalink": "/blog/bit-magic"
     },
     {
-      "title": "Welcome",
-      "permalink": "/blog/welcome"
+      "title": "ABI Encode - Solidity",
+      "permalink": "/blog/solidity-encodings"
     },
     {
-      "title": "MDX Blog Post",
-      "permalink": "/blog/mdx-blog-post"
+      "title": "Welcome",
+      "permalink": "/blog/welcome"
     }
   ]
 }
