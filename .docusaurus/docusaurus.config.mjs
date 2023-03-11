@@ -26,7 +26,7 @@ export default {
       "classic",
       {
         "docs": {
-          "sidebarPath": "/Users/saxenism/Desktop/Bluethroat/official-website/sidebars.js",
+          "sidebarPath": "/Users/saxenism/Desktop/saxenism-expressions/sidebars.js",
           "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/"
         },
         "blog": {
@@ -34,7 +34,7 @@ export default {
           "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/"
         },
         "theme": {
-          "customCss": "/Users/saxenism/Desktop/Bluethroat/official-website/src/css/custom.css"
+          "customCss": "/Users/saxenism/Desktop/saxenism-expressions/src/css/custom.css"
         }
       }
     ]
@@ -57,6 +57,11 @@ export default {
         {
           "to": "/blog",
           "label": "Blog",
+          "position": "left"
+        },
+        {
+          "to": "/videos",
+          "label": "Videos",
           "position": "left"
         },
         {

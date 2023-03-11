@@ -15,9 +15,9 @@
           "editUrlLocalized": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/i18n/en/docusaurus-plugin-content-docs/current",
           "isLast": true,
           "routePriority": -1,
-          "sidebarFilePath": "/Users/saxenism/Desktop/Bluethroat/official-website/sidebars.js",
-          "contentPath": "/Users/saxenism/Desktop/Bluethroat/official-website/docs",
-          "contentPathLocalized": "/Users/saxenism/Desktop/Bluethroat/official-website/i18n/en/docusaurus-plugin-content-docs/current",
+          "sidebarFilePath": "/Users/saxenism/Desktop/saxenism-expressions/sidebars.js",
+          "contentPath": "/Users/saxenism/Desktop/saxenism-expressions/docs",
+          "contentPathLocalized": "/Users/saxenism/Desktop/saxenism-expressions/i18n/en/docusaurus-plugin-content-docs/current",
           "docs": [
             {
               "unversionedId": "intro",
@@ -693,6 +693,11 @@
         "source": "@site/src/pages/testimonials.md",
         "description": "Word on the Street",
         "frontMatter": {}
+      },
+      {
+        "type": "jsx",
+        "permalink": "/videos",
+        "source": "@site/src/pages/videos.js"
       }
     ]
   },
