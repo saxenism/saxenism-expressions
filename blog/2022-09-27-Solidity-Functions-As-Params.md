@@ -28,6 +28,8 @@ function (<parameter types>) {internal | external} [pure | view | payable] [retu
 
 > Note : Function types can only be internal or external. Also, the `return types` cannot be empty if the function in question does not return anything, in this case, completely omit the `returns` keyword.
 
+<!--truncate-->
+
 ### 2. Conversions
 
 function `A` can be converted to function `B` if they identical parameter types, identical return types, identical internal/external propery, and state mutability of `A` is more restrictive than `B`.

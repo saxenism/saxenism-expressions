@@ -25,6 +25,8 @@ Why? <br/>
 
 > Therefore, the development team, that is the most intimately familar with the code base, must make it a sacred duty of theirs (just like doctors take the [Hippocratic Oath](https://en.wikipedia.org/wiki/Hippocratic_Oath)) to test their code to the best of knowledge and ability.
 
+<!--truncate-->
+
 All in all, these softwares (DeFi protocols) handle the hard earned money of everyday Joes like you and me (and also money of stupid funds like 3AC, but yeah, you get the point) so, we cannot let the protocols continue with lax testing, because not everything can and should be viewed with an economic lens, somethings should exist simply because of personal or community ethics.
 
 It does not matter (much) how many auditors have had a stab at your protocol, you, as a developer, do not really understand if your protocol really works and is robust enough to take on the uncertainities of the real world if you have not tested your protocol thoroughly. 

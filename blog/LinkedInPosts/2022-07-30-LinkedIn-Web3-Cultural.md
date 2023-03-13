@@ -19,6 +19,8 @@ Every day joes like you and I were appalled by the completely arbitrary (and unj
 
 During the 2008 economic crisis, people realised that *their* money wasn't really theirs. And, people were desperate for something that they can say was truly theirs.
 
+<!--truncate-->
+
 Bitcoin was the answer for these people.
 
 Fast forward to today, we talk about an enhanced version of Bitcoin called Web3, which was birthed by Ethereum.
