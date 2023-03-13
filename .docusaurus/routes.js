@@ -39,7 +39,7 @@ export default [
   },
   {
     path: '/blog',
-    component: ComponentCreator('/blog', '5c5'),
+    component: ComponentCreator('/blog', '475'),
     exact: true
   },
   {
@@ -60,6 +60,21 @@ export default [
   {
     path: '/blog/bit-packing',
     component: ComponentCreator('/blog/bit-packing', '318'),
+    exact: true
+  },
+  {
+    path: '/blog/defi-tits',
+    component: ComponentCreator('/blog/defi-tits', '3b9'),
+    exact: true
+  },
+  {
+    path: '/blog/functions-as-params',
+    component: ComponentCreator('/blog/functions-as-params', '6af'),
+    exact: true
+  },
+  {
+    path: '/blog/linkedin-cultural',
+    component: ComponentCreator('/blog/linkedin-cultural', '060'),
     exact: true
   },
   {
@@ -93,13 +108,28 @@ export default [
     exact: true
   },
   {
+    path: '/blog/tags/defi',
+    component: ComponentCreator('/blog/tags/defi', 'dae'),
+    exact: true
+  },
+  {
+    path: '/blog/tags/defi-tits',
+    component: ComponentCreator('/blog/tags/defi-tits', '4f3'),
+    exact: true
+  },
+  {
+    path: '/blog/tags/forge',
+    component: ComponentCreator('/blog/tags/forge', 'c21'),
+    exact: true
+  },
+  {
     path: '/blog/tags/hashing',
     component: ComponentCreator('/blog/tags/hashing', 'f47'),
     exact: true
   },
   {
     path: '/blog/tags/intermediate',
-    component: ComponentCreator('/blog/tags/intermediate', '79c'),
+    component: ComponentCreator('/blog/tags/intermediate', '98c'),
     exact: true
   },
   {
@@ -109,17 +139,32 @@ export default [
   },
   {
     path: '/blog/tags/language-tricks',
-    component: ComponentCreator('/blog/tags/language-tricks', '8bf'),
+    component: ComponentCreator('/blog/tags/language-tricks', 'd03'),
+    exact: true
+  },
+  {
+    path: '/blog/tags/linkedin',
+    component: ComponentCreator('/blog/tags/linkedin', '05c'),
+    exact: true
+  },
+  {
+    path: '/blog/tags/non-technical',
+    component: ComponentCreator('/blog/tags/non-technical', '325'),
     exact: true
   },
   {
     path: '/blog/tags/solidity',
-    component: ComponentCreator('/blog/tags/solidity', 'f57'),
+    component: ComponentCreator('/blog/tags/solidity', '68d'),
+    exact: true
+  },
+  {
+    path: '/blog/tags/testing',
+    component: ComponentCreator('/blog/tags/testing', 'f12'),
     exact: true
   },
   {
     path: '/blog/tags/web-3',
-    component: ComponentCreator('/blog/tags/web-3', '22d'),
+    component: ComponentCreator('/blog/tags/web-3', 'd94'),
     exact: true
   },
   {

@@ -10,6 +10,10 @@
       "permalink": "/blog/address-to-uint"
     },
     {
+      "title": "Solidity - Passing functions as parameters",
+      "permalink": "/blog/functions-as-params"
+    },
+    {
       "title": "Solidity - Bit Magic (Hot Dev Alpha!!)",
       "permalink": "/blog/bit-magic"
     },

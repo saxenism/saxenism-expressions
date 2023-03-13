@@ -9,9 +9,9 @@ authors:
 tags: [defi, testing, web3, forge, defi-tits]
 ---
 
-# The International Testing Standard (TITS) for DeFi
+## The International Testing Standard (TITS) for DeFi
 
-[https://twitter.com/saxenism/status/1552166849504509952?s=20&t=G9WJ1kv3BQZ1-_qkpUz8sQ](Declaration Tweet).
+[Declaration Tweet](https://twitter.com/saxenism/status/1552166849504509952?s=20&t=G9WJ1kv3BQZ1-_qkpUz8sQ).
 
 ## Mission Statement
 

@@ -2,17 +2,17 @@
   {
     "label": "web3",
     "permalink": "/blog/tags/web-3",
-    "count": 4
+    "count": 6
   },
   {
     "label": "solidity",
     "permalink": "/blog/tags/solidity",
-    "count": 4
+    "count": 5
   },
   {
     "label": "language-tricks",
     "permalink": "/blog/tags/language-tricks",
-    "count": 3
+    "count": 4
   },
   {
     "label": "bit-magic",
@@ -27,7 +27,7 @@
   {
     "label": "intermediate",
     "permalink": "/blog/tags/intermediate",
-    "count": 2
+    "count": 3
   },
   {
     "label": "beginner",
@@ -47,6 +47,36 @@
   {
     "label": "abi",
     "permalink": "/blog/tags/abi",
+    "count": 1
+  },
+  {
+    "label": "defi",
+    "permalink": "/blog/tags/defi",
+    "count": 1
+  },
+  {
+    "label": "testing",
+    "permalink": "/blog/tags/testing",
+    "count": 1
+  },
+  {
+    "label": "forge",
+    "permalink": "/blog/tags/forge",
+    "count": 1
+  },
+  {
+    "label": "defi-tits",
+    "permalink": "/blog/tags/defi-tits",
+    "count": 1
+  },
+  {
+    "label": "linkedin",
+    "permalink": "/blog/tags/linkedin",
+    "count": 1
+  },
+  {
+    "label": "non-technical",
+    "permalink": "/blog/tags/non-technical",
     "count": 1
   }
 ]

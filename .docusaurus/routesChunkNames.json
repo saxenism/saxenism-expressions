@@ -42,7 +42,7 @@
       "plugin": "plugin---docusaurus-debug-976-b9b"
     }
   },
-  "/blog-5c5": {
+  "/blog-475": {
     "__comp": "__comp---theme-blog-list-pagea-6-a-7ba",
     "__context": {
       "plugin": "plugin---blog-7-e-5-942"
@@ -56,10 +56,19 @@
         "content": "content---blog-6-da-0b7"
       },
       {
+        "content": "content---blog-9-c-8-f75"
+      },
+      {
         "content": "content---blog-676-4d9"
       },
       {
         "content": "content---blog-59-a-49c"
+      },
+      {
+        "content": "content---blog-481-9ae"
+      },
+      {
+        "content": "content---blog-9-bb-a0f"
       }
     ],
     "metadata": "metadata---blogb-2-b-df1"
@@ -94,6 +103,30 @@
     },
     "sidebar": "sidebar---blog-814-8ac",
     "content": "content---blog-bit-packing-931-858"
+  },
+  "/blog/defi-tits-3b9": {
+    "__comp": "__comp---theme-blog-post-pageccc-cab",
+    "__context": {
+      "plugin": "plugin---blog-7-e-5-942"
+    },
+    "sidebar": "sidebar---blog-814-8ac",
+    "content": "content---blog-defi-tits-4-bc-35e"
+  },
+  "/blog/functions-as-params-6af": {
+    "__comp": "__comp---theme-blog-post-pageccc-cab",
+    "__context": {
+      "plugin": "plugin---blog-7-e-5-942"
+    },
+    "sidebar": "sidebar---blog-814-8ac",
+    "content": "content---blog-functions-as-params-48-d-911"
+  },
+  "/blog/linkedin-cultural-060": {
+    "__comp": "__comp---theme-blog-post-pageccc-cab",
+    "__context": {
+      "plugin": "plugin---blog-7-e-5-942"
+    },
+    "sidebar": "sidebar---blog-814-8ac",
+    "content": "content---blog-linkedin-culturalabb-eee"
   },
   "/blog/solidity-encodings-1ef": {
     "__comp": "__comp---theme-blog-post-pageccc-cab",
@@ -170,6 +203,48 @@
     "tag": "tag---blog-tags-bit-packing-73-e-f3e",
     "listMetadata": "listMetadata---blog-tags-bit-packing-6-ec-21d"
   },
+  "/blog/tags/defi-dae": {
+    "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
+    "__context": {
+      "plugin": "plugin---blog-7-e-5-942"
+    },
+    "sidebar": "sidebar---blog-814-8ac",
+    "items": [
+      {
+        "content": "content---blog-481-9ae"
+      }
+    ],
+    "tag": "tag---blog-tags-defie-1-c-7ef",
+    "listMetadata": "listMetadata---blog-tags-defid-80-d44"
+  },
+  "/blog/tags/defi-tits-4f3": {
+    "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
+    "__context": {
+      "plugin": "plugin---blog-7-e-5-942"
+    },
+    "sidebar": "sidebar---blog-814-8ac",
+    "items": [
+      {
+        "content": "content---blog-481-9ae"
+      }
+    ],
+    "tag": "tag---blog-tags-defi-titsd-6-d-e0f",
+    "listMetadata": "listMetadata---blog-tags-defi-tits-67-c-0ea"
+  },
+  "/blog/tags/forge-c21": {
+    "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
+    "__context": {
+      "plugin": "plugin---blog-7-e-5-942"
+    },
+    "sidebar": "sidebar---blog-814-8ac",
+    "items": [
+      {
+        "content": "content---blog-481-9ae"
+      }
+    ],
+    "tag": "tag---blog-tags-forged-49-e28",
+    "listMetadata": "listMetadata---blog-tags-forgeff-8-30f"
+  },
   "/blog/tags/hashing-f47": {
     "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
     "__context": {
@@ -184,7 +259,7 @@
     "tag": "tag---blog-tags-hashingcd-8-c50",
     "listMetadata": "listMetadata---blog-tags-hashing-62-e-bd9"
   },
-  "/blog/tags/intermediate-79c": {
+  "/blog/tags/intermediate-98c": {
     "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
     "__context": {
       "plugin": "plugin---blog-7-e-5-942"
@@ -193,6 +268,9 @@
     "items": [
       {
         "content": "content---blog-115-3dd"
+      },
+      {
+        "content": "content---blog-9-c-8-f75"
       },
       {
         "content": "content---blog-676-4d9"
@@ -215,7 +293,7 @@
     "tag": "tag---blog-tags-keccak-2569-b-3-75f",
     "listMetadata": "listMetadata---blog-tags-keccak-256910-3b6"
   },
-  "/blog/tags/language-tricks-8bf": {
+  "/blog/tags/language-tricks-d03": {
     "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
     "__context": {
       "plugin": "plugin---blog-7-e-5-942"
@@ -227,6 +305,9 @@
       },
       {
         "content": "content---blog-6-da-0b7"
+      },
+      {
+        "content": "content---blog-9-c-8-f75"
       },
       {
         "content": "content---blog-676-4d9"
@@ -235,7 +316,35 @@
     "tag": "tag---blog-tags-language-tricks-95-b-6a7",
     "listMetadata": "listMetadata---blog-tags-language-tricks-8-bb-be2"
   },
-  "/blog/tags/solidity-f57": {
+  "/blog/tags/linkedin-05c": {
+    "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
+    "__context": {
+      "plugin": "plugin---blog-7-e-5-942"
+    },
+    "sidebar": "sidebar---blog-814-8ac",
+    "items": [
+      {
+        "content": "content---blog-9-bb-a0f"
+      }
+    ],
+    "tag": "tag---blog-tags-linkedinb-18-48c",
+    "listMetadata": "listMetadata---blog-tags-linkedindb-5-337"
+  },
+  "/blog/tags/non-technical-325": {
+    "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
+    "__context": {
+      "plugin": "plugin---blog-7-e-5-942"
+    },
+    "sidebar": "sidebar---blog-814-8ac",
+    "items": [
+      {
+        "content": "content---blog-9-bb-a0f"
+      }
+    ],
+    "tag": "tag---blog-tags-non-technical-6-c-0-088",
+    "listMetadata": "listMetadata---blog-tags-non-technicale-1-a-bb5"
+  },
+  "/blog/tags/solidity-68d": {
     "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
     "__context": {
       "plugin": "plugin---blog-7-e-5-942"
@@ -247,6 +356,9 @@
       },
       {
         "content": "content---blog-6-da-0b7"
+      },
+      {
+        "content": "content---blog-9-c-8-f75"
       },
       {
         "content": "content---blog-676-4d9"
@@ -258,7 +370,21 @@
     "tag": "tag---blog-tags-solidity-5-dc-b5d",
     "listMetadata": "listMetadata---blog-tags-solidity-74-a-695"
   },
-  "/blog/tags/web-3-22d": {
+  "/blog/tags/testing-f12": {
+    "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
+    "__context": {
+      "plugin": "plugin---blog-7-e-5-942"
+    },
+    "sidebar": "sidebar---blog-814-8ac",
+    "items": [
+      {
+        "content": "content---blog-481-9ae"
+      }
+    ],
+    "tag": "tag---blog-tags-testing-15-b-d87",
+    "listMetadata": "listMetadata---blog-tags-testing-4-bb-2ba"
+  },
+  "/blog/tags/web-3-d94": {
     "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
     "__context": {
       "plugin": "plugin---blog-7-e-5-942"
@@ -272,10 +398,16 @@
         "content": "content---blog-6-da-0b7"
       },
       {
+        "content": "content---blog-9-c-8-f75"
+      },
+      {
         "content": "content---blog-676-4d9"
       },
       {
         "content": "content---blog-59-a-49c"
+      },
+      {
+        "content": "content---blog-481-9ae"
       }
     ],
     "tag": "tag---blog-tags-web-36-a-3-2fe",

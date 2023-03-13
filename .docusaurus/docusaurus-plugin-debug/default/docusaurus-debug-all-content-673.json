@@ -465,11 +465,78 @@
               "permalink": "/blog/bit-packing"
             },
             "nextItem": {
+              "title": "Solidity - Passing functions as parameters",
+              "permalink": "/blog/functions-as-params"
+            }
+          },
+          "content": "## Convert address to uint and back\n\nThis conversion exploits the fact that addresses take up 20 bytes and so does a uint160 (20 * 8). \n\n\n```solidity\n\n// SPDX-License-Identifier: MIT\n\npragma solidity ^0.8.7;\n\n// The theory behind this is that addresses take up 20 bytes in a word which is equivalent to (20*8) 160 bits and hence should be correctly casted to and from uint160.\n\ncontract AddressToUint {\n\n    address public targetAddress;\n    uint256 public targetUint;\n\n    function convertAddressToUint(address _targetAddress) external returns(uint256) {\n        targetAddress = _targetAddress;\n        targetUint = uint256(uint160(_targetAddress));\n        return targetUint;\n    }\n\n    function convertUintToAddress(uint256 _targetUint) external returns(address) {\n        targetUint = _targetUint;\n        targetAddress = address(uint160(_targetUint));\n        return targetAddress;\n    }\n\n}\n\n// 0xabD0127D996A468A79a0a8e88F4D419E40402e95\n// 980877587572537262620952019491558306941665029781\n\n```\n\n<!--truncate-->"
+        },
+        {
+          "id": "functions-as-params",
+          "metadata": {
+            "permalink": "/blog/functions-as-params",
+            "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/blog/2022-09-27-Solidity-Functions-As-Params.md",
+            "source": "@site/blog/2022-09-27-Solidity-Functions-As-Params.md",
+            "title": "Solidity - Passing functions as parameters",
+            "description": "Function Types",
+            "date": "2022-09-27T00:00:00.000Z",
+            "formattedDate": "September 27, 2022",
+            "tags": [
+              {
+                "label": "web3",
+                "permalink": "/blog/tags/web-3"
+              },
+              {
+                "label": "language-tricks",
+                "permalink": "/blog/tags/language-tricks"
+              },
+              {
+                "label": "intermediate",
+                "permalink": "/blog/tags/intermediate"
+              },
+              {
+                "label": "solidity",
+                "permalink": "/blog/tags/solidity"
+              }
+            ],
+            "readingTime": 1.985,
+            "hasTruncateMarker": true,
+            "authors": [
+              {
+                "name": "Rahul Saxena",
+                "title": "EVM Enjoyoor",
+                "url": "https://twitter.com/saxenism",
+                "image_url": "https://pbs.twimg.com/profile_images/1554486619914117126/7QV7CHum_400x400.jpg",
+                "imageURL": "https://pbs.twimg.com/profile_images/1554486619914117126/7QV7CHum_400x400.jpg"
+              }
+            ],
+            "frontMatter": {
+              "slug": "functions-as-params",
+              "title": "Solidity - Passing functions as parameters",
+              "authors": {
+                "name": "Rahul Saxena",
+                "title": "EVM Enjoyoor",
+                "url": "https://twitter.com/saxenism",
+                "image_url": "https://pbs.twimg.com/profile_images/1554486619914117126/7QV7CHum_400x400.jpg",
+                "imageURL": "https://pbs.twimg.com/profile_images/1554486619914117126/7QV7CHum_400x400.jpg"
+              },
+              "tags": [
+                "web3",
+                "language-tricks",
+                "intermediate",
+                "solidity"
+              ]
+            },
+            "prevItem": {
+              "title": "Solidity - Typecasting Addresses to Uint",
+              "permalink": "/blog/address-to-uint"
+            },
+            "nextItem": {
               "title": "Solidity - Bit Magic (Hot Dev Alpha!!)",
               "permalink": "/blog/bit-magic"
             }
           },
-          "content": "## Convert address to uint and back\n\nThis conversion exploits the fact that addresses take up 20 bytes and so does a uint160 (20 * 8). \n\n\n```solidity\n\n// SPDX-License-Identifier: MIT\n\npragma solidity ^0.8.7;\n\n// The theory behind this is that addresses take up 20 bytes in a word which is equivalent to (20*8) 160 bits and hence should be correctly casted to and from uint160.\n\ncontract AddressToUint {\n\n    address public targetAddress;\n    uint256 public targetUint;\n\n    function convertAddressToUint(address _targetAddress) external returns(uint256) {\n        targetAddress = _targetAddress;\n        targetUint = uint256(uint160(_targetAddress));\n        return targetUint;\n    }\n\n    function convertUintToAddress(uint256 _targetUint) external returns(address) {\n        targetUint = _targetUint;\n        targetAddress = address(uint160(_targetUint));\n        return targetAddress;\n    }\n\n}\n\n// 0xabD0127D996A468A79a0a8e88F4D419E40402e95\n// 980877587572537262620952019491558306941665029781\n\n```\n\n<!--truncate-->"
+          "content": "## Function Types\n\nFor official documentations follow this [link](https://docs.soliditylang.org/en/v0.8.11/types.html#function-types).\n\nSo, in Solidity, you can pass functions themselves as parameters to other functions. These type of parameters are called function types.\n\nThese function types can be used to pass and return functions from function calls.\n\n## Example\n\n### 1. Format of function types is the following:\n\n```solidity\nfunction (<parameter types>) {internal | external} [pure | view | payable] [returns(<return types>)]\n```\n\n> Note : Function types can only be internal or external. Also, the `return types` cannot be empty if the function in question does not return anything, in this case, completely omit the `returns` keyword.\n\n<!--truncate-->\n\n### 2. Conversions\n\nfunction `A` can be converted to function `B` if they identical parameter types, identical return types, identical internal/external propery, and state mutability of `A` is more restrictive than `B`.\n\nSince `view` says that no state will be changed whereas `pure` says no state variable will be changed or read. Therefore, `pure` is more restrictive than `view`\n\nAlso, rememeber that all `non-payable` functions are `payable` (accepting 0 Ether), but no non-payable is payable. Therefore `non-payable` is more restrictive. \n\nSo,\n#### 2.1 `pure` can be converted to `view` and `non-payable`\n#### 2.2 `view` can be converted to `non-payable`\n#### 2.3 `non-payable` can be converted to `payable`\n\n### 3. A short mock implementation of this concept\n\n```solidity\n\n// SPDX-License-Identifier: MIT\n\npragma solidity ^0.8.11;\n\ncontract FunctionParameter {\n\n    uint256 public currentSupply = 100;\n\n    function increaseSupply(uint256 _newSupply) public returns(uint256) {\n        uint256 _currentSupply = currentSupply;\n        _changeSupply(_currentSupply, _newSupply, _add);\n        return currentSupply;\n    }\n\n    function decreaseSupply(uint256 _decreaseSupplyBy) public returns(uint256) {\n        uint256 _currentSupply = currentSupply;\n        _changeSupply(_currentSupply, _decreaseSupplyBy, _sub);\n        return currentSupply;\n    }\n\n    function fundMe() external payable{}\n\n////////////////////////\n// Internal functions\n////////////////////////\n\n    function _changeSupply(uint256 a, uint256 b, function(uint256, uint256) internal pure returns(uint256) foo) internal returns(uint256) {\n        currentSupply = foo(a, b);\n        return currentSupply;\n    }\n    \n    function _add(uint256 a, uint256 b) internal pure returns (uint256) {\n        return (a + b);\n    }\n\n    function _sub(uint256 a, uint256 b) internal pure returns(uint256) {\n        return (a > b ? (a - b) : 0 );\n    }\n}\n\n```\n\nSimilarly as this was done for `internal` function calls, you can use this concept for `external` function calls. \n\n> Note: One obvious but important thing to note here is that the internal functions can only be called inside the current contract (including library functions and inherited functions) because they cannot be executed outside of the context of the current contract."
         },
         {
           "id": "bit-magic",
@@ -533,8 +600,8 @@
               ]
             },
             "prevItem": {
-              "title": "Solidity - Typecasting Addresses to Uint",
-              "permalink": "/blog/address-to-uint"
+              "title": "Solidity - Passing functions as parameters",
+              "permalink": "/blog/functions-as-params"
             },
             "nextItem": {
               "title": "ABI Encode - Solidity",
@@ -607,9 +674,138 @@
             "prevItem": {
               "title": "Solidity - Bit Magic (Hot Dev Alpha!!)",
               "permalink": "/blog/bit-magic"
+            },
+            "nextItem": {
+              "title": "DeFi TITS - A Primer on Testing",
+              "permalink": "/blog/defi-tits"
             }
           },
           "content": "Let us see today when and why do we use `abi.encode` vs `abi.encodePacked`.\n\n## What is a hash function?\n\nA hash function has the following characterisitics:\n\n+ A function that takes in arbitrary size input and outputs a data of fixed size\n+ Properties:\n    + Deterministic\n        + hash(x) = h, every time without fail\n    + quick to compute the hash\n    + irreversible\n        + given h, (really)hard to find x such that hash(x) = h\n    + small change in input changes the output significantly\n        + hard to find x, y such that hash(x) = hash(y)\n\n<!--truncate-->\n\n## String Encoding\n\nThe solidity built-in function `abi.encode` enables to encode any Solidity types into raw bytes, that can be interpreted directly by the EVM.\n\nNote that multiple arguments can be given to this function.\n\nSo, if we do something like:\n`abi.encode(\"Solidity\");`\n\nWe get the result in the following format:\n\n+ 1st (32 bytes) word = offset → indicates at which bytes index the string starts. Here 0x20 (in hex) = 32 (in decimals). If you count 32 from the beginning (= index 32), you will reach the starting point of where the actual encoded string starts.\n\n+ 2nd (32 bytes) word = string length → in the case of the string, this indicates how many characters (including whitespaces) are included in the string. So simply the “string.length “\n\n+ 3rd (32 bytes) word = the actual utf8 encoded string → each individual bytes corresponds to hex notation of a letter / character encoded in utf8. If you search each individual bytes from 536f6c6964697479 inside an utf8 table, you will be able to decode the string. For instance, 53 corresponds to uppercase S , 6f corresponds to lowercase o , 6c corresponds to lowercase l , etc…\n\nThe actual encoded bytes would look something like this:\n\n```\n{\n\t\"0\": \"bytes: 0x00000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000008536f6c6964697479000000000000000000000000000000000000000000000000\"\n}\n```\n\nThe contract code was as straightforward as it gets:\n\n```\n// SPDX-License-Identifier: GPL-3.0\n\npragma solidity 0.8.7;\n\ncontract StringEncoding {\n    bytes public encodedString = abi.encode(\"Solidity\");\n}\n```\n\n## Few other ABI Encodings\n\n+ address payable -> address\n+ contract -> address\n+ enum -> uint8\n+ struct -> tuple of elementry types\n\n## Few points on abi.encode, abi.encodePacked, abi.encodeWithSelector, abi.encodeWithSignature\n\n+ When using `abi.encode`, all elementary types are padded to 32 bytes and dynamic arrays include their length.\n    + Therefore, it is also possible to decode the resulting hash using `abi.decode` if the data type is known.\n    + This encoding is done using the ABI specs.\n+ When using `abi.encodePacked` only the minimum possible memory is utilised. \n    + Therefore, if you were hashing an address with this function, it will only take up 20 bytes and the rest of the word remains unpadded.\n    + For dynamic types, the offset and the length is not stored. \n    ```\n    abi.encodePacked(\"Solidity\");\n    // returns -> 0x536f6c6964697479\n    ```\n\n+ Since `abi.encodePacked` is non-standard hashing and uses the least amount of memory, it is usually gas-efficient\n\n+ If you are making calls to an (external) contract, you'll more likely be using `abi.encode` (because it uses the ABI specs) and when you simply want to save some space and *not* call a contract, you'll be using `abi.encodePacked`.\n\n+ If you are dealing with more than one dynamic data types, use `abi.encode` as it prevents collision.\n\n+ Whereas, in multiple dynamic data types there is a good chance of collision happening if used with `abi.encodePacked`\n\n+ `abi.encodeWithSignature` is the same as `abi.encode` but the function selector is used as the first parameter. Use when the signature is known and don't want to calculate the selector.\n\n+ `abi.encodeWithSelector`, almost same as `abi.encodeWithSignature` but first param is selector.\n\nCode Examples of the above encode options:\n\n```solidity\n\n// Case 1\n(success, ) = address(c).call(abi.encodeWithSignature(\"myfunction(uint256,uint256)\", 400,500));\n\n// Case 2\n(success, ) = address(c).call(abi.encodeWithSelector(bytes4(keccak256(\"myfunction(uint256,uint256)\")), 400,500));\n\n// Case 3\ncontract_instance.myfunction(400,500);\n\n```\n\n+ Case 3 is more expensive but safer than the other cases.\n> This is because, the EVM considers a call to a non-existing contract to always succeed. Therefore, Solidity includes an extra check using the `extcodesize` opcode when performing external calls.\nThis ensures that the contract that is about to be called either actually exists (contains code) or an exception is raised.\n\n> Low level calls (which operate on address rather than a contract instance) ignore this check and therefore become gas efficient but less safe. Eg. `call`, `transfer`, `delegatecall`, `staticcall`, `send`.\n\n+ A very important point to note is:\nIf a function exists such that:\n```\nfunction foo(uint256 _a, address _b) {\n    // do something\n}\n```\n\nThen, the function selector for this particular function would be:\n\n```\nbytes4(keccak256(bytes('foo(uint256,address)'))); // This is correct\n\nbytes4(keccak256(bytes('foo(uint256, address)'))); // This would be incorrect, because of the space between the two param types\n\nbytes4(keccak256(bytes('foo(uint,address)'))); // Again incorrect, because we cannot use the alias of uint, we have to use the entire uint256\n```\n\n+ A more comprehensive example from *solidity-by-example*\n\n```solidity\n// SPDX-License-Identifier: MIT\npragma solidity ^0.8.13;\n\ncontract Receiver {\n    event Received(address caller, uint amount, string message);\n\n    fallback() external payable {\n        emit Received(msg.sender, msg.value, \"Fallback was called\");\n    }\n\n    function foo(string memory _message, uint _x) public payable returns (uint) {\n        emit Received(msg.sender, msg.value, _message);\n\n        return _x + 1;\n    }\n}\n\ncontract Caller {\n    event Response(bool success, bytes data);\n\n    // Let's imagine that contract B does not have the source code for\n    // contract A, but we do know the address of A and the function to call.\n    function testCallFoo(address payable _addr) public payable {\n        // You can send ether and specify a custom gas amount\n        (bool success, bytes memory data) = _addr.call{value: msg.value, gas: 5000}(\n            abi.encodeWithSignature(\"foo(string,uint256)\", \"call foo\", 123)\n        );\n\n        emit Response(success, data);\n    }\n\n    // Calling a function that does not exist triggers the fallback function.\n    function testCallDoesNotExist(address _addr) public {\n        (bool success, bytes memory data) = _addr.call(\n            abi.encodeWithSignature(\"doesNotExist()\")\n        );\n\n        emit Response(success, data);\n    }\n}\n\n```"
+        },
+        {
+          "id": "defi-tits",
+          "metadata": {
+            "permalink": "/blog/defi-tits",
+            "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/blog/2022-08-28-A-Primer-To-Testing.md",
+            "source": "@site/blog/2022-08-28-A-Primer-To-Testing.md",
+            "title": "DeFi TITS - A Primer on Testing",
+            "description": "The International Testing Standard (TITS) for DeFi",
+            "date": "2022-08-28T00:00:00.000Z",
+            "formattedDate": "August 28, 2022",
+            "tags": [
+              {
+                "label": "defi",
+                "permalink": "/blog/tags/defi"
+              },
+              {
+                "label": "testing",
+                "permalink": "/blog/tags/testing"
+              },
+              {
+                "label": "web3",
+                "permalink": "/blog/tags/web-3"
+              },
+              {
+                "label": "forge",
+                "permalink": "/blog/tags/forge"
+              },
+              {
+                "label": "defi-tits",
+                "permalink": "/blog/tags/defi-tits"
+              }
+            ],
+            "readingTime": 13.24,
+            "hasTruncateMarker": true,
+            "authors": [
+              {
+                "name": "Rahul Saxena",
+                "title": "EVM Enjoyoor",
+                "url": "https://twitter.com/saxenism",
+                "image_url": "https://pbs.twimg.com/profile_images/1554486619914117126/7QV7CHum_400x400.jpg",
+                "imageURL": "https://pbs.twimg.com/profile_images/1554486619914117126/7QV7CHum_400x400.jpg"
+              }
+            ],
+            "frontMatter": {
+              "slug": "defi-tits",
+              "title": "DeFi TITS - A Primer on Testing",
+              "authors": {
+                "name": "Rahul Saxena",
+                "title": "EVM Enjoyoor",
+                "url": "https://twitter.com/saxenism",
+                "image_url": "https://pbs.twimg.com/profile_images/1554486619914117126/7QV7CHum_400x400.jpg",
+                "imageURL": "https://pbs.twimg.com/profile_images/1554486619914117126/7QV7CHum_400x400.jpg"
+              },
+              "tags": [
+                "defi",
+                "testing",
+                "web3",
+                "forge",
+                "defi-tits"
+              ]
+            },
+            "prevItem": {
+              "title": "ABI Encode - Solidity",
+              "permalink": "/blog/solidity-encodings"
+            },
+            "nextItem": {
+              "title": "The Web3 Revolution - LinkedIn Post(s)",
+              "permalink": "/blog/linkedin-cultural"
+            }
+          },
+          "content": "## The International Testing Standard (TITS) for DeFi\n\n[Declaration Tweet](https://twitter.com/saxenism/status/1552166849504509952?s=20&t=G9WJ1kv3BQZ1-_qkpUz8sQ).\n\n## Mission Statement\n\nI believe that protocols need to be held to a higher standard of testing. Web3 protocols are decentralised, therefore there are no centralised authorities, and subsequently there is no regulatory pressure on the protocols to do quality checks on their protocols.\n\nIs this an issue?<br /> **YES** <br />\nIs this a big issue?<br />**YES**\n\nWhy? <br/>\n> Well, because, speaking strictly from an economic perspective, it makes much more sense for a protocol to use its time and developer resources on shipping a v2 of their protocol once the initial set of smart contracts are coded rather than spending it on testing their protocol. The protocols presently, try to, conviniently shift the burden of testing and quality assurance on the auditing firms and sometimes on insurance firms. However, Auditing + Insurance is still not enough to offer the level of peace of mind that people should have on software that handles their money.\n\n> Therefore, the development team, that is the most intimately familar with the code base, must make it a sacred duty of theirs (just like doctors take the [Hippocratic Oath](https://en.wikipedia.org/wiki/Hippocratic_Oath)) to test their code to the best of knowledge and ability.\n\n<!--truncate-->\n\nAll in all, these softwares (DeFi protocols) handle the hard earned money of everyday Joes like you and me (and also money of stupid funds like 3AC, but yeah, you get the point) so, we cannot let the protocols continue with lax testing, because not everything can and should be viewed with an economic lens, somethings should exist simply because of personal or community ethics.\n\nIt does not matter (much) how many auditors have had a stab at your protocol, you, as a developer, do not really understand if your protocol really works and is robust enough to take on the uncertainities of the real world if you have not tested your protocol thoroughly. \n\nTherefore, with this repository, I aim to create a certain set of testing standards that all DeFi protocols should strive to meet.\n\nI plan to create this set of standards via iterations. <br />\nIterations of publicly critiquing leading DeFi protocols that are in use today, so that the up and coming protocols in the same space can get an idea and inspiration for the level of testing that the entire community expects out of a protocol that claims to handle money.\n\n## List of protocols being evaluated\n\n1. [Maple Finance](https://github.com/saxenism/defi-tits/tree/master/Maple%20Finance)\n\n## Random tid bits about traditional testing that I have picked up...\n\nThis is definitely not molded for web3 yet, but consider this a good starting point if you haven't formally studied [Software Engineering](https://www.youtube.com/playlist?list=PLbRMhDVUMngf8oZR3DpKMvYhZKga90JVt).\n\nTesting of software is an extremely imaginative and cognitively demanding task, more so in DeFi. So let your imagination go wild and gather ideas regarding testing from any walk of life, science, religion, parenting, social sciences, etc. Just about everything is fair game in testing.\n\n## 1. Old wisdom related to testing\n\n### 1.1 Presence of bugs\nTesting can esure that defects are present but it cannot prove that a particular software is bug-free. Which isn't something super nice, but I'm coping too.\n\n### 1.2 None can do exhaustive testing\nYour software can never be tested for every imaginable and possible test cases. Trust me fellow crypto bro, you cannot.\n\n### 1.3 Test Early\nEarlier you test, lesser you'll cry.\n\n### 1.4 Defect Clustering\nPareto principle but for origin of software bugs.\n\n### 1.5 Pesticide Paradox\nDon't be an idiot and test the same thing over and over with different methods. Find novel ways to screw with your protocol.\n\n### 1.6 Testing is context-dependent\nEvery protocol does something special. Test the shit out of that.\n\n### 1.7 Absence of errors fallacy\nJust like your hot and caring girlfriend, a 100% bug-free software exists only in your imagination.\n\n\n## 1. Why testing is important\n\n+ Saves you and your users from getting rekt.\n+ Hoping for your protocol's success without adequate testing is like going into a gunfight without a bulletproof vest and hoping you don't get shot.\n+ Time and effort spent on testing can be leveraged to get better terms when you get your protocol insured.\n+ In short, you'll get your lambo only wen you test.\n\nThank you for coming to my TED talk. Bye.\n\n## Types of testing\n\nFunctional and Non Functional\n\nNon Function includes \n- Testing the Documentation (which includes)\n    - Instructions\n    - Examples\n    - Messages\n    - Samples\n- Installation Testing\n- Performance Testing\n    - Load Testing\n    - Spike Testing\n    - Stress Testing\n    - Endurance Testing\n- Reliability Testing\n    - Feature Testing\n    - Regression testing\n    - Load Test\n    - Objectives Testing\n- Security Testing (web2 stuff)\n    - Access to application\n    - Data Protection\n    - Brute FOrce\n    - SQL Injection\n    - Service Point\n    - Session Management\n    - Error Handling\n    - Specific Risky Functionalities\n\n## 2. SDLC\n\n+ Requirement\n+ Analysis (outcome from this phase is SRS)\n+ Design (HLD and LLD)\n+ Coding\n+ Testing\n+ Deployment and all\n\n### 2.1 Waterfall Model\n\nSequential design process. One way street, so back tracking is not possible.\n\n![Waterfall Model Image](https://www.tutorialscampus.com/sdlc/img/waterfall-model.png)\n\n### 2.2 Spiral Model\n\nCombination of iterative development process model and sequential linear development model.\n\n![Spiral Model Image](https://pbs.twimg.com/media/DJxUCFeVoAA5bt1?format=jpg&name=small)\n\n## 3. Validation vs Verification\n\n| Verification                           | Validation                       |\n| -----------                            | -----------                      |\n| Methods involve: review, inspection, unit testing & integration testing| Involves testing the entire system (system testing)                            |\n| Usually done by developers while developing                              | Usually done by tester and after developing of the product by developers                             |\n|Concerned with the phase containment of errors | Concerned with making the final product error free |\n| Involves static and dynamic analysis of code | Involves only dynamic analysis of code |\n\n## 4. Types of software testing\n\n### 4.1 Unit Testing\n\nCan be done in the development phase itself. Unit means a particularly small piece of (preferrably independent) code such as a function, small module etc.\n\nSmallest element of the software is a unit and testing each of those units is **unit testing**.\n\n### 4.2 Integration Testing\n\nCombine different units of code and test whether they work together as expected to produce the desired output or not.\n\n4 common integration testing startegies are as follows:\n\n#### 4.2.1 Big Bang Testing\n\nAll units are linked at once, resulting in a complete system. Here, it is difficult to isolate any errors found.\n\n#### 4.2.2 Top Down \n\nHigher level modules are tested first after which the lower level modules are tested. Higher level modules refer to the main modules and lower level refers to the sub modules.\n\n**Stubs** (temporary modules) are used to simulate the behaviour of the lower-level modules that are not yet integrated. \n\nUsed when software needs to interact with an external system.\n\n#### 4.2.3 Bottom Up\n\nLower level modules are tested first and then the higher level modules. \n\nThis approach uses **test drivers** which are mainly used to initiate and pass the required data to the sub modules, implying we pass mock data that should ideally have come from (the not yet implemented) higher modules.\n\n#### 4.2.4 Mixed (Sandwiched integration testing)\n\nA mixed integration testing follows a combination of top down and bottom-up testing approaches.\n\n### 4.3 System Testing or End-to-End Testing\n\nTesting the entire system. Here, we navigate all the necessary modules of an application and check if the end features or the end business works fine, and test the product as a whole system.\n\n#### 4.3.1.1 Alpha Testing\n\n+ The testers are people who have built the product.\n+ Done before releasing the product.\n+ Involves both white box and black box testing\n\n#### 4.3.1.2 Beta Testing\n\n+ Beta testing is performed by a select set of clients who are not part of the organization. \n+ User input on the product is collected to ensure the product is ready for real time users\n+ Commonly involves only black box testing\n\n#### 4.3.2 Acceptance Testing\n\nIt is a formal testing according to user needs, requirements and business processes conducted to determine whether a system satisfies the acceptance criteria or not and to enable the users, customers or other authorized entities to determine whether to accept the system or not.\n\n##### Smoke Testing or Build Verification Testing\n\n+ Subset of acceptance testing\n\n| Smoke Testing | Sanity Testing |\n|----------------|----------------|\n| Smoke testing is done to assure that the acute functionalities of program is working fine. | Sanity testing is done to check the bugs have been fixed after the build. |\n| Smoke testing is documented. | Sanity testing isn’t documented. |\n| Smoke testing is done to measures the stability of the system/product by performing testing. | Sanity testing is done to measures the rationality of the system/product by performing testing. |\n| Smoke testing can be performed either manually or by using automation tools. | Sanity testing is commonly executed manually, not by using any automation approach. |\n| Smoke testing is used to test all over function of the system/product. | Sanity testing is used in the case of only modified or defect functions of system/products. |\n|Smoke testing is performed when new product is built. |Sanity testing is conducted after the completion of regression testing.|\n\n\n#### 4.3.3 Mutation Testing\n\n+ Type of white box testing\n+ Extremely costly and time consuming but also extremely efficient in finding errors and ambiguities\n+ In this type of testing, you slightly change the value/logic/statements in your code and see if you get the expected output in your tests\n\n#### 4.3.4 Performance / Non functional Testing\n\nNon-functional testing is defined as a type of software testing to check non-functional aspects of a software application. It is designed to test the readiness of a system as per nonfunctional parameters which are never addressed by functional testing.\n\nThis testing tests the following things (among others):\n+ Volume\n+ Load\n+ Stress\n+ Security\n+ Configuration \n+ Compatibility (BrowserStack :P)\n+ Recovery\n+ Installation etc\n\n#### 4.3.5 Recovery Testing in Software Testing\n\n+ Recovery testing is a type of system testing which aims at testing whether a system can recover from failures or not.\n+ To ensure that a system is fault-tolerant and can recover well from failures, recovery testing is important to perform.\n\n### 4.4 Regression Testing\n\nRegression testing is the process of testing the modified parts of the code and the parts that might get affected due to the modification to ensure that no new errors have been introduced in the software after the modifications have been made.\n\n#### 4.4.1 Techniques for the selection of test cases for regression testing\n\n+ Select all test cases (Most thorough but inefficient approach)\n+ Select test cases randomly (Dangerous approach)\n+ Select modification traversing test cases (Huge upfront work required to identify these test cases)\n+ Select higher priority test cases (Assign priority values to all your tests, then re-test all your highest priority tests)\n\n#### 4.4.2 Sanity Testing\n\n+ Subset if regression testing\n+ Done to ensure that the code changes that have been made are working properly or not\n+ Focus of the team during sanity testing is to validate the functionality of the application and not detailed testing\n+ Usually performed on builds where the production deployment is required immediately like a critical bug fix.\n+ Performed only after the software product has passed the smoke test and the QA team has accepted for further testing\n\n## 5. STLC (Software Testing Life Cycle)\n\n+ Requirement Analysis (Truly truly understand what your protocol is supposed to do)\n+ Test Planning / Strategy Phase (Based on the context of the protocol in question, zero in on a testing strategy)\n+ Test Case Development (This should take the maximum amout of time. List down all test cases that you think are appropriate.)\n+ Environment Setup (Independent of other stages) (Don't tell me you don't already have Forge installed)\n+ Test Execution (Code up all the test cases you came up with earlier. You can do back and forth between Test Execution and Case Development phase, but try to keep it minimal)\n+ Test Cycle Closure (Create a good report. Remember, chads keep their work presentable)\n\n## 6. Non Functional Testing\n\n+ This is based on customer expectations as opposed to functional testing which is based on customer requirements.\n+ Non functional testing describes how the product works rather that what the product does\n+ Includes things like performance testing, scalability, volume testing, load testing, stress testing etc.\n\n### 6.1 Performace Testing\n\n+ Ensures software application will perform well under their expected workload\n+ Goal is not to find bugs but to elimiate performance bottle-necks\n+ Provides accurate information about the speed, scalability and stability of the software\n+ Types of performance testing types\n    + Load Testing (Multiple users access application simultaneously)\n    + Stress Testing\n    + Endurance Testing\n    + Spiking Testing\n    + Volume & Scalability Testing \n+ Pay attention to:\n    + Long load time\n    + Poor response time\n    + Poor scalability\n    + Bottlenecking\n+ Examples of performance Test cases:\n    + Verify response time is not more than 4 seconds when 1000 users access the website simultaneously \n    + Check the maximum number of users that the application can handle before it crashes\n    + Verify response time of the application under low, normal, moderate and heavy load conditions\n\n### 6.2 Cross browser Tests and Mobile Testing and API Testing\n\nSee if this is applicable and test if you have the resources to do so.\n\nTypes of API Testing\n\n+ Functionality Testing\n+ Reliability Testing\n+ Load Testing\n+ UI/UX Testing\n+ Interoperability Testing\n+ Security Testing\n+ Penetration Testing\n+ Negative Testing\n\n## 7. Agile Testing (Test Driven Development (TDD))\n\n+ Testing is continuous\n+ Continuous Feedback\n+ Decreased time of feedback response\n+ Less documentation\n+ Test Drive\n+ Simplified Code\n\n![](https://i.imgur.com/8oKMUr3.png)\n\n\n## 7. Software Testing Documentation\n\n### 7.1 Test Plan\n\nProvides the outline strategy which will be implemented for testing the application and also the resources that will be required. Test environement will also be described.\n\nMake sure that you also set up a *defect/bug life cycle*\n\n### 7.2 Test Scenario\n\nNotifies the area in which your application will experiment\n\n### 7.3 Test Case\n\nCollected steps and conditions with inputs that can be implemented at the time of testing. \n\n### 7.4 Traceability Matrix\n\nA table where you can relate test case IDs with protocol requirement IDs. \n\n## 8. Defect Management Process (What to do when you find bugs)\n\n+ Detect the defect\n+ Formulate the bug report\n+ Fix bug\n+ Bug list creation (so that, yk, history doesn't repeat itself and everyone sees that you have 3 brain cells)\n\nIt is important to note in the first two points, whenever you encounter a bug, you have to reach to the root cause of the bug and report that. Because, it is very much possible that the actual coding error that caused the bug might create many more bugs in the future.\n\nIn short, treat the root cause and not just the symptoms.\n\n## 9. When to choose manual testing\n\n### 9.1 Exploratory Testing\n\nCarried out by domain experts.\nMinimal planning\n\n### 9.2 Usability Testing\n\nUser friendliness of an app\n\n### 9.3 Ad Hoc Testing\n\nInformal testing.\nNo documents are followed.\n\n### 9.4 How to do manual testing\n1. Understand the requirements\n2. Write the test cases\n3. Conducting the tests\n4. Log Good Bug Reports\n5. Report the results (Detailed test report)\n\n## What to automate?\n\n+ Repetitive Task\n+ Capturing Results\n+ Data Entry Tasks\n+ Timing or Screening Responsiveness\n+ Non functional Testing\n+ Environment Setup/Tear down\n\n## Approaches to Test Automation (Look them up)\n\n+ Code driven Testing\n+ Graphical User Interface\n+ Framework Approach\n    + Linear Scripting framework\n    + Data driven framework\n    + Keyword driven framework\n    + Modular testing framework\n    + Hybrid Testing Framework"
+        },
+        {
+          "id": "linkedin-cultural",
+          "metadata": {
+            "permalink": "/blog/linkedin-cultural",
+            "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/blog/LinkedInPosts/2022-07-30-LinkedIn-Web3-Cultural.md",
+            "source": "@site/blog/LinkedInPosts/2022-07-30-LinkedIn-Web3-Cultural.md",
+            "title": "The Web3 Revolution - LinkedIn Post(s)",
+            "description": "Let's set the records straight.",
+            "date": "2022-07-30T00:00:00.000Z",
+            "formattedDate": "July 30, 2022",
+            "tags": [
+              {
+                "label": "linkedin",
+                "permalink": "/blog/tags/linkedin"
+              },
+              {
+                "label": "non-technical",
+                "permalink": "/blog/tags/non-technical"
+              }
+            ],
+            "readingTime": 2.27,
+            "hasTruncateMarker": true,
+            "authors": [
+              {
+                "name": "Rahul Saxena",
+                "title": "EVM Enjoyoor",
+                "url": "https://twitter.com/saxenism",
+                "image_url": "https://pbs.twimg.com/profile_images/1554486619914117126/7QV7CHum_400x400.jpg",
+                "imageURL": "https://pbs.twimg.com/profile_images/1554486619914117126/7QV7CHum_400x400.jpg"
+              }
+            ],
+            "frontMatter": {
+              "slug": "linkedin-cultural",
+              "title": "The Web3 Revolution - LinkedIn Post(s)",
+              "authors": {
+                "name": "Rahul Saxena",
+                "title": "EVM Enjoyoor",
+                "url": "https://twitter.com/saxenism",
+                "image_url": "https://pbs.twimg.com/profile_images/1554486619914117126/7QV7CHum_400x400.jpg",
+                "imageURL": "https://pbs.twimg.com/profile_images/1554486619914117126/7QV7CHum_400x400.jpg"
+              },
+              "tags": [
+                "linkedin",
+                "non-technical"
+              ]
+            },
+            "prevItem": {
+              "title": "DeFi TITS - A Primer on Testing",
+              "permalink": "/blog/defi-tits"
+            }
+          },
+          "content": "Let's set the records straight.\n\nWeb3 is as much a social movement as it is a technological one.\n\nBitcoin was born as a result of the cumulation of people's hopelessness and disgust at the status quo.\n\nEvery day joes like you and I were appalled by the completely arbitrary (and unjust) exercise of power by the people in power in times of crisis.\n\nDuring the 2008 economic crisis, people realised that *their* money wasn't really theirs. And, people were desperate for something that they can say was truly theirs.\n\n<!--truncate-->\n\nBitcoin was the answer for these people.\n\nFast forward to today, we talk about an enhanced version of Bitcoin called Web3, which was birthed by Ethereum.\n\nNow, web3 means *decentralised applications*, where your *accounts* cannot be frozen simply because someone in a privileged position does not like you. It means, the flow of *your* money is extremely transparent and you can track your money to the last gwei and see where it is being spent.\n\nWeb3 means that you do not have to *trust* anyone with your money.\n\nThe code is the law and whatever the code says, will happen with your money. No one can take your money and take degen bets with it (unless you want them to).\n\nBut Rahul, things like these happen all the time. Look at Celcius, Vauld, 3AC, Bitfinex etc.\n\nYes, I know, and this is where I want to set the records straight.\n\nJust because an application deals in crypto-currency or uses blockchain does not mean it is *decentralised*. If you have backend servers and databases (with an admin and passwords and all that circus) and you still use blockchain for a specific purpose, then yes, you can claim your website uses blockchain. But, saying your website is decentralised would be a flat-out lie.\n\nAs users, we must recognise the degree of centralisation in an application before we lend it our money.\n\nSure, exchanges like Vauld, Celcius etc are completely centralised and they can do whatever they feel like with your funds, but there are many other *decentralised applications* which are also not much decentralised simply because they use (token weighted) voting to take decisions and a minority of the users are majority token holders. For more context, read more about the Solend saga that went down just a few weeks back.\n\nThe bottom line here is that it is a choice. A very simple one.\n\nIf you do not want any hassle in regards to your money and want to rely on the goodwill of others, go ahead with your traditional banks and NBFCs. However, if you want a certain extent of *control* over your finances, start reading about how DeFi works.\n\nThank you & Godspeed."
         }
       ],
       "blogListPaginated": [
@@ -617,15 +813,18 @@
           "items": [
             "bit-packing",
             "address-to-uint",
+            "functions-as-params",
             "bit-magic",
-            "solidity-encodings"
+            "solidity-encodings",
+            "defi-tits",
+            "linkedin-cultural"
           ],
           "metadata": {
             "permalink": "/blog",
             "page": 1,
             "postsPerPage": 10,
             "totalPages": 1,
-            "totalCount": 4,
+            "totalCount": 7,
             "blogDescription": "Blog",
             "blogTitle": "Blog"
           }
@@ -637,8 +836,10 @@
           "items": [
             "bit-packing",
             "address-to-uint",
+            "functions-as-params",
             "bit-magic",
-            "solidity-encodings"
+            "solidity-encodings",
+            "defi-tits"
           ],
           "permalink": "/blog/tags/web-3",
           "pages": [
@@ -646,15 +847,17 @@
               "items": [
                 "bit-packing",
                 "address-to-uint",
+                "functions-as-params",
                 "bit-magic",
-                "solidity-encodings"
+                "solidity-encodings",
+                "defi-tits"
               ],
               "metadata": {
                 "permalink": "/blog/tags/web-3",
                 "page": 1,
                 "postsPerPage": 10,
                 "totalPages": 1,
-                "totalCount": 4,
+                "totalCount": 6,
                 "blogDescription": "Blog",
                 "blogTitle": "Blog"
               }
@@ -666,6 +869,7 @@
           "items": [
             "bit-packing",
             "address-to-uint",
+            "functions-as-params",
             "bit-magic",
             "solidity-encodings"
           ],
@@ -675,6 +879,7 @@
               "items": [
                 "bit-packing",
                 "address-to-uint",
+                "functions-as-params",
                 "bit-magic",
                 "solidity-encodings"
               ],
@@ -683,7 +888,7 @@
                 "page": 1,
                 "postsPerPage": 10,
                 "totalPages": 1,
-                "totalCount": 4,
+                "totalCount": 5,
                 "blogDescription": "Blog",
                 "blogTitle": "Blog"
               }
@@ -695,6 +900,7 @@
           "items": [
             "bit-packing",
             "address-to-uint",
+            "functions-as-params",
             "bit-magic"
           ],
           "permalink": "/blog/tags/language-tricks",
@@ -703,6 +909,7 @@
               "items": [
                 "bit-packing",
                 "address-to-uint",
+                "functions-as-params",
                 "bit-magic"
               ],
               "metadata": {
@@ -710,7 +917,7 @@
                 "page": 1,
                 "postsPerPage": 10,
                 "totalPages": 1,
-                "totalCount": 3,
+                "totalCount": 4,
                 "blogDescription": "Blog",
                 "blogTitle": "Blog"
               }
@@ -769,6 +976,7 @@
           "label": "intermediate",
           "items": [
             "bit-packing",
+            "functions-as-params",
             "bit-magic"
           ],
           "permalink": "/blog/tags/intermediate",
@@ -776,6 +984,7 @@
             {
               "items": [
                 "bit-packing",
+                "functions-as-params",
                 "bit-magic"
               ],
               "metadata": {
@@ -783,7 +992,7 @@
                 "page": 1,
                 "postsPerPage": 10,
                 "totalPages": 1,
-                "totalCount": 2,
+                "totalCount": 3,
                 "blogDescription": "Blog",
                 "blogTitle": "Blog"
               }
@@ -872,6 +1081,144 @@
               ],
               "metadata": {
                 "permalink": "/blog/tags/abi",
+                "page": 1,
+                "postsPerPage": 10,
+                "totalPages": 1,
+                "totalCount": 1,
+                "blogDescription": "Blog",
+                "blogTitle": "Blog"
+              }
+            }
+          ]
+        },
+        "/blog/tags/defi": {
+          "label": "defi",
+          "items": [
+            "defi-tits"
+          ],
+          "permalink": "/blog/tags/defi",
+          "pages": [
+            {
+              "items": [
+                "defi-tits"
+              ],
+              "metadata": {
+                "permalink": "/blog/tags/defi",
+                "page": 1,
+                "postsPerPage": 10,
+                "totalPages": 1,
+                "totalCount": 1,
+                "blogDescription": "Blog",
+                "blogTitle": "Blog"
+              }
+            }
+          ]
+        },
+        "/blog/tags/testing": {
+          "label": "testing",
+          "items": [
+            "defi-tits"
+          ],
+          "permalink": "/blog/tags/testing",
+          "pages": [
+            {
+              "items": [
+                "defi-tits"
+              ],
+              "metadata": {
+                "permalink": "/blog/tags/testing",
+                "page": 1,
+                "postsPerPage": 10,
+                "totalPages": 1,
+                "totalCount": 1,
+                "blogDescription": "Blog",
+                "blogTitle": "Blog"
+              }
+            }
+          ]
+        },
+        "/blog/tags/forge": {
+          "label": "forge",
+          "items": [
+            "defi-tits"
+          ],
+          "permalink": "/blog/tags/forge",
+          "pages": [
+            {
+              "items": [
+                "defi-tits"
+              ],
+              "metadata": {
+                "permalink": "/blog/tags/forge",
+                "page": 1,
+                "postsPerPage": 10,
+                "totalPages": 1,
+                "totalCount": 1,
+                "blogDescription": "Blog",
+                "blogTitle": "Blog"
+              }
+            }
+          ]
+        },
+        "/blog/tags/defi-tits": {
+          "label": "defi-tits",
+          "items": [
+            "defi-tits"
+          ],
+          "permalink": "/blog/tags/defi-tits",
+          "pages": [
+            {
+              "items": [
+                "defi-tits"
+              ],
+              "metadata": {
+                "permalink": "/blog/tags/defi-tits",
+                "page": 1,
+                "postsPerPage": 10,
+                "totalPages": 1,
+                "totalCount": 1,
+                "blogDescription": "Blog",
+                "blogTitle": "Blog"
+              }
+            }
+          ]
+        },
+        "/blog/tags/linkedin": {
+          "label": "linkedin",
+          "items": [
+            "linkedin-cultural"
+          ],
+          "permalink": "/blog/tags/linkedin",
+          "pages": [
+            {
+              "items": [
+                "linkedin-cultural"
+              ],
+              "metadata": {
+                "permalink": "/blog/tags/linkedin",
+                "page": 1,
+                "postsPerPage": 10,
+                "totalPages": 1,
+                "totalCount": 1,
+                "blogDescription": "Blog",
+                "blogTitle": "Blog"
+              }
+            }
+          ]
+        },
+        "/blog/tags/non-technical": {
+          "label": "non-technical",
+          "items": [
+            "linkedin-cultural"
+          ],
+          "permalink": "/blog/tags/non-technical",
+          "pages": [
+            {
+              "items": [
+                "linkedin-cultural"
+              ],
+              "metadata": {
+                "permalink": "/blog/tags/non-technical",
                 "page": 1,
                 "postsPerPage": 10,
                 "totalPages": 1,
