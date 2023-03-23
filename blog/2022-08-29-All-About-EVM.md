@@ -28,6 +28,8 @@ The EVM executes its own bytecode intstruction set which higher level smart cont
 
 1. A Turing machine is a finite (there are a limited number of states, such as a coin toss will have only two states: HEADS or TAILS) state machine that has an unlimited supply of paper tape that it can write on and read back.
 
+<!--truncate-->
+
 2. The EVM is a quasi-Turing complete state machine. 
 
   * *Quasi* because all execution processes are limited to a finite number of computational steps by the amount of gas available for any given smart        contract execution.
