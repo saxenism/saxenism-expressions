@@ -27,6 +27,8 @@ Derivative are of 4 types:
 + Swaps
 + Forwards
 
+<!--truncate-->
+
 And all the 4 types, especially futures and options, are closely linked. Therefore, if we even fully understand one instrument, we would be easily able to grasp all kinds of different derivative instruments.
 
 Since, we are interested in learning about *Perps* which is the pre-dominant derivative instrument used in web3, we'll take up learning about options and then transition into learning about **perps** or **perpetual futures**.
