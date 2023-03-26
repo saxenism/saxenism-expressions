@@ -2,6 +2,10 @@
   "title": "Recent posts",
   "items": [
     {
+      "title": "Options 101 - An introduction to derivatives and options trading",
+      "permalink": "/blog/options-introduction"
+    },
+    {
       "title": "Solidity - Bit Packing",
       "permalink": "/blog/bit-packing"
     },
@@ -16,10 +20,6 @@
     {
       "title": "Solidity - Bit Magic (Hot Dev Alpha!!)",
       "permalink": "/blog/bit-magic"
-    },
-    {
-      "title": "ABI Encode - Solidity",
-      "permalink": "/blog/solidity-encodings"
     }
   ]
 }

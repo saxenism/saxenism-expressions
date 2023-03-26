@@ -42,13 +42,16 @@
       "plugin": "plugin---docusaurus-debug-976-b9b"
     }
   },
-  "/blog-475": {
+  "/blog-39c": {
     "__comp": "__comp---theme-blog-list-pagea-6-a-7ba",
     "__context": {
       "plugin": "plugin---blog-7-e-5-942"
     },
     "sidebar": "sidebar---blog-814-8ac",
     "items": [
+      {
+        "content": "content---blog-18-f-26e"
+      },
       {
         "content": "content---blog-115-3dd"
       },
@@ -62,7 +65,13 @@
         "content": "content---blog-676-4d9"
       },
       {
+        "content": "content---blog-8-de-699"
+      },
+      {
         "content": "content---blog-59-a-49c"
+      },
+      {
+        "content": "content---bloge-88-4c2"
       },
       {
         "content": "content---blog-481-9ae"
@@ -112,6 +121,14 @@
     "sidebar": "sidebar---blog-814-8ac",
     "content": "content---blog-defi-tits-4-bc-35e"
   },
+  "/blog/evm-deep-dive-2d3": {
+    "__comp": "__comp---theme-blog-post-pageccc-cab",
+    "__context": {
+      "plugin": "plugin---blog-7-e-5-942"
+    },
+    "sidebar": "sidebar---blog-814-8ac",
+    "content": "content---blog-evm-deep-dive-8-e-5-440"
+  },
   "/blog/functions-as-params-6af": {
     "__comp": "__comp---theme-blog-post-pageccc-cab",
     "__context": {
@@ -127,6 +144,22 @@
     },
     "sidebar": "sidebar---blog-814-8ac",
     "content": "content---blog-linkedin-culturalabb-eee"
+  },
+  "/blog/modern-solidity-cd7": {
+    "__comp": "__comp---theme-blog-post-pageccc-cab",
+    "__context": {
+      "plugin": "plugin---blog-7-e-5-942"
+    },
+    "sidebar": "sidebar---blog-814-8ac",
+    "content": "content---blog-modern-solidity-144-60c"
+  },
+  "/blog/options-introduction-625": {
+    "__comp": "__comp---theme-blog-post-pageccc-cab",
+    "__context": {
+      "plugin": "plugin---blog-7-e-5-942"
+    },
+    "sidebar": "sidebar---blog-814-8ac",
+    "content": "content---blog-options-introductionc-3-f-540"
   },
   "/blog/solidity-encodings-1ef": {
     "__comp": "__comp---theme-blog-post-pageccc-cab",
@@ -203,13 +236,30 @@
     "tag": "tag---blog-tags-bit-packing-73-e-f3e",
     "listMetadata": "listMetadata---blog-tags-bit-packing-6-ec-21d"
   },
-  "/blog/tags/defi-dae": {
+  "/blog/tags/deep-dive-043": {
     "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
     "__context": {
       "plugin": "plugin---blog-7-e-5-942"
     },
     "sidebar": "sidebar---blog-814-8ac",
     "items": [
+      {
+        "content": "content---bloge-88-4c2"
+      }
+    ],
+    "tag": "tag---blog-tags-deep-divea-40-2dc",
+    "listMetadata": "listMetadata---blog-tags-deep-dive-072-ad7"
+  },
+  "/blog/tags/defi-835": {
+    "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
+    "__context": {
+      "plugin": "plugin---blog-7-e-5-942"
+    },
+    "sidebar": "sidebar---blog-814-8ac",
+    "items": [
+      {
+        "content": "content---blog-18-f-26e"
+      },
       {
         "content": "content---blog-481-9ae"
       }
@@ -230,6 +280,62 @@
     ],
     "tag": "tag---blog-tags-defi-titsd-6-d-e0f",
     "listMetadata": "listMetadata---blog-tags-defi-tits-67-c-0ea"
+  },
+  "/blog/tags/derivatives-6e1": {
+    "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
+    "__context": {
+      "plugin": "plugin---blog-7-e-5-942"
+    },
+    "sidebar": "sidebar---blog-814-8ac",
+    "items": [
+      {
+        "content": "content---blog-18-f-26e"
+      }
+    ],
+    "tag": "tag---blog-tags-derivatives-124-180",
+    "listMetadata": "listMetadata---blog-tags-derivatives-4-ff-8f3"
+  },
+  "/blog/tags/evm-2cb": {
+    "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
+    "__context": {
+      "plugin": "plugin---blog-7-e-5-942"
+    },
+    "sidebar": "sidebar---blog-814-8ac",
+    "items": [
+      {
+        "content": "content---bloge-88-4c2"
+      }
+    ],
+    "tag": "tag---blog-tags-evm-040-231",
+    "listMetadata": "listMetadata---blog-tags-evmd-17-d62"
+  },
+  "/blog/tags/evm-internals-792": {
+    "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
+    "__context": {
+      "plugin": "plugin---blog-7-e-5-942"
+    },
+    "sidebar": "sidebar---blog-814-8ac",
+    "items": [
+      {
+        "content": "content---bloge-88-4c2"
+      }
+    ],
+    "tag": "tag---blog-tags-evm-internals-9-ba-b0b",
+    "listMetadata": "listMetadata---blog-tags-evm-internalsf-8-a-70d"
+  },
+  "/blog/tags/finance-984": {
+    "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
+    "__context": {
+      "plugin": "plugin---blog-7-e-5-942"
+    },
+    "sidebar": "sidebar---blog-814-8ac",
+    "items": [
+      {
+        "content": "content---blog-18-f-26e"
+      }
+    ],
+    "tag": "tag---blog-tags-finance-729-9eb",
+    "listMetadata": "listMetadata---blog-tags-finance-501-59e"
   },
   "/blog/tags/forge-c21": {
     "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
@@ -293,7 +399,7 @@
     "tag": "tag---blog-tags-keccak-2569-b-3-75f",
     "listMetadata": "listMetadata---blog-tags-keccak-256910-3b6"
   },
-  "/blog/tags/language-tricks-d03": {
+  "/blog/tags/language-tricks-086": {
     "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
     "__context": {
       "plugin": "plugin---blog-7-e-5-942"
@@ -311,6 +417,9 @@
       },
       {
         "content": "content---blog-676-4d9"
+      },
+      {
+        "content": "content---blog-8-de-699"
       }
     ],
     "tag": "tag---blog-tags-language-tricks-95-b-6a7",
@@ -330,6 +439,20 @@
     "tag": "tag---blog-tags-linkedinb-18-48c",
     "listMetadata": "listMetadata---blog-tags-linkedindb-5-337"
   },
+  "/blog/tags/modern-solidity-dc3": {
+    "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
+    "__context": {
+      "plugin": "plugin---blog-7-e-5-942"
+    },
+    "sidebar": "sidebar---blog-814-8ac",
+    "items": [
+      {
+        "content": "content---blog-8-de-699"
+      }
+    ],
+    "tag": "tag---blog-tags-modern-solidityaae-10e",
+    "listMetadata": "listMetadata---blog-tags-modern-solidity-13-d-9d4"
+  },
   "/blog/tags/non-technical-325": {
     "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
     "__context": {
@@ -344,7 +467,35 @@
     "tag": "tag---blog-tags-non-technical-6-c-0-088",
     "listMetadata": "listMetadata---blog-tags-non-technicale-1-a-bb5"
   },
-  "/blog/tags/solidity-68d": {
+  "/blog/tags/options-2f3": {
+    "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
+    "__context": {
+      "plugin": "plugin---blog-7-e-5-942"
+    },
+    "sidebar": "sidebar---blog-814-8ac",
+    "items": [
+      {
+        "content": "content---blog-18-f-26e"
+      }
+    ],
+    "tag": "tag---blog-tags-options-885-302",
+    "listMetadata": "listMetadata---blog-tags-optionsdd-9-ae3"
+  },
+  "/blog/tags/security-9a5": {
+    "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
+    "__context": {
+      "plugin": "plugin---blog-7-e-5-942"
+    },
+    "sidebar": "sidebar---blog-814-8ac",
+    "items": [
+      {
+        "content": "content---bloge-88-4c2"
+      }
+    ],
+    "tag": "tag---blog-tags-security-04-f-e8e",
+    "listMetadata": "listMetadata---blog-tags-securitye-34-23e"
+  },
+  "/blog/tags/solidity-89a": {
     "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
     "__context": {
       "plugin": "plugin---blog-7-e-5-942"
@@ -364,7 +515,13 @@
         "content": "content---blog-676-4d9"
       },
       {
+        "content": "content---blog-8-de-699"
+      },
+      {
         "content": "content---blog-59-a-49c"
+      },
+      {
+        "content": "content---bloge-88-4c2"
       }
     ],
     "tag": "tag---blog-tags-solidity-5-dc-b5d",
@@ -384,7 +541,21 @@
     "tag": "tag---blog-tags-testing-15-b-d87",
     "listMetadata": "listMetadata---blog-tags-testing-4-bb-2ba"
   },
-  "/blog/tags/web-3-d94": {
+  "/blog/tags/tradfi-2e4": {
+    "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
+    "__context": {
+      "plugin": "plugin---blog-7-e-5-942"
+    },
+    "sidebar": "sidebar---blog-814-8ac",
+    "items": [
+      {
+        "content": "content---blog-18-f-26e"
+      }
+    ],
+    "tag": "tag---blog-tags-tradfi-64-f-027",
+    "listMetadata": "listMetadata---blog-tags-tradfi-411-e15"
+  },
+  "/blog/tags/web-3-972": {
     "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
     "__context": {
       "plugin": "plugin---blog-7-e-5-942"
@@ -402,6 +573,9 @@
       },
       {
         "content": "content---blog-676-4d9"
+      },
+      {
+        "content": "content---blog-8-de-699"
       },
       {
         "content": "content---blog-59-a-49c"

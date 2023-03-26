@@ -5,7 +5,7 @@
  */
 export default {
   "title": "EVM Expressions",
-  "tagline": "Hey, I am Rahul and I love the EVM and believe in a (progressively) decentralised world. Doing my bit towards it.",
+  "tagline": "Hey, I am Rahul and I love the EVM. I believe in a (progressively) decentralised world and I am doing my bit towards it.",
   "favicon": "img/favicon.ico",
   "url": "https://saxenism.com",
   "baseUrl": "/",
@@ -60,7 +60,7 @@ export default {
         },
         {
           "to": "/testimonials",
-          "label": "Chatters",
+          "label": "Testimonials",
           "position": "left"
         }
       ],

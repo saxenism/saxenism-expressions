@@ -8,8 +8,11 @@ const FeatureList = [
     Svg: require('@site/static/img/hacker-svgrepo-com.svg').default,
     description: (
       <>
-        I enjoy auditing EVM smart contracts as it is almost a direct expression of how my mind fundamentally works. I specialise in catching (some really extreme) edge-cases in your codebase.
-        Previous clients include Brahama.finance, YouDonate, CantoNameService, Sablier v2, among others.
+        <ul>
+          <li>I enjoy auditing EVM smart contracts as it is almost a direct expression of how my mind fundamentally works. </li>
+          <li>I specialise in catching (some really extreme) edge-cases in your codebase.</li>
+          <li>Previous clients include Sablier v2, Brahama.finance, YouDonate, Return Protocol, CantoNameService, CrytoAvatar among others.</li>
+        </ul>
       </>
     ),
   },
@@ -18,8 +21,11 @@ const FeatureList = [
     Svg: require('@site/static/img/test-tube-shake-svgrepo-com.svg').default,
     description: (
       <>
-        I have led the efforts for theorizing, reconnaissance and implementation of an acutely thorough testing infrastructure for Sublime Finance and now the Specular L2.
-        At Specular, my testing methodologies revelead 12+ critical bugs (code not audited until that point) and 8+ edge cases in Sublime's codebase even after multiple audits.
+        <ul>
+          <li>I have led the efforts for theorizing, reconnaissance and implementation of an acutely thorough testing infrastructure for Sublime Finance and now the Specular L2. </li>
+          <li>At Specular, my testing methodologies revelead 12+ critical bugs (code not audited until that point) and 8+ edge cases in Sublime's codebase even after multiple audits.</li>
+          <li>I have offered testing review (and implementation) services to several leading DeFi protocols.</li>
+        </ul>
       </>
     ),
   },
@@ -28,8 +34,11 @@ const FeatureList = [
     Svg: require('@site/static/img/computers.svg').default,
     description: (
       <>
-        Led the product development of a new-age lending product at Sublime along with another dev from the ground up. Led a team of devs for creating a decentralised Upwork-like platform
-        and wrote a lot of code here-and-there. Overall, I just love writing, super-safe yet gas-efficient code. Given my security background, the fundamentals of writing sound code are just hardwired into me :P 
+        <ul>
+          <li>Led the product development of a new-age lending product at Sublime along with another dev from the ground up.</li>
+          <li>Led a team of devs for creating a decentralised Upwork-like platform</li>
+          <li>I have written a bunch of code here-and-there. Overall, I just love writing, super-safe yet gas-efficient code. Given my security background, the fundamentals of writing sound code are just hardwired into me :P </li>
+        </ul>
       </>
     ),
   },

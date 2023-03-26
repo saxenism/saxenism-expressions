@@ -9,16 +9,25 @@ import styles from './index.module.css';
 
 function HomepageHeader() {
   const {siteConfig} = useDocusaurusContext();
+  const margin = {
+    'margin-right': '20px'
+  };
   return (
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <div className="container">
         <h1 className="hero__title">{siteConfig.title}</h1>
         <p className="hero__subtitle">{siteConfig.tagline}</p>
         <div className={styles.buttons}>
+          <Link 
+            style={margin}
+            className="button button--secondary button--lg"
+            to="https://t.me/YaamiDancho">
+            💫 Testimonials 🌟
+          </Link>
           <Link
             className="button button--secondary button--lg"
             to="https://t.me/YaamiDancho">
-            🕊️ Contact Me ✉️
+            ✍️ Contact Me 🕊️ 
           </Link>
         </div>
       </div>

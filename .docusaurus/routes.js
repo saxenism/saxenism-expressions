@@ -39,7 +39,7 @@ export default [
   },
   {
     path: '/blog',
-    component: ComponentCreator('/blog', '475'),
+    component: ComponentCreator('/blog', '39c'),
     exact: true
   },
   {
@@ -68,6 +68,11 @@ export default [
     exact: true
   },
   {
+    path: '/blog/evm-deep-dive',
+    component: ComponentCreator('/blog/evm-deep-dive', '2d3'),
+    exact: true
+  },
+  {
     path: '/blog/functions-as-params',
     component: ComponentCreator('/blog/functions-as-params', '6af'),
     exact: true
@@ -75,6 +80,16 @@ export default [
   {
     path: '/blog/linkedin-cultural',
     component: ComponentCreator('/blog/linkedin-cultural', '060'),
+    exact: true
+  },
+  {
+    path: '/blog/modern-solidity',
+    component: ComponentCreator('/blog/modern-solidity', 'cd7'),
+    exact: true
+  },
+  {
+    path: '/blog/options-introduction',
+    component: ComponentCreator('/blog/options-introduction', '625'),
     exact: true
   },
   {
@@ -108,13 +123,38 @@ export default [
     exact: true
   },
   {
+    path: '/blog/tags/deep-dive',
+    component: ComponentCreator('/blog/tags/deep-dive', '043'),
+    exact: true
+  },
+  {
     path: '/blog/tags/defi',
-    component: ComponentCreator('/blog/tags/defi', 'dae'),
+    component: ComponentCreator('/blog/tags/defi', '835'),
     exact: true
   },
   {
     path: '/blog/tags/defi-tits',
     component: ComponentCreator('/blog/tags/defi-tits', '4f3'),
+    exact: true
+  },
+  {
+    path: '/blog/tags/derivatives',
+    component: ComponentCreator('/blog/tags/derivatives', '6e1'),
+    exact: true
+  },
+  {
+    path: '/blog/tags/evm',
+    component: ComponentCreator('/blog/tags/evm', '2cb'),
+    exact: true
+  },
+  {
+    path: '/blog/tags/evm-internals',
+    component: ComponentCreator('/blog/tags/evm-internals', '792'),
+    exact: true
+  },
+  {
+    path: '/blog/tags/finance',
+    component: ComponentCreator('/blog/tags/finance', '984'),
     exact: true
   },
   {
@@ -139,7 +179,7 @@ export default [
   },
   {
     path: '/blog/tags/language-tricks',
-    component: ComponentCreator('/blog/tags/language-tricks', 'd03'),
+    component: ComponentCreator('/blog/tags/language-tricks', '086'),
     exact: true
   },
   {
@@ -148,13 +188,28 @@ export default [
     exact: true
   },
   {
+    path: '/blog/tags/modern-solidity',
+    component: ComponentCreator('/blog/tags/modern-solidity', 'dc3'),
+    exact: true
+  },
+  {
     path: '/blog/tags/non-technical',
     component: ComponentCreator('/blog/tags/non-technical', '325'),
     exact: true
   },
   {
+    path: '/blog/tags/options',
+    component: ComponentCreator('/blog/tags/options', '2f3'),
+    exact: true
+  },
+  {
+    path: '/blog/tags/security',
+    component: ComponentCreator('/blog/tags/security', '9a5'),
+    exact: true
+  },
+  {
     path: '/blog/tags/solidity',
-    component: ComponentCreator('/blog/tags/solidity', '68d'),
+    component: ComponentCreator('/blog/tags/solidity', '89a'),
     exact: true
   },
   {
@@ -163,8 +218,13 @@ export default [
     exact: true
   },
   {
+    path: '/blog/tags/tradfi',
+    component: ComponentCreator('/blog/tags/tradfi', '2e4'),
+    exact: true
+  },
+  {
     path: '/blog/tags/web-3',
-    component: ComponentCreator('/blog/tags/web-3', 'd94'),
+    component: ComponentCreator('/blog/tags/web-3', '972'),
     exact: true
   },
   {

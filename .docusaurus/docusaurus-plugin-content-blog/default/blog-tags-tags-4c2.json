@@ -1,18 +1,43 @@
 [
   {
+    "label": "defi",
+    "permalink": "/blog/tags/defi",
+    "count": 2
+  },
+  {
+    "label": "finance",
+    "permalink": "/blog/tags/finance",
+    "count": 1
+  },
+  {
+    "label": "derivatives",
+    "permalink": "/blog/tags/derivatives",
+    "count": 1
+  },
+  {
+    "label": "options",
+    "permalink": "/blog/tags/options",
+    "count": 1
+  },
+  {
+    "label": "tradfi",
+    "permalink": "/blog/tags/tradfi",
+    "count": 1
+  },
+  {
     "label": "web3",
     "permalink": "/blog/tags/web-3",
-    "count": 6
+    "count": 7
   },
   {
     "label": "solidity",
     "permalink": "/blog/tags/solidity",
-    "count": 5
+    "count": 7
   },
   {
     "label": "language-tricks",
     "permalink": "/blog/tags/language-tricks",
-    "count": 4
+    "count": 5
   },
   {
     "label": "bit-magic",
@@ -35,6 +60,11 @@
     "count": 1
   },
   {
+    "label": "modern-solidity",
+    "permalink": "/blog/tags/modern-solidity",
+    "count": 1
+  },
+  {
     "label": "hashing",
     "permalink": "/blog/tags/hashing",
     "count": 1
@@ -50,8 +80,23 @@
     "count": 1
   },
   {
-    "label": "defi",
-    "permalink": "/blog/tags/defi",
+    "label": "evm",
+    "permalink": "/blog/tags/evm",
+    "count": 1
+  },
+  {
+    "label": "security",
+    "permalink": "/blog/tags/security",
+    "count": 1
+  },
+  {
+    "label": "deep-dive",
+    "permalink": "/blog/tags/deep-dive",
+    "count": 1
+  },
+  {
+    "label": "evm-internals",
+    "permalink": "/blog/tags/evm-internals",
     "count": 1
   },
   {
