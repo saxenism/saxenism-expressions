@@ -27,7 +27,7 @@ function HomepageHeader() {
           <Link
             className="button button--secondary button--lg"
             to="https://t.me/YaamiDancho">
-            ✍️ Contact Me 🕊️ 
+            ✍️ Book An Audit 🕊️ 
           </Link>
         </div>
       </div>
