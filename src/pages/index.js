@@ -39,8 +39,8 @@ export default function Home() {
   const {siteConfig} = useDocusaurusContext();
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />">
+      title={`EVM Expressions`}
+      description="Personal website of Rahul Saxena, an EVM Engineer providing security and testing consulting focussed on DeFi protocols">
       <HomepageHeader />
       <main>
         <HomepageFeatures />

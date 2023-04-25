@@ -70,11 +70,11 @@ export default {
       "style": "dark",
       "links": [
         {
-          "title": "Docs",
+          "title": "Blog",
           "items": [
             {
-              "label": "Tutorial",
-              "to": "/docs/intro"
+              "label": "Blog",
+              "to": "/blog"
             }
           ]
         },
@@ -99,12 +99,12 @@ export default {
           "title": "More",
           "items": [
             {
-              "label": "Blog",
-              "to": "/blog"
-            },
-            {
               "label": "GitHub",
               "href": "https://github.com/saxenism"
+            },
+            {
+              "label": "Instagram",
+              "href": "https://www.instagram.com/saxenism/"
             }
           ]
         }
