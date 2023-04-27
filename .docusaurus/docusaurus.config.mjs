@@ -5,7 +5,7 @@
  */
 export default {
   "title": "EVM Expressions",
-  "tagline": "Hey, I am Rahul and I love the EVM. I believe in a (progressively) decentralised world and I am doing my bit towards it.",
+  "tagline": "Hey, I am Rahul and I love Ethereum and the EVM. I help protocols navigate the risky world of web3 with security audits and testing consultation.",
   "favicon": "img/favicon.ico",
   "url": "https://saxenism.com",
   "baseUrl": "/",
@@ -40,12 +40,12 @@ export default {
     ]
   ],
   "themeConfig": {
-    "image": "img/docusaurus-social-card.jpg",
+    "image": "img/btlabs.png",
     "navbar": {
       "title": "EVM Expressions",
       "logo": {
         "alt": "My Site Logo",
-        "src": "img/logo.svg"
+        "src": "img/logo512.png"
       },
       "items": [
         {

@@ -4,7 +4,20 @@ import styles from './styles.module.css';
 
 const FeatureList = [
   {
-    title: "Previoos Clients",
+    title: 'Auditoor',
+    Svg: require('@site/static/img/hacker-svgrepo-com.svg').default,
+    description: (
+      <>
+        <ul>
+          <li>I enjoy auditing EVM smart contracts as it is almost a direct expression of how my mind fundamentally works. </li>
+          <li>I specialise in catching (some really extreme) edge-cases in your codebase.</li>
+          <li>Led a secure product development of a new-age lending product at <a href='https://sublime.finance/'>Sublime</a> along with another dev from the ground up</li>
+        </ul>
+      </>
+    ),
+  },
+  {
+    title: "Previous Clients",
     Svg: require('@site/static/img/ryanlerch_swords_and_shield.svg').default,
     description: (
       <>
@@ -16,19 +29,6 @@ const FeatureList = [
           <li><a href='https://twitter.com/youdonated'>YouDonate</a></li>
           <li><a href='https://www.return.green/'>Return Protocol</a></li>
           <li><a href='https://cryptoavatars.io/'>CryptoAvatars</a></li>
-        </ul>
-      </>
-    ),
-  },
-  {
-    title: 'Auditoor',
-    Svg: require('@site/static/img/hacker-svgrepo-com.svg').default,
-    description: (
-      <>
-        <ul>
-          <li>I enjoy auditing EVM smart contracts as it is almost a direct expression of how my mind fundamentally works. </li>
-          <li>I specialise in catching (some really extreme) edge-cases in your codebase.</li>
-          <li>Led a secure product development of a new-age lending product at <a href='https://sublime.finance/'>Sublime</a> along with another dev from the ground up</li>
         </ul>
       </>
     ),

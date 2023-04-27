@@ -22,12 +22,12 @@ function HomepageHeader() {
             style={margin}
             className="button button--secondary button--lg"
             to= '/testimonials'>
-            💫 Testimonials 🌟
+            💫 Reviews 🌟
           </Link>
           <Link
             className="button button--secondary button--lg"
             to="https://t.me/YaamiDancho">
-            ✍️ Book An Audit 🕊️ 
+            ✍️ Get In Touch 🕊️ 
           </Link>
         </div>
       </div>
