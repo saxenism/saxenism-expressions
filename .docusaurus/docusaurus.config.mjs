@@ -118,7 +118,7 @@ export default {
           ]
         }
       ],
-      "copyright": "Copyright © 2023 Bluethroat Labs, Private Ltd. Built with Docusaurus."
+      "copyright": "Copyright © 2023 Bluethroat Labs Private Ltd."
     },
     "prism": {
       "theme": {

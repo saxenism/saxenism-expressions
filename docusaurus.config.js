@@ -129,7 +129,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} Bluethroat Labs, Private Ltd. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} Bluethroat Labs Private Ltd.`,
       },
       prism: {
         theme: darkCodeTheme,

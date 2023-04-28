@@ -9,9 +9,9 @@ const FeatureList = [
     description: (
       <>
         <ul>
-          <li>Auditing EVM smart contracts is almost a direct expression of how my mind fundamentally works, and I LOVE IT!! </li>
-          <li>I specialise in catching (some really extreme) edge-casey bugs in your codebase.</li>
-          <li>Have led secure product development of a new-age lending product at <a href='https://sublime.finance/'>Sublime</a> called <b>Pooled Credit Lines</b> from the ground up</li>
+          <li style={{textAlign: 'left'}}>Auditing EVM smart contracts is almost a direct expression of how my mind fundamentally works, and I LOVE IT!! </li>
+          <li style={{textAlign: 'left'}}>I specialise in catching (some really extreme) edge-casey bugs in your codebase.</li>
+          <li style={{textAlign: 'left'}}>Have led secure product development of a new-age lending product at <a href='https://sublime.finance/'>Sublime</a> called <b>Pooled Credit Lines</b> from the ground up</li>
         </ul>
       </>
     ),
@@ -21,7 +21,7 @@ const FeatureList = [
     Svg: require('@site/static/img/ryanlerch_swords_and_shield.svg').default,
     description: (
       <>
-      <p>Clients that I have helped secured, either individually or in teams</p>
+      <p style={{textAlign: 'center'}}>Clients that I have helped secured, either individually or in teams</p>
         <ul>
           <li><a href='https://www.brahma.fi/'>Brahama Finance</a></li>
           <li><a href='https://sablier.finance/'>Sablier v2</a></li>
@@ -39,9 +39,9 @@ const FeatureList = [
     description: (
       <>
         <ul>
-          <li>Led efforts for theorizing and implementing the entire testing infra for <a href='https://sublime.finance/' target='_blank'>Sublime</a> & <a href='https://specular.network/' target='_blank'>Specular L2</a>. </li>
-          <li><b>12+ critical bugs</b> & <b>8+ edge cases</b> uncovered at Specular & Sublime respectively following my testing process.</li>
-          <li>You can listen to <a href='https://youtu.be/8ZMC62u3Dog' target='_blank'>my presentation</a> on testing pyschology.</li>
+          <li style={{textAlign: 'left'}}>Led efforts for theorizing and implementing the entire testing infra for <a href='https://sublime.finance/' target='_blank'>Sublime</a> & <a href='https://specular.network/' target='_blank'>Specular L2</a>. </li>
+          <li style={{textAlign: 'left'}}><b>12+ critical bugs</b> & <b>8+ edge cases</b> uncovered at Specular & Sublime respectively following my testing process.</li>
+          <li style={{textAlign: 'left'}}>You can listen to <a href='https://youtu.be/8ZMC62u3Dog' target='_blank'>my presentation</a> on testing pyschology.</li>
         </ul>
       </>
     ),
