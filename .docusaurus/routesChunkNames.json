@@ -587,6 +587,13 @@
     "tag": "tag---blog-tags-web-36-a-3-2fe",
     "listMetadata": "listMetadata---blog-tags-web-3371-5f4"
   },
+  "/glossary-6ed": {
+    "__comp": "__comp---theme-mdx-page-1-f-3-b90",
+    "__context": {
+      "plugin": "plugin---markdown-page-98-c-792"
+    },
+    "content": "content---glossary-634-708"
+  },
   "/markdown-page-0f3": {
     "__comp": "__comp---theme-mdx-page-1-f-3-b90",
     "__context": {

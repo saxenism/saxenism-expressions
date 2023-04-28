@@ -78,19 +78,24 @@ const config = {
           // },
           {to: '/blog', label: 'Blog', position: 'left'},
           {to: '/videos', label: 'Videos', position: 'left'},
-          {to: '/testimonials', label: 'Testimonials', position: 'left'}
+          {to: '/testimonials', label: 'Reviews', position: 'left'},
+          {to: '/glossary', label: 'DeFi Dictionary', position: 'left'}
         ],
       },
       footer: {
         style: 'dark',
         links: [
           {
-            title: 'Blog',
+            title: 'Library',
             items: [
               {
                 label: 'Blog',
                 to: '/blog',
               },
+              {
+                label: 'Video Presentations',
+                to: '/videos'
+              }
             ],
           },
           {

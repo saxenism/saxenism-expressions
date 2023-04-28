@@ -22,7 +22,7 @@ function HomepageHeader() {
             style={margin}
             className="button button--secondary button--lg"
             to= '/testimonials'>
-            💫 Reviews 🌟
+            💫 Testimonials 🌟
           </Link>
           <Link
             className="button button--secondary button--lg"

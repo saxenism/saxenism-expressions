@@ -60,7 +60,12 @@ export default {
         },
         {
           "to": "/testimonials",
-          "label": "Testimonials",
+          "label": "Reviews",
+          "position": "left"
+        },
+        {
+          "to": "/glossary",
+          "label": "DeFi Dictionary",
           "position": "left"
         }
       ],
@@ -70,11 +75,15 @@ export default {
       "style": "dark",
       "links": [
         {
-          "title": "Blog",
+          "title": "Library",
           "items": [
             {
               "label": "Blog",
               "to": "/blog"
+            },
+            {
+              "label": "Video Presentations",
+              "to": "/videos"
             }
           ]
         },

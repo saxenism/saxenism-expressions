@@ -4,14 +4,14 @@ import styles from './styles.module.css';
 
 const FeatureList = [
   {
-    title: 'Auditoor',
+    title: 'Auditoor & Developoor',
     Svg: require('@site/static/img/hacker-svgrepo-com.svg').default,
     description: (
       <>
         <ul>
-          <li>I enjoy auditing EVM smart contracts as it is almost a direct expression of how my mind fundamentally works. </li>
-          <li>I specialise in catching (some really extreme) edge-cases in your codebase.</li>
-          <li>Led a secure product development of a new-age lending product at <a href='https://sublime.finance/'>Sublime</a> along with another dev from the ground up</li>
+          <li>Auditing EVM smart contracts is almost a direct expression of how my mind fundamentally works, and I LOVE IT!! </li>
+          <li>I specialise in catching (some really extreme) edge-casey bugs in your codebase.</li>
+          <li>Have led secure product development of a new-age lending product at <a href='https://sublime.finance/'>Sublime</a> called <b>Pooled Credit Lines</b> from the ground up</li>
         </ul>
       </>
     ),
@@ -39,9 +39,9 @@ const FeatureList = [
     description: (
       <>
         <ul>
-          <li>I have led the efforts for theorizing, reconnaissance and implementation of an acutely thorough testing infrastructure for Sublime Finance and now the Specular L2. </li>
-          <li>At Specular, my testing methodologies revelead 12+ critical bugs (code not audited until that point) and 8+ edge cases in Sublime's codebase even after multiple audits.</li>
-          <li>I have offered testing review (and implementation) services to several leading DeFi protocols.</li>
+          <li>Led efforts for theorizing and implementing the entire testing infra for <a href='https://sublime.finance/' target='_blank'>Sublime</a> & <a href='https://specular.network/' target='_blank'>Specular L2</a>. </li>
+          <li><b>12+ critical bugs</b> & <b>8+ edge cases</b> uncovered at Specular & Sublime respectively following my testing process.</li>
+          <li>You can listen to <a href='https://youtu.be/8ZMC62u3Dog' target='_blank'>my presentation</a> on testing pyschology.</li>
         </ul>
       </>
     ),

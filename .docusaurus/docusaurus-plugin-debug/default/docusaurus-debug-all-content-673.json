@@ -1667,6 +1667,14 @@
   "docusaurus-plugin-content-pages": {
     "default": [
       {
+        "type": "mdx",
+        "permalink": "/glossary",
+        "source": "@site/src/pages/glossary.md",
+        "title": "DeFi Dictionary",
+        "description": "Here is a collection of finance terms and concepts I come across while auditing several codebases. Collecting them all here for easy access for myself in the future and possibly helping out other developers in the community.",
+        "frontMatter": {}
+      },
+      {
         "type": "jsx",
         "permalink": "/",
         "source": "@site/src/pages/index.js"

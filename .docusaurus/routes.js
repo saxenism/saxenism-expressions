@@ -228,6 +228,11 @@ export default [
     exact: true
   },
   {
+    path: '/glossary',
+    component: ComponentCreator('/glossary', '6ed'),
+    exact: true
+  },
+  {
     path: '/markdown-page',
     component: ComponentCreator('/markdown-page', '0f3'),
     exact: true
