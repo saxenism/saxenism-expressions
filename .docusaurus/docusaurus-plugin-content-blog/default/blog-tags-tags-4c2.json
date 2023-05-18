@@ -2,7 +2,37 @@
   {
     "label": "defi",
     "permalink": "/blog/tags/defi",
+    "count": 3
+  },
+  {
+    "label": "oracles",
+    "permalink": "/blog/tags/oracles",
+    "count": 1
+  },
+  {
+    "label": "oracle",
+    "permalink": "/blog/tags/oracle",
+    "count": 1
+  },
+  {
+    "label": "chainlink",
+    "permalink": "/blog/tags/chainlink",
+    "count": 1
+  },
+  {
+    "label": "security",
+    "permalink": "/blog/tags/security",
     "count": 2
+  },
+  {
+    "label": "tips",
+    "permalink": "/blog/tags/tips",
+    "count": 1
+  },
+  {
+    "label": "security-tips",
+    "permalink": "/blog/tags/security-tips",
+    "count": 1
   },
   {
     "label": "finance",
@@ -82,11 +112,6 @@
   {
     "label": "evm",
     "permalink": "/blog/tags/evm",
-    "count": 1
-  },
-  {
-    "label": "security",
-    "permalink": "/blog/tags/security",
     "count": 1
   },
   {

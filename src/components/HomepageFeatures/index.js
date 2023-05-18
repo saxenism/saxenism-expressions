@@ -23,7 +23,8 @@ const FeatureList = [
       <>
       <p style={{textAlign: 'center'}}>Clients that I have helped secured, either individually or in teams</p>
         <ul>
-          <li><a href='https://www.brahma.fi/'>Brahama Finance</a></li>
+          <li><a href='https://www.brahma.fi/'>Brahma Finance: Polygains Vault</a></li>
+          <li><a href='https://www.brahma.fi/'>Brahma Finance: Brahma Console</a></li>
           <li><a href='https://sablier.finance/'>Sablier v2</a></li>
           <li><a href='https://vapornodes.finance/'>Vapor Finance</a></li>
           <li><a href='https://twitter.com/youdonated'>YouDonate</a></li>

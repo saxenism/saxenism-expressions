@@ -7,7 +7,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'EVM Expressions',
-  tagline: 'Hey, I am Rahul and I love Ethereum and the EVM. I help protocols navigate the risky world of web3 with security audits and testing consultation.',
+  tagline: 'Hey, I am Rahul and I love Ethereum and the EVM. I help protocols mitigate the risks of operating in the world of web3 by providing comprehensive security audits and testing consultations.',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
@@ -95,23 +95,35 @@ const config = {
               {
                 label: 'Video Presentations',
                 to: '/videos'
+              },
+              {
+                label: 'Testimonials',
+                to: '/testimonials'
+              },
+              {
+                label: 'Defi Dictionary',
+                to: '/glossary'
               }
             ],
           },
           {
-            title: 'Socials',
+            title: 'DM me on',
             items: [
               {
-                label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/users/11924484/rahul-saxena',
-              },
-              {
                 label: 'Discord',
-                href: 'https://discordapp.com/invite/docusaurus',
+                href: 'https://discordapp.com/users/saxenism#8139',
               },
               {
                 label: 'Twitter',
                 href: 'https://twitter.com/saxenism',
+              },
+              {
+                label: 'Telegram',
+                href: 'https://t.me/saxenism'
+              },
+              {
+                label: 'Instagram',
+                href: 'https://www.instagram.com/saxenism/',
               },
             ],
           },
@@ -123,13 +135,13 @@ const config = {
                 href: 'https://github.com/saxenism',
               },
               {
-                label: 'Instagram',
-                href: 'https://www.instagram.com/saxenism/',
+                label: 'Stack Overflow',
+                href: 'https://stackoverflow.com/users/11924484/rahul-saxena',
               },
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} Bluethroat Labs Private Ltd.`,
+        copyright: `Copyright © ${new Date().getFullYear()} Bluethroat Labs`,
       },
       prism: {
         theme: darkCodeTheme,

@@ -1,0 +1,151 @@
+---
+slug: chainlink-interaction-security
+title: Top 10 Security Tips for interacting with Chainlink Oracles
+authors:
+  name: Rahul Saxena
+  title: EVM Enjoyoor
+  url: https://twitter.com/saxenism
+  image_url: https://pbs.twimg.com/profile_images/1554486619914117126/7QV7CHum_400x400.jpg
+tags: [defi, oracles, oracle, chainlink, security, tips, security-tips]
+---
+
+## Bullet-proof your `PriceFeedManager` contracts
+
+Gm developers and fellow auditors!! 
+
+In almost any decentralised application in the domain of decentralised finance, one of the most critical components of the protocol is to fetch the prices of assets on-chain. This is mostly enabled by on-chain oracles.
+
+Oracles are data feeds that bring data from off the blockchain (off-chain) data sources and puts it on the blockchain (on-chain) for smart contracts to use. This is necessary because smart contracts running on Ethereum cannot access information stored outside the blockchain network.
+
+Unsurprisingly, protocols introduce a **LOT OF** bugs when implementing their contracts that interact with such oracles. This is mostly because it is quite hard to account for all the attack vectors due to the somewhat hybrid (off-chain and on-chain) nature of oracle interactions.
+
+Hopefully, this article will help you to bid farewell to all the most common price feed contract bugs from your protocol.
+Read this thread and bid goodbye to all your price feed contract bugs.
+
+This thread will be focused on the Chainlink oracles and how to deal with them, since they are one of the most popular choices. Other popular oracles are the [Uniswap v3 Oracles](https://docs.uniswap.org/concepts/protocol/oracle#:~:text=All%20Uniswap%20v3%20pools%20can,as%20an%20array%20of%20observations.), [MakerDAO Oracle](https://docs.makerdao.com/smart-contract-modules/oracle-module), etc.
+
+Grab some popcorn, this is gonna be fun. Time for my top 10 tips:
+
+<iframe src="https://giphy.com/embed/uWzS6ZLs0AaVOJlgRd" width="480" height="270" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/TheFourOnFox-fox-tv-uWzS6ZLs0AaVOJlgRd">via GIPHY</a></p>
+
+## Let's begin our journey through these tips
+
+Grab some Cola, cause these tips' delivery can get a bit spicy.
+
+### 1. Backup Oracles are a must
+
+As a degen, hedging risks must be a completely alien concept to you, but do not let that affect your dev life.
+
+Consider implementing a back-up oracle in case your primary oracle goes down or does not support a specific token.
+
+<iframe src="https://giphy.com/embed/o6MKIQwBPlPkxCMOap" width="480" height="245" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/wolfentertainment-fbi-agent-feds-o6MKIQwBPlPkxCMOap">via GIPHY</a></p>
+
+<!--truncate-->
+
+### 2. Use the latest recommended function to fetch prices
+
+Say NO to `oracle.latestAnswer()` and embrace `oracle.latestRoundData()`.
+
+I mean, unless ofc you are 80 y/o.
+
+Your choice, cause you're probably more deprecated than this function.
+
+<iframe src="https://giphy.com/embed/dyRhCAXGENobdYucFD" width="480" height="320" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/grumpy-old-man-dyRhCAXGENobdYucFD">via GIPHY</a></p>
+
+### 3. Trust Assumptions
+
+I understand that your girlfriend left you because you have trust issues, but guess what it's good to have trust issues as a blockchain dev.
+
+Wrap your `latestRoundData` function call in a `try-catch` block, because multisigs which are running a particular price feed can immediately block access to their price feeds at will.
+
+![](https://pbs.twimg.com/media/Fv169u6WwAAA5h5?format=jpg&name=large)
+
+### 4. Validate the `answer` received
+
+I get that you've never been validated by your dad, but that's no excuse to not validate the response you get from the feed after calling `latestRoundData`.
+
+Validate the SHIT out of the returned values.
+
+Here's how you do it. 
+
+P.S.: DO NOT FORGET A SINGLE ONE OF THEM!!!
+
+![](https://pbs.twimg.com/media/Fv195CbXwAEXTSX?format=jpg&name=medium)
+
+### 5. Check Sequencer Uptime
+
+Since your favorite hobby is to day-dream for 12 hours a day, you might want to deploy your protocol on L2 rollups.
+If you want all your users to have equal access to your protocol (in event of a sequencer outage), USE THE SEQUENCER-UPTIME-FEED.
+
++ For certain types of protocol, like, lending protocols this would have been a high severity finding.
+    + Because, shutting down of the sequencer does not mean that the L2 chain has stopped working
+    + People can still submit their transactions and interact with the chain using the L1 contracts (force inclusion mechanism)
+    + However, not everyone might have the expertise to be able to interact with the L2 chain via the L1 contracts
+    + This could mean, in the time when the sequencer is down, if the price of the borrower's collateral goes down and a lender with their knowledge of using [`forced inclusion`](https://developer.arbitrum.io/tx-lifecycle#3a-what-if-the-sequencer-never-includes-our-transaction) may give the borrower a margin call.
+    + The borrower might not have the technical expertise to respond to that margin call via the L1 contracts and end up getting liquidated
++ Therefore, this check is essential when looking to provide equal opportunities and access to all the participants in your protocol.
+
+Here's a [tweet](https://twitter.com/bytes032/status/1653943092427325448) describing this attack vector in slightly more detail.
+
+![](https://pbs.twimg.com/media/FvP8edwWcAEL9F6?format=jpg&name=large)
+
+### 6. Do not harcode any asset value
+
+You've been going from one abusive relationship to another and it shows!! How on god's green earth did you even dream of hardcoding the value of oh so *stable* coins to $1. Were you watching *Mankitsu Happening* during the entire UST crash, USDT FUD & USDC bank run!??
+
+Always use the Oracle for god's sake.
+
+![](https://pbs.twimg.com/media/FvsEJhSWIAAEaUE.jpg)
+
+### 7. USD Feeds can return decimals other than 8
+
+You binge-watched the entire Breaking Bad series but did not study an iota of Chemistry, did you? Cause if you did, you'd know there were always exceptions to the rules.
+
+All USD feeds do not necessarily have 8 decimals.
+
+Case in point: AMPL/USD
+
+<iframe src="https://giphy.com/embed/kdXIVFq6z6hOkpEbUM" width="480" height="480" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/morphin-breaking-bad-chemistry-chemist-kdXIVFq6z6hOkpEbUM">via GIPHY</a></p>
+
+### 8. Price Feeds are diverse. Do not generalise.
+
+As devs, I agree it is extremely difficult to do away with our lazy gene, but DO NOT set a common *staleFeedThreshold* for all tokens. The heartbeats of different feeds vary wildly.
+Eg. It's 1 hour for ETH/USD & 48 hours for AMPL/USD
+
+Set *staleFeedThreshold*(s) accordingly.
+
+<iframe src="https://giphy.com/embed/qzXJgNLXM51WCCB1ef" width="480" height="270" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/primevideo-qzXJgNLXM51WCCB1ef">via GIPHY</a></p>
+
+### 9. TWAP Oracles too have risks
+
+Just like your 3 AM motivation hits you & you start pumping out pushups, point 8, might have motivated you to set up a backup oracle
+
+You might be tempted to use a backup TWAP oracle for low-liqudity tokens, right?
+
+Good, however, be aware of the risks: [Read This Blog](https://chainsecurity.com/oracle-manipulation-after-merge/)
+
+![](https://composable-security.com/static/eb91a3d403ec60f08a12c9fe66b14f17/9af0a/featured.png)
+
+### 10. Get over your obsession of 18
+
+Get out of your God-Complex sometimes and question your assumptions a bit. 
+
+I've lost count of how many times I've seen a bug being reported where the developer just assumed that whatever token they are dealing with can have a maximum of 18 tokens.
+
+The world is bigger, ser.
+
+![](https://pbs.twimg.com/media/Fv2IKVYX0AIblYu?format=jpg&name=4096x4096)
+
+## Conclusion 
+
+I can think of a few more tips, like, 
+
++ Don't be lazy & end up using BTC/USD feed for WBTC
++ Take care of precision when finding price of one asset in terms of another
++ & so on
+
+But I'm tired now, gonna go sleep.
+
+Thank you for having stayed this far. Appreciate it. Bye
+
+<iframe src="https://giphy.com/embed/RbmhUWdyYIF7jZSfzP" width="480" height="419" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/pudgypenguins-pudgy-penguin-penguins-RbmhUWdyYIF7jZSfzP">via GIPHY</a></p>

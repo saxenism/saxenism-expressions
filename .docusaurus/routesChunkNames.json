@@ -42,13 +42,16 @@
       "plugin": "plugin---docusaurus-debug-976-b9b"
     }
   },
-  "/blog-39c": {
+  "/blog-e85": {
     "__comp": "__comp---theme-blog-list-pagea-6-a-7ba",
     "__context": {
       "plugin": "plugin---blog-7-e-5-942"
     },
     "sidebar": "sidebar---blog-814-8ac",
     "items": [
+      {
+        "content": "content---blog-0-e-5-5fb"
+      },
       {
         "content": "content---blog-18-f-26e"
       },
@@ -75,9 +78,6 @@
       },
       {
         "content": "content---blog-481-9ae"
-      },
-      {
-        "content": "content---blog-9-bb-a0f"
       }
     ],
     "metadata": "metadata---blogb-2-b-df1"
@@ -112,6 +112,14 @@
     },
     "sidebar": "sidebar---blog-814-8ac",
     "content": "content---blog-bit-packing-931-858"
+  },
+  "/blog/chainlink-interaction-security-309": {
+    "__comp": "__comp---theme-blog-post-pageccc-cab",
+    "__context": {
+      "plugin": "plugin---blog-7-e-5-942"
+    },
+    "sidebar": "sidebar---blog-814-8ac",
+    "content": "content---blog-chainlink-interaction-security-9-f-3-b4d"
   },
   "/blog/defi-tits-3b9": {
     "__comp": "__comp---theme-blog-post-pageccc-cab",
@@ -160,6 +168,19 @@
     },
     "sidebar": "sidebar---blog-814-8ac",
     "content": "content---blog-options-introductionc-3-f-540"
+  },
+  "/blog/page/2-dff": {
+    "__comp": "__comp---theme-blog-list-pagea-6-a-7ba",
+    "__context": {
+      "plugin": "plugin---blog-7-e-5-942"
+    },
+    "sidebar": "sidebar---blog-814-8ac",
+    "items": [
+      {
+        "content": "content---blog-page-29-bb-2ef"
+      }
+    ],
+    "metadata": "metadata---blog-page-28-eb-625"
   },
   "/blog/solidity-encodings-1ef": {
     "__comp": "__comp---theme-blog-post-pageccc-cab",
@@ -236,6 +257,20 @@
     "tag": "tag---blog-tags-bit-packing-73-e-f3e",
     "listMetadata": "listMetadata---blog-tags-bit-packing-6-ec-21d"
   },
+  "/blog/tags/chainlink-e89": {
+    "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
+    "__context": {
+      "plugin": "plugin---blog-7-e-5-942"
+    },
+    "sidebar": "sidebar---blog-814-8ac",
+    "items": [
+      {
+        "content": "content---blog-0-e-5-5fb"
+      }
+    ],
+    "tag": "tag---blog-tags-chainlink-340-431",
+    "listMetadata": "listMetadata---blog-tags-chainlinka-2-b-ef7"
+  },
   "/blog/tags/deep-dive-043": {
     "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
     "__context": {
@@ -250,13 +285,16 @@
     "tag": "tag---blog-tags-deep-divea-40-2dc",
     "listMetadata": "listMetadata---blog-tags-deep-dive-072-ad7"
   },
-  "/blog/tags/defi-835": {
+  "/blog/tags/defi-77a": {
     "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
     "__context": {
       "plugin": "plugin---blog-7-e-5-942"
     },
     "sidebar": "sidebar---blog-814-8ac",
     "items": [
+      {
+        "content": "content---blog-0-e-5-5fb"
+      },
       {
         "content": "content---blog-18-f-26e"
       },
@@ -433,7 +471,7 @@
     "sidebar": "sidebar---blog-814-8ac",
     "items": [
       {
-        "content": "content---blog-9-bb-a0f"
+        "content": "content---blog-page-29-bb-2ef"
       }
     ],
     "tag": "tag---blog-tags-linkedinb-18-48c",
@@ -461,7 +499,7 @@
     "sidebar": "sidebar---blog-814-8ac",
     "items": [
       {
-        "content": "content---blog-9-bb-a0f"
+        "content": "content---blog-page-29-bb-2ef"
       }
     ],
     "tag": "tag---blog-tags-non-technical-6-c-0-088",
@@ -481,7 +519,7 @@
     "tag": "tag---blog-tags-options-885-302",
     "listMetadata": "listMetadata---blog-tags-optionsdd-9-ae3"
   },
-  "/blog/tags/security-9a5": {
+  "/blog/tags/oracle-9fa": {
     "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
     "__context": {
       "plugin": "plugin---blog-7-e-5-942"
@@ -489,11 +527,56 @@
     "sidebar": "sidebar---blog-814-8ac",
     "items": [
       {
+        "content": "content---blog-0-e-5-5fb"
+      }
+    ],
+    "tag": "tag---blog-tags-oracle-71-f-f2f",
+    "listMetadata": "listMetadata---blog-tags-oracle-04-c-34e"
+  },
+  "/blog/tags/oracles-59a": {
+    "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
+    "__context": {
+      "plugin": "plugin---blog-7-e-5-942"
+    },
+    "sidebar": "sidebar---blog-814-8ac",
+    "items": [
+      {
+        "content": "content---blog-0-e-5-5fb"
+      }
+    ],
+    "tag": "tag---blog-tags-oracles-21-d-0e2",
+    "listMetadata": "listMetadata---blog-tags-oracles-32-c-c4b"
+  },
+  "/blog/tags/security-6f1": {
+    "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
+    "__context": {
+      "plugin": "plugin---blog-7-e-5-942"
+    },
+    "sidebar": "sidebar---blog-814-8ac",
+    "items": [
+      {
+        "content": "content---blog-0-e-5-5fb"
+      },
+      {
         "content": "content---bloge-88-4c2"
       }
     ],
     "tag": "tag---blog-tags-security-04-f-e8e",
     "listMetadata": "listMetadata---blog-tags-securitye-34-23e"
+  },
+  "/blog/tags/security-tips-679": {
+    "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
+    "__context": {
+      "plugin": "plugin---blog-7-e-5-942"
+    },
+    "sidebar": "sidebar---blog-814-8ac",
+    "items": [
+      {
+        "content": "content---blog-0-e-5-5fb"
+      }
+    ],
+    "tag": "tag---blog-tags-security-tipse-49-789",
+    "listMetadata": "listMetadata---blog-tags-security-tips-03-e-6c5"
   },
   "/blog/tags/solidity-89a": {
     "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
@@ -540,6 +623,20 @@
     ],
     "tag": "tag---blog-tags-testing-15-b-d87",
     "listMetadata": "listMetadata---blog-tags-testing-4-bb-2ba"
+  },
+  "/blog/tags/tips-dc8": {
+    "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
+    "__context": {
+      "plugin": "plugin---blog-7-e-5-942"
+    },
+    "sidebar": "sidebar---blog-814-8ac",
+    "items": [
+      {
+        "content": "content---blog-0-e-5-5fb"
+      }
+    ],
+    "tag": "tag---blog-tags-tipsa-13-83c",
+    "listMetadata": "listMetadata---blog-tags-tips-55-c-f5f"
   },
   "/blog/tags/tradfi-2e4": {
     "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",

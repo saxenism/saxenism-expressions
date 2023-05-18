@@ -39,7 +39,7 @@ export default [
   },
   {
     path: '/blog',
-    component: ComponentCreator('/blog', '39c'),
+    component: ComponentCreator('/blog', 'e85'),
     exact: true
   },
   {
@@ -60,6 +60,11 @@ export default [
   {
     path: '/blog/bit-packing',
     component: ComponentCreator('/blog/bit-packing', '318'),
+    exact: true
+  },
+  {
+    path: '/blog/chainlink-interaction-security',
+    component: ComponentCreator('/blog/chainlink-interaction-security', '309'),
     exact: true
   },
   {
@@ -93,6 +98,11 @@ export default [
     exact: true
   },
   {
+    path: '/blog/page/2',
+    component: ComponentCreator('/blog/page/2', 'dff'),
+    exact: true
+  },
+  {
     path: '/blog/solidity-encodings',
     component: ComponentCreator('/blog/solidity-encodings', '1ef'),
     exact: true
@@ -123,13 +133,18 @@ export default [
     exact: true
   },
   {
+    path: '/blog/tags/chainlink',
+    component: ComponentCreator('/blog/tags/chainlink', 'e89'),
+    exact: true
+  },
+  {
     path: '/blog/tags/deep-dive',
     component: ComponentCreator('/blog/tags/deep-dive', '043'),
     exact: true
   },
   {
     path: '/blog/tags/defi',
-    component: ComponentCreator('/blog/tags/defi', '835'),
+    component: ComponentCreator('/blog/tags/defi', '77a'),
     exact: true
   },
   {
@@ -203,8 +218,23 @@ export default [
     exact: true
   },
   {
+    path: '/blog/tags/oracle',
+    component: ComponentCreator('/blog/tags/oracle', '9fa'),
+    exact: true
+  },
+  {
+    path: '/blog/tags/oracles',
+    component: ComponentCreator('/blog/tags/oracles', '59a'),
+    exact: true
+  },
+  {
     path: '/blog/tags/security',
-    component: ComponentCreator('/blog/tags/security', '9a5'),
+    component: ComponentCreator('/blog/tags/security', '6f1'),
+    exact: true
+  },
+  {
+    path: '/blog/tags/security-tips',
+    component: ComponentCreator('/blog/tags/security-tips', '679'),
     exact: true
   },
   {
@@ -215,6 +245,11 @@ export default [
   {
     path: '/blog/tags/testing',
     component: ComponentCreator('/blog/tags/testing', 'f12'),
+    exact: true
+  },
+  {
+    path: '/blog/tags/tips',
+    component: ComponentCreator('/blog/tags/tips', 'dc8'),
     exact: true
   },
   {

@@ -332,6 +332,84 @@
       "blogSidebarTitle": "Recent posts",
       "blogPosts": [
         {
+          "id": "chainlink-interaction-security",
+          "metadata": {
+            "permalink": "/blog/chainlink-interaction-security",
+            "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/blog/2023-05-15-Oracle-Interaction-Security-Tips.mdx",
+            "source": "@site/blog/2023-05-15-Oracle-Interaction-Security-Tips.mdx",
+            "title": "Top 10 Security Tips for interacting with Chainlink Oracles",
+            "description": "Bullet-proof your PriceFeedManager contracts",
+            "date": "2023-05-15T00:00:00.000Z",
+            "formattedDate": "May 15, 2023",
+            "tags": [
+              {
+                "label": "defi",
+                "permalink": "/blog/tags/defi"
+              },
+              {
+                "label": "oracles",
+                "permalink": "/blog/tags/oracles"
+              },
+              {
+                "label": "oracle",
+                "permalink": "/blog/tags/oracle"
+              },
+              {
+                "label": "chainlink",
+                "permalink": "/blog/tags/chainlink"
+              },
+              {
+                "label": "security",
+                "permalink": "/blog/tags/security"
+              },
+              {
+                "label": "tips",
+                "permalink": "/blog/tags/tips"
+              },
+              {
+                "label": "security-tips",
+                "permalink": "/blog/tags/security-tips"
+              }
+            ],
+            "readingTime": 5.255,
+            "hasTruncateMarker": true,
+            "authors": [
+              {
+                "name": "Rahul Saxena",
+                "title": "EVM Enjoyoor",
+                "url": "https://twitter.com/saxenism",
+                "image_url": "https://pbs.twimg.com/profile_images/1554486619914117126/7QV7CHum_400x400.jpg",
+                "imageURL": "https://pbs.twimg.com/profile_images/1554486619914117126/7QV7CHum_400x400.jpg"
+              }
+            ],
+            "frontMatter": {
+              "slug": "chainlink-interaction-security",
+              "title": "Top 10 Security Tips for interacting with Chainlink Oracles",
+              "authors": {
+                "name": "Rahul Saxena",
+                "title": "EVM Enjoyoor",
+                "url": "https://twitter.com/saxenism",
+                "image_url": "https://pbs.twimg.com/profile_images/1554486619914117126/7QV7CHum_400x400.jpg",
+                "imageURL": "https://pbs.twimg.com/profile_images/1554486619914117126/7QV7CHum_400x400.jpg"
+              },
+              "tags": [
+                "defi",
+                "oracles",
+                "oracle",
+                "chainlink",
+                "security",
+                "tips",
+                "security-tips"
+              ]
+            },
+            "nextItem": {
+              "title": "Options 101 - An introduction to derivatives and options trading",
+              "permalink": "/blog/options-introduction"
+            }
+          },
+          "content": "## Bullet-proof your `PriceFeedManager` contracts\n\nGm developers and fellow auditors!! \n\nIn almost any decentralised application in the domain of decentralised finance, one of the most critical components of the protocol is to fetch the prices of assets on-chain. This is mostly enabled by on-chain oracles.\n\nOracles are data feeds that bring data from off the blockchain (off-chain) data sources and puts it on the blockchain (on-chain) for smart contracts to use. This is necessary because smart contracts running on Ethereum cannot access information stored outside the blockchain network.\n\nUnsurprisingly, protocols introduce a **LOT OF** bugs when implementing their contracts that interact with such oracles. This is mostly because it is quite hard to account for all the attack vectors due to the somewhat hybrid (off-chain and on-chain) nature of oracle interactions.\n\nHopefully, this article will help you to bid farewell to all the most common price feed contract bugs from your protocol.\nRead this thread and bid goodbye to all your price feed contract bugs.\n\nThis thread will be focused on the Chainlink oracles and how to deal with them, since they are one of the most popular choices. Other popular oracles are the [Uniswap v3 Oracles](https://docs.uniswap.org/concepts/protocol/oracle#:~:text=All%20Uniswap%20v3%20pools%20can,as%20an%20array%20of%20observations.), [MakerDAO Oracle](https://docs.makerdao.com/smart-contract-modules/oracle-module), etc.\n\nGrab some popcorn, this is gonna be fun. Time for my top 10 tips:\n\n<iframe src=\"https://giphy.com/embed/uWzS6ZLs0AaVOJlgRd\" width=\"480\" height=\"270\" frameBorder=\"0\" class=\"giphy-embed\" allowFullScreen></iframe><p><a href=\"https://giphy.com/gifs/TheFourOnFox-fox-tv-uWzS6ZLs0AaVOJlgRd\">via GIPHY</a></p>\n\n## Let's begin our journey through these tips\n\nGrab some Cola, cause these tips' delivery can get a bit spicy.\n\n### 1. Backup Oracles are a must\n\nAs a degen, hedging risks must be a completely alien concept to you, but do not let that affect your dev life.\n\nConsider implementing a back-up oracle in case your primary oracle goes down or does not support a specific token.\n\n<iframe src=\"https://giphy.com/embed/o6MKIQwBPlPkxCMOap\" width=\"480\" height=\"245\" frameBorder=\"0\" class=\"giphy-embed\" allowFullScreen></iframe><p><a href=\"https://giphy.com/gifs/wolfentertainment-fbi-agent-feds-o6MKIQwBPlPkxCMOap\">via GIPHY</a></p>\n\n<!--truncate-->\n\n### 2. Use the latest recommended function to fetch prices\n\nSay NO to `oracle.latestAnswer()` and embrace `oracle.latestRoundData()`.\n\nI mean, unless ofc you are 80 y/o.\n\nYour choice, cause you're probably more deprecated than this function.\n\n<iframe src=\"https://giphy.com/embed/dyRhCAXGENobdYucFD\" width=\"480\" height=\"320\" frameBorder=\"0\" class=\"giphy-embed\" allowFullScreen></iframe><p><a href=\"https://giphy.com/gifs/grumpy-old-man-dyRhCAXGENobdYucFD\">via GIPHY</a></p>\n\n### 3. Trust Assumptions\n\nI understand that your girlfriend left you because you have trust issues, but guess what it's good to have trust issues as a blockchain dev.\n\nWrap your `latestRoundData` function call in a `try-catch` block, because multisigs which are running a particular price feed can immediately block access to their price feeds at will.\n\n![](https://pbs.twimg.com/media/Fv169u6WwAAA5h5?format=jpg&name=large)\n\n### 4. Validate the `answer` received\n\nI get that you've never been validated by your dad, but that's no excuse to not validate the response you get from the feed after calling `latestRoundData`.\n\nValidate the SHIT out of the returned values.\n\nHere's how you do it. \n\nP.S.: DO NOT FORGET A SINGLE ONE OF THEM!!!\n\n![](https://pbs.twimg.com/media/Fv195CbXwAEXTSX?format=jpg&name=medium)\n\n### 5. Check Sequencer Uptime\n\nSince your favorite hobby is to day-dream for 12 hours a day, you might want to deploy your protocol on L2 rollups.\nIf you want all your users to have equal access to your protocol (in event of a sequencer outage), USE THE SEQUENCER-UPTIME-FEED.\n\n+ For certain types of protocol, like, lending protocols this would have been a high severity finding.\n    + Because, shutting down of the sequencer does not mean that the L2 chain has stopped working\n    + People can still submit their transactions and interact with the chain using the L1 contracts (force inclusion mechanism)\n    + However, not everyone might have the expertise to be able to interact with the L2 chain via the L1 contracts\n    + This could mean, in the time when the sequencer is down, if the price of the borrower's collateral goes down and a lender with their knowledge of using [`forced inclusion`](https://developer.arbitrum.io/tx-lifecycle#3a-what-if-the-sequencer-never-includes-our-transaction) may give the borrower a margin call.\n    + The borrower might not have the technical expertise to respond to that margin call via the L1 contracts and end up getting liquidated\n+ Therefore, this check is essential when looking to provide equal opportunities and access to all the participants in your protocol.\n\nHere's a [tweet](https://twitter.com/bytes032/status/1653943092427325448) describing this attack vector in slightly more detail.\n\n![](https://pbs.twimg.com/media/FvP8edwWcAEL9F6?format=jpg&name=large)\n\n### 6. Do not harcode any asset value\n\nYou've been going from one abusive relationship to another and it shows!! How on god's green earth did you even dream of hardcoding the value of oh so *stable* coins to $1. Were you watching *Mankitsu Happening* during the entire UST crash, USDT FUD & USDC bank run!??\n\nAlways use the Oracle for god's sake.\n\n![](https://pbs.twimg.com/media/FvsEJhSWIAAEaUE.jpg)\n\n### 7. USD Feeds can return decimals other than 8\n\nYou binge-watched the entire Breaking Bad series but did not study an iota of Chemistry, did you? Cause if you did, you'd know there were always exceptions to the rules.\n\nAll USD feeds do not necessarily have 8 decimals.\n\nCase in point: AMPL/USD\n\n<iframe src=\"https://giphy.com/embed/kdXIVFq6z6hOkpEbUM\" width=\"480\" height=\"480\" frameBorder=\"0\" class=\"giphy-embed\" allowFullScreen></iframe><p><a href=\"https://giphy.com/gifs/morphin-breaking-bad-chemistry-chemist-kdXIVFq6z6hOkpEbUM\">via GIPHY</a></p>\n\n### 8. Price Feeds are diverse. Do not generalise.\n\nAs devs, I agree it is extremely difficult to do away with our lazy gene, but DO NOT set a common *staleFeedThreshold* for all tokens. The heartbeats of different feeds vary wildly.\nEg. It's 1 hour for ETH/USD & 48 hours for AMPL/USD\n\nSet *staleFeedThreshold*(s) accordingly.\n\n<iframe src=\"https://giphy.com/embed/qzXJgNLXM51WCCB1ef\" width=\"480\" height=\"270\" frameBorder=\"0\" class=\"giphy-embed\" allowFullScreen></iframe><p><a href=\"https://giphy.com/gifs/primevideo-qzXJgNLXM51WCCB1ef\">via GIPHY</a></p>\n\n### 9. TWAP Oracles too have risks\n\nJust like your 3 AM motivation hits you & you start pumping out pushups, point 8, might have motivated you to set up a backup oracle\n\nYou might be tempted to use a backup TWAP oracle for low-liqudity tokens, right?\n\nGood, however, be aware of the risks: [Read This Blog](https://chainsecurity.com/oracle-manipulation-after-merge/)\n\n![](https://composable-security.com/static/eb91a3d403ec60f08a12c9fe66b14f17/9af0a/featured.png)\n\n### 10. Get over your obsession of 18\n\nGet out of your God-Complex sometimes and question your assumptions a bit. \n\nI've lost count of how many times I've seen a bug being reported where the developer just assumed that whatever token they are dealing with can have a maximum of 18 tokens.\n\nThe world is bigger, ser.\n\n![](https://pbs.twimg.com/media/Fv2IKVYX0AIblYu?format=jpg&name=4096x4096)\n\n## Conclusion \n\nI can think of a few more tips, like, \n\n+ Don't be lazy & end up using BTC/USD feed for WBTC\n+ Take care of precision when finding price of one asset in terms of another\n+ & so on\n\nBut I'm tired now, gonna go sleep.\n\nThank you for having stayed this far. Appreciate it. Bye\n\n<iframe src=\"https://giphy.com/embed/RbmhUWdyYIF7jZSfzP\" width=\"480\" height=\"419\" frameBorder=\"0\" class=\"giphy-embed\" allowFullScreen></iframe><p><a href=\"https://giphy.com/gifs/pudgypenguins-pudgy-penguin-penguins-RbmhUWdyYIF7jZSfzP\">via GIPHY</a></p>"
+        },
+        {
           "id": "options-introduction",
           "metadata": {
             "permalink": "/blog/options-introduction",
@@ -391,6 +469,10 @@
                 "options",
                 "tradfi"
               ]
+            },
+            "prevItem": {
+              "title": "Top 10 Security Tips for interacting with Chainlink Oracles",
+              "permalink": "/blog/chainlink-interaction-security"
             },
             "nextItem": {
               "title": "Solidity - Bit Packing",
@@ -1022,6 +1104,7 @@
       "blogListPaginated": [
         {
           "items": [
+            "chainlink-interaction-security",
             "options-introduction",
             "bit-packing",
             "address-to-uint",
@@ -1030,15 +1113,30 @@
             "modern-solidity",
             "solidity-encodings",
             "evm-deep-dive",
-            "defi-tits",
-            "linkedin-cultural"
+            "defi-tits"
           ],
           "metadata": {
             "permalink": "/blog",
             "page": 1,
             "postsPerPage": 10,
-            "totalPages": 1,
-            "totalCount": 10,
+            "totalPages": 2,
+            "totalCount": 11,
+            "nextPage": "/blog/page/2",
+            "blogDescription": "Blog",
+            "blogTitle": "Blog"
+          }
+        },
+        {
+          "items": [
+            "linkedin-cultural"
+          ],
+          "metadata": {
+            "permalink": "/blog/page/2",
+            "page": 2,
+            "postsPerPage": 10,
+            "totalPages": 2,
+            "totalCount": 11,
+            "previousPage": "/blog",
             "blogDescription": "Blog",
             "blogTitle": "Blog"
           }
@@ -1048,6 +1146,7 @@
         "/blog/tags/defi": {
           "label": "defi",
           "items": [
+            "chainlink-interaction-security",
             "options-introduction",
             "defi-tits"
           ],
@@ -1055,6 +1154,7 @@
           "pages": [
             {
               "items": [
+                "chainlink-interaction-security",
                 "options-introduction",
                 "defi-tits"
               ],
@@ -1063,7 +1163,147 @@
                 "page": 1,
                 "postsPerPage": 10,
                 "totalPages": 1,
+                "totalCount": 3,
+                "blogDescription": "Blog",
+                "blogTitle": "Blog"
+              }
+            }
+          ]
+        },
+        "/blog/tags/oracles": {
+          "label": "oracles",
+          "items": [
+            "chainlink-interaction-security"
+          ],
+          "permalink": "/blog/tags/oracles",
+          "pages": [
+            {
+              "items": [
+                "chainlink-interaction-security"
+              ],
+              "metadata": {
+                "permalink": "/blog/tags/oracles",
+                "page": 1,
+                "postsPerPage": 10,
+                "totalPages": 1,
+                "totalCount": 1,
+                "blogDescription": "Blog",
+                "blogTitle": "Blog"
+              }
+            }
+          ]
+        },
+        "/blog/tags/oracle": {
+          "label": "oracle",
+          "items": [
+            "chainlink-interaction-security"
+          ],
+          "permalink": "/blog/tags/oracle",
+          "pages": [
+            {
+              "items": [
+                "chainlink-interaction-security"
+              ],
+              "metadata": {
+                "permalink": "/blog/tags/oracle",
+                "page": 1,
+                "postsPerPage": 10,
+                "totalPages": 1,
+                "totalCount": 1,
+                "blogDescription": "Blog",
+                "blogTitle": "Blog"
+              }
+            }
+          ]
+        },
+        "/blog/tags/chainlink": {
+          "label": "chainlink",
+          "items": [
+            "chainlink-interaction-security"
+          ],
+          "permalink": "/blog/tags/chainlink",
+          "pages": [
+            {
+              "items": [
+                "chainlink-interaction-security"
+              ],
+              "metadata": {
+                "permalink": "/blog/tags/chainlink",
+                "page": 1,
+                "postsPerPage": 10,
+                "totalPages": 1,
+                "totalCount": 1,
+                "blogDescription": "Blog",
+                "blogTitle": "Blog"
+              }
+            }
+          ]
+        },
+        "/blog/tags/security": {
+          "label": "security",
+          "items": [
+            "chainlink-interaction-security",
+            "evm-deep-dive"
+          ],
+          "permalink": "/blog/tags/security",
+          "pages": [
+            {
+              "items": [
+                "chainlink-interaction-security",
+                "evm-deep-dive"
+              ],
+              "metadata": {
+                "permalink": "/blog/tags/security",
+                "page": 1,
+                "postsPerPage": 10,
+                "totalPages": 1,
                 "totalCount": 2,
+                "blogDescription": "Blog",
+                "blogTitle": "Blog"
+              }
+            }
+          ]
+        },
+        "/blog/tags/tips": {
+          "label": "tips",
+          "items": [
+            "chainlink-interaction-security"
+          ],
+          "permalink": "/blog/tags/tips",
+          "pages": [
+            {
+              "items": [
+                "chainlink-interaction-security"
+              ],
+              "metadata": {
+                "permalink": "/blog/tags/tips",
+                "page": 1,
+                "postsPerPage": 10,
+                "totalPages": 1,
+                "totalCount": 1,
+                "blogDescription": "Blog",
+                "blogTitle": "Blog"
+              }
+            }
+          ]
+        },
+        "/blog/tags/security-tips": {
+          "label": "security-tips",
+          "items": [
+            "chainlink-interaction-security"
+          ],
+          "permalink": "/blog/tags/security-tips",
+          "pages": [
+            {
+              "items": [
+                "chainlink-interaction-security"
+              ],
+              "metadata": {
+                "permalink": "/blog/tags/security-tips",
+                "page": 1,
+                "postsPerPage": 10,
+                "totalPages": 1,
+                "totalCount": 1,
                 "blogDescription": "Blog",
                 "blogTitle": "Blog"
               }
@@ -1466,29 +1706,6 @@
               ],
               "metadata": {
                 "permalink": "/blog/tags/evm",
-                "page": 1,
-                "postsPerPage": 10,
-                "totalPages": 1,
-                "totalCount": 1,
-                "blogDescription": "Blog",
-                "blogTitle": "Blog"
-              }
-            }
-          ]
-        },
-        "/blog/tags/security": {
-          "label": "security",
-          "items": [
-            "evm-deep-dive"
-          ],
-          "permalink": "/blog/tags/security",
-          "pages": [
-            {
-              "items": [
-                "evm-deep-dive"
-              ],
-              "metadata": {
-                "permalink": "/blog/tags/security",
                 "page": 1,
                 "postsPerPage": 10,
                 "totalPages": 1,
