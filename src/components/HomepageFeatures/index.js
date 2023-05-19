@@ -23,14 +23,14 @@ const FeatureList = [
       <>
       <p style={{textAlign: 'center'}}>Clients that I have helped secured, either individually or in teams</p>
         <ul>
-          <li><a href='https://twitter.com/HatsFinance/status/1658887827466375168'>Top 3 Finish in Gravita Audit Contest</a></li>
-          <li><a href='https://www.brahma.fi/'>Brahma Finance: Polygains Vault</a></li>
-          <li><a href='https://www.brahma.fi/'>Brahma Finance: Brahma Console</a></li>
-          <li><a href='https://sablier.finance/'>Sablier v2</a></li>
-          <li><a href='https://vapornodes.finance/'>Vapor Finance</a></li>
-          <li><a href='https://twitter.com/youdonated'>YouDonate</a></li>
-          <li><a href='https://www.return.green/'>Return Protocol</a></li>
-          <li><a href='https://cryptoavatars.io/'>CryptoAvatars</a></li>
+          <li><a href='https://twitter.com/HatsFinance/status/1658887827466375168' target='_blank'>Top 3 Finish in Gravita Audit Contest</a></li>
+          <li><a href='https://www.brahma.fi/' target='_blank'>Brahma Finance: Polygains Vault</a></li>
+          <li><a href='https://twitter.com/0xdanzu/status/1658486994299920388?s=20' target='_blank'>Brahma Finance: Brahma Console</a></li>
+          <li><a href='https://sablier.finance/' target='_blank'>Sablier v2</a></li>
+          <li><a href='https://vapornodes.finance/' target='_blank'>Vapor Finance</a></li>
+          <li><a href='https://twitter.com/youdonated' target='_blank'>YouDonate</a></li>
+          <li><a href='https://www.return.green/' target='_blank'>Return Protocol</a></li>
+          <li><a href='https://cryptoavatars.io/' target='_blank'>CryptoAvatars</a></li>
         </ul>
       </>
     ),
