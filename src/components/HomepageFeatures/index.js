@@ -23,6 +23,7 @@ const FeatureList = [
       <>
       <p style={{textAlign: 'center'}}>Clients that I have helped secured, either individually or in teams</p>
         <ul>
+          <li><a href='https://twitter.com/HatsFinance/status/1658887827466375168'>Top 3 Finish in Gravita Audit Contest</a></li>
           <li><a href='https://www.brahma.fi/'>Brahma Finance: Polygains Vault</a></li>
           <li><a href='https://www.brahma.fi/'>Brahma Finance: Brahma Console</a></li>
           <li><a href='https://sablier.finance/'>Sablier v2</a></li>
