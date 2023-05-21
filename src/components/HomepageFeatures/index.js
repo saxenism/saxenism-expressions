@@ -17,7 +17,7 @@ const FeatureList = [
     ),
   },
   {
-    title: "Previous Clients",
+    title: "Previous Work",
     Svg: require('@site/static/img/ryanlerch_swords_and_shield.svg').default,
     description: (
       <>

@@ -273,6 +273,11 @@ export default [
     exact: true
   },
   {
+    path: '/past-reports',
+    component: ComponentCreator('/past-reports', 'f3e'),
+    exact: true
+  },
+  {
     path: '/testimonials',
     component: ComponentCreator('/testimonials', 'bee'),
     exact: true

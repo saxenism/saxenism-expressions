@@ -1908,6 +1908,20 @@
       },
       {
         "type": "mdx",
+        "permalink": "/past-reports",
+        "source": "@site/src/pages/past-reports.mdx",
+        "title": "Public Audit Reports",
+        "description": "This page contains all past audit reports that I created and compiled and also got permission to share publicly.",
+        "frontMatter": {
+          "toc_min_heading_level": 2,
+          "toc_max_heading_level": 6,
+          "title": "Public Audit Reports",
+          "description": "This page contains all past audit reports that I created and compiled and also got permission to share publicly.",
+          "hide_table_of_contents": false
+        }
+      },
+      {
+        "type": "mdx",
         "permalink": "/testimonials",
         "source": "@site/src/pages/testimonials.md",
         "description": "Word on the Street",

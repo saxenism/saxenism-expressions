@@ -7,7 +7,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'EVM Expressions',
-  tagline: 'Hey, I am Rahul and I love Ethereum and the EVM. I help protocols mitigate the risks of operating in the world of web3 by providing comprehensive security audits and testing consultations.',
+  tagline: 'Hey!! I am Rahul and I help protocols mitigate the risks of operating in web3 by providing comprehensive security audits and testing consultations.',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
@@ -89,6 +89,10 @@ const config = {
             title: 'Library',
             items: [
               {
+                label: 'Past Audit Reports',
+                to: '/past-reports'
+              },
+              {
                 label: 'Blog',
                 to: '/blog',
               },
@@ -99,10 +103,6 @@ const config = {
               {
                 label: 'Testimonials',
                 to: '/testimonials'
-              },
-              {
-                label: 'Defi Dictionary',
-                to: '/glossary'
               }
             ],
           },
@@ -138,6 +138,10 @@ const config = {
                 label: 'Stack Overflow',
                 href: 'https://stackoverflow.com/users/11924484/rahul-saxena',
               },
+              {
+                label: 'Defi Dictionary',
+                href: '/glossary'
+              }
             ],
           },
         ],

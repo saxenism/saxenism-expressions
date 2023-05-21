@@ -5,7 +5,7 @@
  */
 export default {
   "title": "EVM Expressions",
-  "tagline": "Hey, I am Rahul and I love Ethereum and the EVM. I help protocols mitigate the risks of operating in the world of web3 by providing comprehensive security audits and testing consultations.",
+  "tagline": "Hey!! I am Rahul and I help protocols mitigate the risks of operating in web3 by providing comprehensive security audits and testing consultations.",
   "favicon": "img/favicon.ico",
   "url": "https://saxenism.com",
   "baseUrl": "/",
@@ -78,6 +78,10 @@ export default {
           "title": "Library",
           "items": [
             {
+              "label": "Past Audit Reports",
+              "to": "/past-reports"
+            },
+            {
               "label": "Blog",
               "to": "/blog"
             },
@@ -88,10 +92,6 @@ export default {
             {
               "label": "Testimonials",
               "to": "/testimonials"
-            },
-            {
-              "label": "Defi Dictionary",
-              "to": "/glossary"
             }
           ]
         },
@@ -126,6 +126,10 @@ export default {
             {
               "label": "Stack Overflow",
               "href": "https://stackoverflow.com/users/11924484/rahul-saxena"
+            },
+            {
+              "label": "Defi Dictionary",
+              "href": "/glossary"
             }
           ]
         }
