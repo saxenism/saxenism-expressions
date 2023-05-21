@@ -7,7 +7,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'EVM Expressions',
-  tagline: 'Hey!! I am Rahul and I help protocols mitigate the risks of operating in web3 by providing comprehensive security audits and testing consultations.',
+  tagline: 'GM!! I am Rahul and I provide comprehensive security audits and testing consultations to help protocols mitigate the risks of operating in web3',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
@@ -70,16 +70,12 @@ const config = {
           src: 'img/logo512.png',
         },
         items: [
-          // {
-          //   type: 'doc',
-          //   docId: 'intro',
-          //   position: 'left',
-          //   label: 'Tutorial',
-          // },
+          {to: '/past-reports', position: 'left', label: 'Reports'},
           {to: '/blog', label: 'Blog', position: 'left'},
           {to: '/videos', label: 'Videos', position: 'left'},
-          {to: '/testimonials', label: 'Reviews', position: 'left'},
-          {to: '/glossary', label: 'DeFi Dictionary', position: 'left'}
+          {to: '/testimonials', label: 'Testimonials', position: 'left'},
+
+          {to: '/glossary', label: 'DeFi Dictionary', position: 'right'}
         ],
       },
       footer: {

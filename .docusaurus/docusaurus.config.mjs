@@ -5,7 +5,7 @@
  */
 export default {
   "title": "EVM Expressions",
-  "tagline": "Hey!! I am Rahul and I help protocols mitigate the risks of operating in web3 by providing comprehensive security audits and testing consultations.",
+  "tagline": "GM!! I am Rahul and I provide comprehensive security audits and testing consultations to help protocols mitigate the risks of operating in web3",
   "favicon": "img/favicon.ico",
   "url": "https://saxenism.com",
   "baseUrl": "/",
@@ -49,6 +49,11 @@ export default {
       },
       "items": [
         {
+          "to": "/past-reports",
+          "position": "left",
+          "label": "Reports"
+        },
+        {
           "to": "/blog",
           "label": "Blog",
           "position": "left"
@@ -60,13 +65,13 @@ export default {
         },
         {
           "to": "/testimonials",
-          "label": "Reviews",
+          "label": "Testimonials",
           "position": "left"
         },
         {
           "to": "/glossary",
           "label": "DeFi Dictionary",
-          "position": "left"
+          "position": "right"
         }
       ],
       "hideOnScroll": false
