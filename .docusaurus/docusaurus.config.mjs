@@ -5,7 +5,7 @@
  */
 export default {
   "title": "EVM Expressions",
-  "tagline": "GM!! I am Rahul and I provide comprehensive security audits and testing consultations to help protocols mitigate the risks of operating in web3",
+  "tagline": "Hey there, I am Rahul Saxena and I am a smart contract security auditor. I provide comprehensive security audits, threat modelling and testing consults to help protocols mitigate the risks of operating in web3.",
   "favicon": "img/favicon.ico",
   "url": "https://saxenism.com",
   "baseUrl": "/",
