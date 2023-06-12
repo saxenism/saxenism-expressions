@@ -7,7 +7,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'EVM Expressions',
-  tagline: 'GM!! I am Rahul and I provide comprehensive security audits and testing consultations to help protocols mitigate the risks of operating in web3',
+  tagline: 'Hey there, I am Rahul Saxena and I am a smart contract security auditor. I provide comprehensive security audits and testing consultations to help protocols mitigate the risks of operating in web3. Welcome to my homepage.',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here

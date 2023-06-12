@@ -8,7 +8,7 @@ const AchievementsList = [
     Svg: require('@site/static/img/ryanlerch_swords_and_shield.svg').default,
     description: (
       <>
-      <p style={{textAlign: 'center'}}>Clients that I have helped secured, either via private audits, audit contests or bug bounties. Primarily via private audits.</p>
+      <p style={{textAlign: 'center'}}>Clients that I have helped secured, either via private audits, audit contests or bug bounties.</p>
         <ul>
           <li style={{textAlign: 'left'}}> <b>[BUG BOUNTY] &nbsp; &nbsp;</b> <a href='https://twitter.com/hoprnet/status/1666430539656581120' target='_blank'> Discovered a medium severity bug in HOPR with $3.3M staked at the time of disclosure</a>  </li>
           <li style={{textAlign: 'left'}}> <b>[AUDIT CONTEST] &nbsp; &nbsp;</b> <a href='https://twitter.com/HatsFinance/status/1658887827466375168' target='_blank'>   Top 3 Finish in Gravita Audit Contest</a>  </li>
