@@ -2,6 +2,29 @@ import React from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.css';
 
+const AchievementsList = [
+  {
+    title: "Previous Work",
+    Svg: require('@site/static/img/ryanlerch_swords_and_shield.svg').default,
+    description: (
+      <>
+      <p style={{textAlign: 'center'}}>Clients that I have helped secured, either via private audits, audit contests or bug bounties. Primarily via private audits.</p>
+        <ul>
+          <li style={{textAlign: 'left'}}>  <a href='https://twitter.com/hoprnet/status/1666430539656581120' target='_blank'> Discovered a medium severity bug in HOPR with $3.3M staked at the time of disclosure</a> <b>[BUG BOUNTY]</b> </li>
+          <li style={{textAlign: 'left'}}>  <a href='https://twitter.com/HatsFinance/status/1658887827466375168' target='_blank'>Top 3 Finish in Gravita Audit Contest</a> <b>[AUDIT CONTEST]</b>  </li>
+          <li style={{textAlign: 'left'}}>  <a href='https://www.brahma.fi/' target='_blank'>Brahma Finance: Polygains Vault</a> <b>[PRIVATE AUDIT]</b> </li>
+          <li style={{textAlign: 'left'}}>  <a href='https://twitter.com/0xdanzu/status/1658486994299920388?s=20' target='_blank'>Brahma Finance: Brahma Console</a> <b>[PRIVATE AUDIT]</b> </li>
+          <li style={{textAlign: 'left'}}>  <a href='https://sablier.finance/' target='_blank'>Sablier v2</a> <b>[PRIVATE AUDIT]</b> </li>
+          <li style={{textAlign: 'left'}}>  <a href='https://vapornodes.finance/' target='_blank'>Vapor Finance</a> <b>[PRIVATE AUDIT]</b> </li>
+          <li style={{textAlign: 'left'}}>  <a href='https://twitter.com/youdonated' target='_blank'>YouDonate</a> <b>[PRIVATE AUDIT]</b> </li>
+          <li style={{textAlign: 'left'}}>  <a href='https://www.return.green/' target='_blank'>Return Protocol</a> <b>[PRIVATE AUDIT]</b> </li>
+          <li style={{textAlign: 'left'}}>  <a href='https://cryptoavatars.io/' target='_blank'>CryptoAvatars</a> <b>[PRIVATE AUDIT]</b> </li>
+        </ul>
+      </>
+    ),
+  }
+];
+
 const FeatureList = [
   {
     title: 'Auditoor & Developoor',
@@ -12,25 +35,6 @@ const FeatureList = [
           <li style={{textAlign: 'left'}}>Auditing EVM smart contracts is almost a direct expression of how my mind fundamentally works, and I LOVE IT!! </li>
           <li style={{textAlign: 'left'}}>I specialise in catching (some really extreme) edge-casey bugs in your codebase.</li>
           <li style={{textAlign: 'left'}}>Have led secure product development of a new-age lending product at <a href='https://sublime.finance/'>Sublime</a> called <b>Pooled Credit Lines</b> from the ground up</li>
-        </ul>
-      </>
-    ),
-  },
-  {
-    title: "Previous Work",
-    Svg: require('@site/static/img/ryanlerch_swords_and_shield.svg').default,
-    description: (
-      <>
-      <p style={{textAlign: 'center'}}>Clients that I have helped secured, either individually or in teams primarliy via private audits</p>
-        <ul>
-          <li><a href='https://twitter.com/HatsFinance/status/1658887827466375168' target='_blank'>Top 3 Finish in Gravita Audit Contest</a></li>
-          <li><a href='https://www.brahma.fi/' target='_blank'>Brahma Finance: Polygains Vault</a></li>
-          <li><a href='https://twitter.com/0xdanzu/status/1658486994299920388?s=20' target='_blank'>Brahma Finance: Brahma Console</a></li>
-          <li><a href='https://sablier.finance/' target='_blank'>Sablier v2</a></li>
-          <li><a href='https://vapornodes.finance/' target='_blank'>Vapor Finance</a></li>
-          <li><a href='https://twitter.com/youdonated' target='_blank'>YouDonate</a></li>
-          <li><a href='https://www.return.green/' target='_blank'>Return Protocol</a></li>
-          <li><a href='https://cryptoavatars.io/' target='_blank'>CryptoAvatars</a></li>
         </ul>
       </>
     ),
@@ -52,7 +56,21 @@ const FeatureList = [
 
 function Feature({Svg, title, description}) {
   return (
-    <div className={clsx('col col--4')}>
+    <div className={clsx('col col--6')}>
+      <div className="text--center">
+        <Svg className={styles.featureSvg} role="img" />
+      </div>
+      <div className="text--center padding-horiz--md">
+        <h3>{title}</h3>
+        <p>{description}</p>
+      </div>
+    </div>
+  );
+}
+
+function Achievements({Svg, title, description}) {
+  return (
+    <div className={clsx('col col--12')}>
       <div className="text--center">
         <Svg className={styles.featureSvg} role="img" />
       </div>
@@ -66,6 +84,16 @@ function Feature({Svg, title, description}) {
 
 export default function HomepageFeatures() {
   return (
+    <>
+    <section className={styles.features}>
+      <div className="container">
+        <div className="row">
+          {AchievementsList.map((props, idx) => (
+            <Achievements key={idx} {...props} />
+          ))}
+        </div>
+      </div>
+    </section>
     <section className={styles.features}>
       <div className="container">
         <div className="row">
@@ -75,5 +103,6 @@ export default function HomepageFeatures() {
         </div>
       </div>
     </section>
+    </>
   );
 }

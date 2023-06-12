@@ -5,6 +5,11 @@
   width: 100%;
 }
 
+ul {
+  margin-right: 0;
+  padding-left: 22.5%;
+}
+
 .featureSvg {
   height: 200px;
   width: 200px;
