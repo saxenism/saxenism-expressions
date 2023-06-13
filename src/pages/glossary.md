@@ -4,19 +4,19 @@ Here is a collection of finance terms and concepts I come across while auditing 
 
 ## B
 
-### BorrowIndex
+### 1. BorrowIndex
 
 Formally defined as *accumulator of the total earned interest rate since the opening of the market.*
 
 Small primer on different treatments of interests:
 
-#### Earned Interest
+#### 1.1 Earned Interest
 
 Earned interest is the rate at which an investment earns value on top of principal. Usually, earned interest is expressed as either a total dollar amount, or as a percentage of your total portfolio or investment. 
 
 For example, if you have an investment valued at $40,000, and you earn $4,000 in interest over the course of the twelve months, that year your total investment value will have grown to $44,000. This represents earned interest of $4,000, or 10 percent.
 
-#### Accrued Interest
+#### 1.2 Accrued Interest
 
 Accrued interest is the amount of interest your investment is currently earning, but that you haven’t yet collected. If you have a savings account, there’s an interest rate that’s associated with your account balance. Generally, the interest is only added on a monthly or quarterly basis, but the interest technically is accruing every day, even if you can’t access the growth until the end of the period. 
 
@@ -24,7 +24,7 @@ You can factor how much you’ll be earning on your money because you know the i
 
 ## T
 
-### TotalBorrows
+### 1. TotalBorrows
 
 The total amount of base tokens that are currently borrowed from the protocol plus interest accrued to all borrows. 
 
@@ -32,7 +32,7 @@ Formally defined as total amount of outstanding borrows of the underlying in thi
 
 > What I think this means: sum of amount of all borrowings of the borrow token (that are not yet paid) which includes the tokens themselves plus the interest accrued on them.
 
-### TotalReserves
+### 2. TotalReserves
 
 Total amount of reserves of the underlying held in this market. 
 
@@ -42,7 +42,7 @@ Important to note that if a reserve percentage exists, it essentially eats into 
 
 ## L
 
-### LTV (Loan To Value)
+### 1. LTV (Loan To Value)
 
 1. LTV stands for Loan-To-Value ratio.
 2. Lenders assess the LTV ratio to determine the level of exposure to risk they take on when underwriting a mortgage.
