@@ -8,7 +8,7 @@ export default function VideosPage() {
     let videoInformation = [
         {
             embedId: 'BDtbTCuJoOM',
-            videoName: "Rahul Saxena's auditing methodology"
+            videoName: "My auditing methodology"
         },
         {
             embedId: '8ZMC62u3Dog',

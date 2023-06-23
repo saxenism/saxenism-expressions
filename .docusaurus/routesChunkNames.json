@@ -42,6 +42,13 @@
       "plugin": "plugin---docusaurus-debug-976-b9b"
     }
   },
+  "/bar-raiser-82c": {
+    "__comp": "__comp---theme-mdx-page-1-f-3-b90",
+    "__context": {
+      "plugin": "plugin---glossary-98-c-b7e"
+    },
+    "content": "content---bar-raiser-702-eb9"
+  },
   "/blog-e85": {
     "__comp": "__comp---theme-blog-list-pagea-6-a-7ba",
     "__context": {

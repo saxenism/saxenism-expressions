@@ -38,6 +38,11 @@ export default [
     exact: true
   },
   {
+    path: '/bar-raiser',
+    component: ComponentCreator('/bar-raiser', '82c'),
+    exact: true
+  },
+  {
     path: '/blog',
     component: ComponentCreator('/blog', 'e85'),
     exact: true

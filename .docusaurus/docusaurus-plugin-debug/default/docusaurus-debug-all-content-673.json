@@ -1885,6 +1885,14 @@
     "default": [
       {
         "type": "mdx",
+        "permalink": "/bar-raiser",
+        "source": "@site/src/pages/bar-raiser.md",
+        "title": "The Bar-Rasing Games",
+        "description": "Security of any kind, especially smart contract security is a field where you have to constantly keep on learning and evolving. Staying ahead of the curve is the only possible way to thrive in the badlands of security.",
+        "frontMatter": {}
+      },
+      {
+        "type": "mdx",
         "permalink": "/glossary",
         "source": "@site/src/pages/glossary.md",
         "title": "DeFi Dictionary",

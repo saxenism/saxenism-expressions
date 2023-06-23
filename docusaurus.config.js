@@ -75,7 +75,8 @@ const config = {
           {to: '/videos', label: 'Videos', position: 'left'},
           {to: '/testimonials', label: 'Testimonials', position: 'left'},
 
-          {to: '/glossary', label: 'DeFi Dictionary', position: 'right'}
+          {to: '/glossary', label: 'DeFi Dictionary', position: 'right'},
+          {to: '/bar-raiser', label: '‎', position: 'right'}
         ],
       },
       footer: {
