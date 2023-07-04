@@ -45,7 +45,7 @@
   "/bar-raiser-82c": {
     "__comp": "__comp---theme-mdx-page-1-f-3-b90",
     "__context": {
-      "plugin": "plugin---glossary-98-c-b7e"
+      "plugin": "plugin---bar-raiser-98-c-8cb"
     },
     "content": "content---bar-raiser-702-eb9"
   },
@@ -694,35 +694,35 @@
   "/glossary-6ed": {
     "__comp": "__comp---theme-mdx-page-1-f-3-b90",
     "__context": {
-      "plugin": "plugin---glossary-98-c-b7e"
+      "plugin": "plugin---bar-raiser-98-c-8cb"
     },
     "content": "content---glossary-634-708"
   },
   "/markdown-page-0f3": {
     "__comp": "__comp---theme-mdx-page-1-f-3-b90",
     "__context": {
-      "plugin": "plugin---glossary-98-c-b7e"
+      "plugin": "plugin---bar-raiser-98-c-8cb"
     },
     "content": "content---markdown-page-393-028"
   },
   "/past-reports-f3e": {
     "__comp": "__comp---theme-mdx-page-1-f-3-b90",
     "__context": {
-      "plugin": "plugin---glossary-98-c-b7e"
+      "plugin": "plugin---bar-raiser-98-c-8cb"
     },
     "content": "content---past-reports-565-d47"
   },
   "/testimonials-bee": {
     "__comp": "__comp---theme-mdx-page-1-f-3-b90",
     "__context": {
-      "plugin": "plugin---glossary-98-c-b7e"
+      "plugin": "plugin---bar-raiser-98-c-8cb"
     },
     "content": "content---testimonialse-20-adf"
   },
   "/videos-bb6": {
     "__comp": "__comp---site-src-pages-videos-js-34-f-1a1",
     "__context": {
-      "plugin": "plugin---glossary-98-c-b7e"
+      "plugin": "plugin---bar-raiser-98-c-8cb"
     },
     "config": "config---videos-5-e-9-040"
   },
@@ -780,7 +780,7 @@
   "/-b81": {
     "__comp": "__comp---site-src-pages-index-jsc-4-f-f99",
     "__context": {
-      "plugin": "plugin---glossary-98-c-b7e"
+      "plugin": "plugin---bar-raiser-98-c-8cb"
     },
     "config": "config---videos-5-e-9-040"
   }

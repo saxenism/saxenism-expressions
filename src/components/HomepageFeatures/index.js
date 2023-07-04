@@ -10,11 +10,12 @@ const AchievementsList = [
       <>
       <p style={{textAlign: 'center'}}>Clients that I have helped secured, either via private audits, audit contests or bug bounties.</p>
         <ul className={styles.unnamedList}>
-          <li style={{textAlign: 'left'}}> <b>[BUG BOUNTY] &nbsp; &nbsp;</b> <a href='https://twitter.com/hoprnet/status/1666430539656581120' target='_blank'> Discovered a medium severity bug in HOPR with $3.3M staked at the time of disclosure</a>  </li>
+          <li style={{textAlign: 'left'}}> <b> [BOUNTY] &nbsp; &nbsp;</b> <a href='https://twitter.com/hoprnet/status/1666430539656581120' target='_blank'> Discovered a medium severity bug in HOPR with $3.3M staked at the time of disclosure</a>  </li>
           <li style={{textAlign: 'left'}}> <b>[AUDIT CONTEST] &nbsp; &nbsp;</b> <a href='https://twitter.com/HatsFinance/status/1658887827466375168' target='_blank'>   Top 3 Finish in Gravita Audit Contest</a>  </li>
           <li style={{textAlign: 'left'}}> <b>[PRIVATE AUDIT] &nbsp; &nbsp;</b> <a href='https://www.brahma.fi/' target='_blank'>   Brahma Finance: Polygains Vault</a> </li>
           <li style={{textAlign: 'left'}}> <b>[PRIVATE AUDIT] &nbsp; &nbsp;</b> <a href='https://twitter.com/0xdanzu/status/1658486994299920388?s=20' target='_blank'>    Brahma Finance: Brahma Console</a> </li>
           <li style={{textAlign: 'left'}}> <b>[PRIVATE AUDIT] &nbsp; &nbsp;</b> <a href='https://sablier.finance/' target='_blank'>   Sablier v2</a> </li>
+          <li style={{textAlign: 'left'}}> <b>[PRIVATE AUDIT] &nbsp; &nbsp;</b> <a href='https://twitter.com/stackingsalmon' target='_blank'>   Stacking Salmon</a> </li>
           <li style={{textAlign: 'left'}}> <b>[PRIVATE AUDIT] &nbsp; &nbsp;</b> <a href='https://vapornodes.finance/' target='_blank'>    Vapor Finance</a> </li>
           <li style={{textAlign: 'left'}}> <b>[PRIVATE AUDIT] &nbsp; &nbsp;</b> <a href='https://twitter.com/youdonated' target='_blank'>   YouDonate</a> </li>
           <li style={{textAlign: 'left'}}> <b>[PRIVATE AUDIT] &nbsp; &nbsp;</b> <a href='https://www.return.green/' target='_blank'>    Return Protocol</a> </li>
