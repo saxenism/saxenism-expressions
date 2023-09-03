@@ -72,11 +72,6 @@ export default {
           "to": "/glossary",
           "label": "DeFi Dictionary",
           "position": "right"
-        },
-        {
-          "to": "/bar-raiser",
-          "label": "‎",
-          "position": "right"
         }
       ],
       "hideOnScroll": false

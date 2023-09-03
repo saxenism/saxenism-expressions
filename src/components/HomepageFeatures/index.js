@@ -35,6 +35,7 @@ const FeatureList = [
         <ul>
           <li style={{textAlign: 'left'}}>Auditing EVM smart contracts is almost a direct expression of how my mind fundamentally works, and I LOVE IT!! </li>
           <li style={{textAlign: 'left'}}>I specialise in catching (some really extreme) edge-casey bugs in your codebase.</li>
+          <li style={{textAlign: 'left'}}>Developing native workflow modules for <a href='https://www.inverter.network/'>Inverter Network</a> </li>
           <li style={{textAlign: 'left'}}>Have led secure product development of a new-age lending product at <a href='https://sublime.finance/'>Sublime</a> called <b>Pooled Credit Lines</b> from the ground up</li>
         </ul>
       </>
